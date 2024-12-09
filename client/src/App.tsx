@@ -5,13 +5,13 @@ import {
   RouterProvider,
 } from "react-router-dom"
 import MainLayout from "./Layout/MainLayout"
-import Overview from "./components/Overview"
-import Inventory from "./components/Inventory"
-import Products from "./components/Products"
-import Purchasing from "./components/Purchasing"
-import Sales from "./components/Sales"
-import Stocklist from "./components/Stocklist"
-import Reports from "./components/Reports"
+import OverviewPage from "./pages/OverviewPage"
+import InventoryPage from "./pages/InventoryPage"
+import ProductsPage from "./pages/ProductsPage"
+import PurchasingPage from "./pages/PurchasingPage"
+import SalesPage from "./pages/SalesPage"
+import StocklistPage from "./pages/StocklistPage"
+import ReportsPage from "./pages/ReportsPage"
 import Login from "./components/auth/Login"
 import Register from "./components/auth/Register"
 
@@ -22,13 +22,13 @@ const App = () => {
         <Route path='/' element={<Login />} />
         <Route path='/register' element={<Register />} />
         <Route path='/dashboard' element={<MainLayout />}>
-          <Route path='overview' element={<Overview />} />
-          <Route path='inventory' element={<Inventory />} />
-          <Route path='products' element={<Products />} />
-          <Route path='purchasing' element={<Purchasing />} />
-          <Route path='sales' element={<Sales />} />
-          <Route path='stocklist' element={<Stocklist />} />
-          <Route path='reports' element={<Reports />} />
+          <Route path='overview' element={<OverviewPage />} />
+          <Route path='inventory' element={<InventoryPage />} />
+          <Route path='products' element={<ProductsPage />} />
+          <Route path='purchasing' element={<PurchasingPage />} />
+          <Route path='sales' element={<SalesPage />} />
+          <Route path='stocklist' element={<StocklistPage />} />
+          <Route path='reports' element={<ReportsPage />} />
         </Route>
       </>
     )
