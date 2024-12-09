@@ -1,4 +1,4 @@
-Set Up (Client Folder)
-cd client
-npm install
-npm run dev
+Setup (client folder)
+- cd client
+- npm install
+- run "npm run dev"
