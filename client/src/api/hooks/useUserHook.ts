@@ -1,7 +1,6 @@
 import { useMutation } from "@tanstack/react-query"
 import { loginUser } from "../services/user"
 
-// Login user mutation hook
 export const useLoginUser = () => {
   return useMutation({
     mutationFn: loginUser,
