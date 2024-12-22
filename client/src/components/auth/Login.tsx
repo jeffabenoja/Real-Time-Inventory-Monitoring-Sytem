@@ -44,9 +44,9 @@ const Login = () => {
       {isPending ? (
         <Spinner loading={isPending} />
       ) : (
-        <div className='w-6/12 rounded-xl bg-[#FFF] h-[500px] overflow-hidden shadow-2xl p-6 flex flex-col md:flex-row gap-8 md:items-center'>
+        <div className='w-6/12 rounded-xl bg-[#FFF] h-[500px] overflow-hidden shadow-2xl p-6 flex md:flex-row gap-8 items-center justify-center'>
           <div className='flex-1'>
-            <h1 className='text-2xl font-bold mb-8 text-red-900'>
+            <h1 className='text-md md:text-2xl font-bold mb-8 text-red-900'>
               Sign In Credentials
             </h1>
 
@@ -98,8 +98,8 @@ const Login = () => {
               </div>
             )}
           </div>
-          <div className='flex-1 px-3'>
-            <h1 className='text-4xl font-bold mb-8 text-red-900'>
+          <div className='hidden lg:block flex-1 px-3'>
+            <h1 className='text-2xl xl:text-4xl font-bold mb-8 text-red-900'>
               E&L Delicatessen Real-Time Inventory Monitoring System
             </h1>
             <p className='text-sm text-justify'>
