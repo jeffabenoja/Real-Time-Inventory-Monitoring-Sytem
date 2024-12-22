@@ -6,11 +6,11 @@ import { NavLink } from "react-router-dom"
 import { useState } from "react"
 
 const NAVIGATION_ITEMS = [
-  { name: "Overview", to: "/overview" },
-  { name: "Products", to: "/products" },
-  { name: "Sales", to: "/sales" },
-  { name: "Stocklist", to: "/stocklist" },
-  { name: "Reports", to: "/reports" },
+  { name: "Overview", to: "overview" },
+  { name: "Products", to: "products" },
+  { name: "Sales", to: "sales" },
+  { name: "Stocklist", to: "stocklist" },
+  { name: "Reports", to: "reports" },
 ]
 
 const Header = () => {
