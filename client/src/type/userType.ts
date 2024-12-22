@@ -9,7 +9,7 @@ export interface UserGroup {
 }
 
 export interface UserLogin {
-  userCode: string
+  usercode: string
   password: string
 }
 

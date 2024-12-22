@@ -6,7 +6,7 @@ import { NavLink } from "react-router-dom"
 import { useState } from "react"
 
 const NAVIGATION_ITEMS = [
-  { name: "Overview", to: "/" },
+  { name: "Overview", to: "/overview" },
   { name: "Inventory", to: "/inventory" },
   { name: "Products", to: "/products" },
   { name: "Purchasing", to: "/purchasing" },
@@ -54,7 +54,7 @@ const Header = () => {
                                         } lg:hover:bg-transparent hover:text-red-900 lg:py-0 transition-colors`
                 }
               >
-                Dashboard
+                {item.name}
               </NavLink>
             </li>
           ))}
