@@ -12,6 +12,7 @@ import StocklistPage from "./pages/StocklistPage"
 import ReportsPage from "./pages/ReportsPage"
 import Login from "./components/auth/Login"
 import Register from "./components/auth/Register"
+import NotFoundPage from "./pages/NotFoundPage"
 
 const App = () => {
   const router = createBrowserRouter(
@@ -25,6 +26,7 @@ const App = () => {
           <Route path='sales' element={<SalesPage />} />
           <Route path='stocklist' element={<StocklistPage />} />
           <Route path='reports' element={<ReportsPage />} />
+          <Route path='*' element={<NotFoundPage />} />
         </Route>
       </>
     )

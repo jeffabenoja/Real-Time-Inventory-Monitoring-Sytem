@@ -20,8 +20,12 @@ const Header = () => {
     setMenu(!menu)
   }
 
+  const closeMenu = () => {
+    setMenu(false)
+  }
+
   return (
-    <header className='relative flex justify-between items-center px-4 lg:px-8 py-4 border-gray-200 mx-auto max-w-full transition-all duration-300 ease-in-out'>
+    <header className='relative flex justify-between items-center px-4 lg:px-8 py-4 shadow-sm border-gray-200 mx-auto max-w-full transition-all duration-300 ease-in-out'>
       <div className='hidden lg:block font-bold text-2xl text-red-900'>
         E&L Delicatessen
       </div>
@@ -36,7 +40,7 @@ const Header = () => {
           menu
             ? "block absolute top-[52px] left-0 w-full bg-[#FAFAFA]"
             : "hidden"
-        } px-4 lg:px-6 py-2.5 lg:flex items-center justify-between  `}
+        } px-4 lg:px-6 py-2.5 lg:flex items-center justify-between `}
       >
         <ul className='flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0 gap-5'>
           {NAVIGATION_ITEMS.map((item) => (
@@ -51,6 +55,7 @@ const Header = () => {
                                             : "text-gray-700 lg:border-0"
                                         } lg:hover:bg-transparent hover:text-red-900 lg:py-0 transition-colors`
                 }
+                onClick={closeMenu}
               >
                 {item.name}
               </NavLink>

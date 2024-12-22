@@ -23,7 +23,7 @@ const Login = () => {
     e.preventDefault()
     loginUser(login, {
       onSuccess: () => {
-        navigate("/dashboard")
+        navigate("/dashboard/overview")
       },
     })
   }

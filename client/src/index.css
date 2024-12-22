@@ -62,3 +62,26 @@ h5,
 h6 {
   text-wrap: balance;
 }
+
+/* Scrollbar Track */
+.scrollbar::-webkit-scrollbar {
+  width: 12px;
+}
+
+/* Scrollbar Thumb */
+.scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e0;
+  /* background: #7f1d1d; */
+  border-radius: 10px;
+  border: 3px solid #edf2f7;
+}
+
+.scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #a0aec0;
+}
+
+.scrollbar {
+  scrollbar-width: thin;
+  /* scrollbar-color: #7f1d1d #edf2f7;  */
+  scrollbar-color: #cbd5e0 #edf2f7;
+}

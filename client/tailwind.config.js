@@ -6,6 +6,10 @@ export default {
       boxShadow: {
         login: "25px 30px 55px rgba(85, 87, 115, 0.5)", // Custom box shadow
       },
+      height: {
+        "dynamic-sm": "calc(100vh - 52px)",
+        "dynamic-lg": "calc(100vh - 77px)",
+      },
     },
   },
   plugins: [
@@ -44,7 +48,7 @@ export default {
         ".input-field input:focus + label": {
           color: "#7f1d1d",
           top: "-18px",
- 
+
           fontSize: "15px",
           transform: "translate(10px, 8px) scale(0.88)",
           zIndex: "1111",
