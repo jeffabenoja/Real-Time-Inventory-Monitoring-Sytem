@@ -3,6 +3,9 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      colors: {
+        primary: "#7f1d1d",
+      },
       boxShadow: {
         login: "25px 30px 55px rgba(85, 87, 115, 0.5)", // Custom box shadow
       },
@@ -13,7 +16,7 @@ export default {
     },
   },
   plugins: [
-    function ({ addComponents }) {
+    function ({ addComponents, theme }) {
       addComponents({
         ".input-field": {
           position: "relative",
@@ -37,26 +40,24 @@ export default {
           backgroundColor: "#fff",
           color: "#000",
           top: "8px",
-          left: "10x",
+          left: "10px",
           padding: "0 25px",
           transition: "0.2s ease",
         },
         ".input-field input:focus": {
-          color: "#7f1d1d",
-          borderColor: "#7f1d1d",
+          color: theme("colors.primary"),
+          borderColor: theme("colors.primary"),
         },
         ".input-field input:focus + label": {
-          color: "#7f1d1d",
+          color: theme("colors.primary"),
           top: "-18px",
-
           fontSize: "15px",
           transform: "translate(10px, 8px) scale(0.88)",
           zIndex: "1111",
         },
         ".input-field input:valid + label": {
-          color: "#7f1d1d",
+          color: theme("colors.primary"),
           top: "-18px",
-
           fontSize: "15px",
           transform: "translate(10px, 8px) scale(0.88)",
           zIndex: "1111",

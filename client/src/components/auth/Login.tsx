@@ -46,7 +46,7 @@ const Login = () => {
       ) : (
         <div className='w-6/12 rounded-xl bg-[#FFF] h-[500px] overflow-hidden shadow-2xl p-6 flex md:flex-row gap-8 items-center justify-center'>
           <div className='flex-1'>
-            <h1 className='text-md md:text-2xl font-bold mb-8 text-red-900'>
+            <h1 className='text-md md:text-2xl font-bold mb-8 text-primary'>
               Sign In Credentials
             </h1>
 
@@ -80,26 +80,26 @@ const Login = () => {
                 </div>
               </div>
               <div className='w-full mt-14 flex items-center justify-end'>
-                <span className='text-xs font-bold cursor-pointer hover:text-red-900'>
+                <span className='text-xs font-bold cursor-pointer hover:text-primary'>
                   Forgot Password?
                 </span>
               </div>
               <button
                 className='w-full rounded-full border-0 outline-transparent p-2 bg-red-800
-           font-medium my-5 cursor-pointer text-white hover:bg-red-900'
+           font-medium my-5 cursor-pointer text-white hover:bg-primary'
                 type='submit'
               >
                 Sign In
               </button>
             </form>
             {error && (
-              <div className='w-full text-center text-red-900 font-bold text-xs'>
+              <div className='w-full text-center text-primary font-bold text-xs'>
                 {getErrorMessage(error)}
               </div>
             )}
           </div>
           <div className='hidden lg:block flex-1 px-3'>
-            <h1 className='text-2xl xl:text-4xl font-bold mb-8 text-red-900'>
+            <h1 className='text-2xl xl:text-4xl font-bold mb-8 text-primary'>
               E&L Delicatessen Real-Time Inventory Monitoring System
             </h1>
             <p className='text-sm text-justify'>

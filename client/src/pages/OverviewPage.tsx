@@ -43,7 +43,7 @@ const columns = [
 
   columnHelper.accessor("email", {
     cell: (info) => (
-      <span className='italic text-red-900'>{info.getValue()}</span>
+      <span className='italic text-primary'>{info.getValue()}</span>
     ),
     header: () => (
       <span className='flex items-center truncate'>

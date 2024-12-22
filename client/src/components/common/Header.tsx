@@ -26,14 +26,14 @@ const Header = () => {
 
   return (
     <header className='relative flex justify-between items-center px-4 lg:px-8 py-4 shadow-sm border-gray-200 mx-auto max-w-full transition-all duration-300 ease-in-out'>
-      <div className='hidden lg:block font-bold text-2xl text-red-900'>
+      <div className='hidden lg:block font-bold text-2xl text-primary'>
         E&L Delicatessen
       </div>
       <div
         className='lg:hidden flex items-center cursor-pointer z-10'
         onClick={menuToggle}
       >
-        <CiMenuBurger className='text-xl hover:text-red-900' />
+        <CiMenuBurger className='text-xl hover:text-primary' />
       </div>
       <nav
         className={`${
@@ -51,9 +51,9 @@ const Header = () => {
                   `block py-2 pr-4 pl-3 duration-200 border-b border-gray-100 
                                         ${
                                           isActive
-                                            ? "text-red-900 font-bold  border-red-900 "
+                                            ? "text-primary font-bold  border-primary "
                                             : "text-gray-700 lg:border-0"
-                                        } lg:hover:bg-transparent hover:text-red-900 lg:py-0 transition-colors`
+                                        } lg:hover:bg-transparent hover:text-primary lg:py-0 transition-colors`
                 }
                 onClick={closeMenu}
               >
@@ -65,9 +65,9 @@ const Header = () => {
       </nav>
 
       <div className='flex gap-6 items-center cursor-pointer'>
-        <IoIosNotifications className='text-xl hover:text-red-900' />
-        <IoIosSettings className='text-xl hover:text-red-900' />
-        <CgProfile className='text-xl hover:text-red-900' />
+        <IoIosNotifications className='text-xl hover:text-primary' />
+        <IoIosSettings className='text-xl hover:text-primary' />
+        <CgProfile className='text-xl hover:text-primary' />
       </div>
     </header>
   )
