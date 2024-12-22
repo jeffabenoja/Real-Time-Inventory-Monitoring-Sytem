@@ -7,7 +7,9 @@ export default defineConfig({
     proxy: {
       "/api": {
         target: "http://server.vade.dev:7877",
+        changeOrigin: true,
         secure: false,
+        rewrite: (path) => path.replace(/^\/api/, ""),
       },
     },
   },

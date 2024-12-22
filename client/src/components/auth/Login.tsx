@@ -1,13 +1,14 @@
 import { useState } from "react"
 import { UserLogin } from "../../type/userType"
 import { useNavigate } from "react-router-dom"
+import { useLoginUser } from "../../api/hooks/useUserHook"
 
 const Login = () => {
   const [login, setLogin] = useState<UserLogin>({
     usercode: "",
     password: "",
   })
-
+  const { mutate: loginUser } = useLoginUser()
   const navigate = useNavigate()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -19,8 +20,11 @@ const Login = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    navigate("/dashboard")
-    console.log(login)
+    loginUser(login, {
+      onSuccess: () => {
+        navigate("/dashboard")
+      },
+    })
   }
 
   return (
