@@ -6,7 +6,6 @@ import {
 } from "@tanstack/react-table"
 import { CiUser } from "react-icons/ci"
 import { MdOutlineEmail } from "react-icons/md"
-
 import { useQuery } from "@tanstack/react-query"
 
 const columnHelper = createColumnHelper<any>()
@@ -47,7 +46,7 @@ const columns = [
       <span className='italic text-red-900'>{info.getValue()}</span>
     ),
     header: () => (
-      <span className='flex items-center'>
+      <span className='flex items-center truncate'>
         <MdOutlineEmail size={14} className='mr-1 hidden lg:block' />
         Email
       </span>
