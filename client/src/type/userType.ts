@@ -1,18 +1,24 @@
 // Define types for user data
-export interface userGroup {
+export interface UserGroup {
   id: string
-  code: string
-  isAdmin: boolean
-  isCreator: boolean
-  isEditor: boolean
-  status: "active" | "inactive" | "pending" // String union for known statuses
+  code?: string
+  isAdmin?: boolean
+  isCreator?: boolean
+  isEditor?: boolean
+  status?: "active" | "inactive" | "pending" // String union for known statuses
+}
+
+export interface UserLogin {
+  userCode: string
+  password: string
 }
 
 export interface User {
   id: string
-  usercode: string
+  loginCredentials: UserLogin
   firstname: string
   lastname: string
-  userGroup: userGroup
+  email: string
+  userGroup: UserGroup
   status: "active" | "inactive" | "pending" // String union for known statuses
 }
