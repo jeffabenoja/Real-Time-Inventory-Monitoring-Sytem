@@ -7,9 +7,7 @@ import { useState } from "react"
 
 const NAVIGATION_ITEMS = [
   { name: "Overview", to: "/overview" },
-  { name: "Inventory", to: "/inventory" },
   { name: "Products", to: "/products" },
-  { name: "Purchasing", to: "/purchasing" },
   { name: "Sales", to: "/sales" },
   { name: "Stocklist", to: "/stocklist" },
   { name: "Reports", to: "/reports" },
