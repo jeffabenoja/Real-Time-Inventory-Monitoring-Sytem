@@ -74,7 +74,12 @@ const OverviewPage = () => {
     getCoreRowModel: getCoreRowModel(),
   })
 
-  return <Table table={table} />
+  return (
+    <div className='flex flex-col max-w-full mx-auto px-4 lg:px-8 py-4 h-dynamic-sm lg:h-dynamic-lg'>
+      <h1 className='text-2xl font-bold mb-5'>Overview Page</h1>
+      <Table table={table} />
+    </div>
+  )
 }
 
 export default OverviewPage

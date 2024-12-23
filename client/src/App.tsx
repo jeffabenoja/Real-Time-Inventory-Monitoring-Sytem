@@ -11,7 +11,6 @@ import SalesPage from "./pages/SalesPage"
 import StocklistPage from "./pages/StocklistPage"
 import ReportsPage from "./pages/ReportsPage"
 import Login from "./components/auth/Login"
-import Register from "./components/auth/Register"
 import NotFoundPage from "./pages/NotFoundPage"
 
 const App = () => {
@@ -19,7 +18,6 @@ const App = () => {
     createRoutesFromElements(
       <>
         <Route path='/' element={<Login />} />
-        <Route path='/register' element={<Register />} />
         <Route path='/dashboard' element={<MainLayout />}>
           <Route path='overview' element={<OverviewPage />} />
           <Route path='products' element={<ProductsPage />} />
