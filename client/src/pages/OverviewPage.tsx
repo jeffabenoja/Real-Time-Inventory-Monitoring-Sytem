@@ -1,11 +1,8 @@
 import Table from "../components/common/Table"
-import {
-  createColumnHelper,
-  useReactTable,
-  getCoreRowModel,
-} from "@tanstack/react-table"
+import { createColumnHelper } from "@tanstack/react-table"
 import { CiUser } from "react-icons/ci"
 import { MdOutlineEmail } from "react-icons/md"
+
 import { useQuery } from "@tanstack/react-query"
 
 const columnHelper = createColumnHelper<any>()
@@ -68,16 +65,11 @@ const OverviewPage = () => {
     },
   })
 
-  const table = useReactTable({
-    data: data || [],
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  })
-
   return (
     <div className='flex flex-col max-w-full mx-auto px-4 lg:px-8 py-4 h-dynamic-sm lg:h-dynamic-lg'>
       <h1 className='text-2xl font-bold mb-5'>Overview Page</h1>
-      <Table table={table} />
+
+      <Table data={data} columns={columns} />
     </div>
   )
 }
