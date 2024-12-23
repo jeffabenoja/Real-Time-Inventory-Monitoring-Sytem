@@ -12,6 +12,7 @@ import StocklistPage from "./pages/StocklistPage"
 import ReportsPage from "./pages/ReportsPage"
 import Login from "./components/auth/Login"
 import NotFoundPage from "./pages/NotFoundPage"
+import { Toaster } from "sonner"
 
 const App = () => {
   const router = createBrowserRouter(
@@ -30,7 +31,12 @@ const App = () => {
     )
   )
 
-  return <RouterProvider router={router} />
+  return (
+    <>
+      <Toaster position='top-right' />
+      <RouterProvider router={router} />
+    </>
+  )
 }
 
 export default App

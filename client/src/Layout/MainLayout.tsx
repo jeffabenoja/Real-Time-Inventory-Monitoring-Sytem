@@ -6,6 +6,7 @@ const MainLayout = () => {
     <>
       <Header />
       <Outlet />
+
     </>
   )
 }

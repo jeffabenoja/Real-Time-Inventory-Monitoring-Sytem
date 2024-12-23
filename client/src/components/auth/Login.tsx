@@ -3,6 +3,7 @@ import { UserLogin } from "../../type/userType"
 import { useNavigate } from "react-router-dom"
 import { useLoginUser } from "../../api/hooks/useUserHook"
 import Spinner from "../common/Spinner"
+import { showToast } from "../../utils/Toast"
 
 const Login = () => {
   const [login, setLogin] = useState<UserLogin>({
@@ -24,6 +25,11 @@ const Login = () => {
     loginUser(login, {
       onSuccess: () => {
         navigate("/dashboard/overview")
+        showToast.success("Login Successful")
+      },
+
+      onError: () => {
+        showToast.error("Unauthorized Access")
       },
     })
   }
