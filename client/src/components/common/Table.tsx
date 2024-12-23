@@ -1,19 +1,26 @@
-import React from "react"
+import React, { useState } from "react"
 import {
   flexRender,
   useReactTable,
   getCoreRowModel,
+  getFilteredRowModel,
 } from "@tanstack/react-table"
 import { TableProps } from "../../type/tableType"
 import { IoIosAdd } from "react-icons/io"
 import { VscSettings } from "react-icons/vsc"
-import { CiSearch, CiExport, CiImport } from "react-icons/ci"
-
+import { CiExport, CiImport } from "react-icons/ci"
+import Search from "./Search"
+import Buttons from "./Buttons"
 const Table: React.FC<TableProps> = ({ data, columns }) => {
+  const [globalFilter, setGlobalFilter] = useState<string>("")
   const table = useReactTable({
     data: data || [],
     columns,
+    state: {
+      globalFilter,
+    },
     getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
   })
 
   return (
@@ -22,55 +29,27 @@ const Table: React.FC<TableProps> = ({ data, columns }) => {
       <div className='flex items-center justify-between py-2'>
         <div className='flex items-center justify-center'>
           <div className=' relative'>
-            <input
-              type='text'
-              className='text-sm md:text-base w-[100px] md:w-full px-3 py-1 outline-none placeholder:text-sm border border-gray-300 rounded-md  focus:bg-gray-50'
-              placeholder='Search...'
-            />
-            <CiSearch
-              className='absolute top-[4px] md:top-[6px] right-2 md:right-3'
-              size={20}
+            <Search
+              columnFilter={globalFilter}
+              setColumnFilter={setGlobalFilter}
             />
           </div>
 
           <div className='ml-2'>
-            <button
-              type='button'
-              className='px-2 py-1 bg-white border border-gray-300 rounded-md flex items-center hover:bg-gray-50'
-            >
-              <CiImport className='md:mr-2' size={18} />
-              <span className='hidden md:block'>Import</span>
-            </button>
+            <Buttons label={"Import"} Icon={CiImport} />
           </div>
 
           <div className='ml-2'>
-            <button
-              type='button'
-              className='px-2 py-1 bg-white border border-gray-300 rounded-md flex items-center hover:bg-gray-50'
-            >
-              <CiExport className='md:mr-2' size={18} />
-              <span className='hidden md:block'>Export</span>
-            </button>
+            <Buttons label={"Export"} Icon={CiExport} />
           </div>
 
           <div className='ml-2'>
-            <button
-              type='button'
-              className='px-2 md:px-3 py-1 bg-white border border-gray-300 rounded-md flex items-center hover:bg-gray-50'
-            >
-              <IoIosAdd className='md:mr-1' size={18} />
-              <span className='hidden md:block'>Add</span>
-            </button>
+            <Buttons label={"Add"} Icon={IoIosAdd} />
           </div>
         </div>
+
         <div className='ml-2'>
-          <button
-            type='button'
-            className='px-2 md:px-3 py-1 bg-white border border-gray-300 rounded-md flex items-center hover:bg-gray-50'
-          >
-            <VscSettings className='md:mr-1' size={16} />
-            <span className='hidden md:block'>View</span>
-          </button>
+          <Buttons label={"View"} Icon={VscSettings} />
         </div>
       </div>
 
