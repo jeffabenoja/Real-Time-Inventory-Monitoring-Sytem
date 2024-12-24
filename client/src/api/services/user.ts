@@ -1,10 +1,6 @@
-import axios from "axios"
+import apiClient from "../../utils/apiClient"
 import * as loginUrls from "../urls/loginUrls"
 import { UserLogin } from "../../type/userType"
-
-const apiClient = axios.create({
-  baseURL: "/api",
-})
 
 // Login user API call
 export const loginUser = async (logindata: UserLogin) => {
