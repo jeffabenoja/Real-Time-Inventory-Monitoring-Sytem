@@ -1,9 +1,7 @@
 import { useState } from "react"
 import { UserLogin } from "../../type/userType"
-import { useNavigate } from "react-router-dom"
-import { useLoginUser } from "../../api/hooks/useUserHook"
+import { useLoginUser } from "../../hooks/user/useLoginUser"
 import Spinner from "../common/Spinner"
-import { showToast } from "../../utils/Toast"
 
 const Login = () => {
   const [login, setLogin] = useState<UserLogin>({
@@ -11,7 +9,6 @@ const Login = () => {
     password: "",
   })
   const { mutate: loginUser, isPending, error } = useLoginUser()
-  const navigate = useNavigate()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLogin({
@@ -22,27 +19,18 @@ const Login = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    loginUser(login, {
-      onSuccess: () => {
-        navigate("/dashboard/overview")
-        showToast.success("Login Successful")
-      },
 
-      onError: () => {
-        showToast.error("Unauthorized Access")
-      },
-    })
+    loginUser(login)
   }
 
-  // Error message handling
   const getErrorMessage = (error: any): string => {
     if (error?.response?.data?.message) {
-      return error.response.data.message // If the backend returns a custom message
+      return error.response.data.message
     }
     if (error?.message) {
-      return error.message // Generic error message
+      return error.message
     }
-    return "An unknown error occurred." // Default error message
+    return "An unknown error occurred."
   }
 
   return (
@@ -100,7 +88,7 @@ const Login = () => {
             </form>
             {error && (
               <div className='w-full text-center text-primary font-bold text-xs'>
-                {getErrorMessage(error)}
+                {`Login Status: ${getErrorMessage(error)}`}
               </div>
             )}
           </div>
