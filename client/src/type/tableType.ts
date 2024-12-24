@@ -1,5 +1,6 @@
-import {Table as ReactTable} from "@tanstack/react-table"
+import { ColumnDef } from "@tanstack/react-table"
 
-export type TableProps<TData> = {
-  table: ReactTable<TData>
+export interface TableProps {
+  columns: Array<ColumnDef<any>>
+  data: Array<any>
 }

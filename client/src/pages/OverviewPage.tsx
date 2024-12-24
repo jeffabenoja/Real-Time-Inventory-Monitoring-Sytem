@@ -1,11 +1,8 @@
 import Table from "../components/common/Table"
-import {
-  createColumnHelper,
-  useReactTable,
-  getCoreRowModel,
-} from "@tanstack/react-table"
+import { createColumnHelper } from "@tanstack/react-table"
 import { CiUser } from "react-icons/ci"
 import { MdOutlineEmail } from "react-icons/md"
+import Spinner from "../components/common/Spinner"
 import { useQuery } from "@tanstack/react-query"
 
 const columnHelper = createColumnHelper<any>()
@@ -55,8 +52,8 @@ const columns = [
 ]
 
 const OverviewPage = () => {
-  const { data } = useQuery({
-    queryKey: ["users"],
+  const { data, isLoading } = useQuery({
+    queryKey: ["comments"],
     queryFn: async () => {
       const response = await fetch(
         "https://jsonplaceholder.typicode.com/comments?_start=0&_limit=20"
@@ -68,16 +65,11 @@ const OverviewPage = () => {
     },
   })
 
-  const table = useReactTable({
-    data: data || [],
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  })
-
   return (
     <div className='flex flex-col max-w-full mx-auto px-4 lg:px-8 py-4 h-dynamic-sm lg:h-dynamic-lg'>
       <h1 className='text-2xl font-bold mb-5'>Overview Page</h1>
-      <Table table={table} />
+
+      {isLoading ? <Spinner /> : <Table data={data} columns={columns} />}
     </div>
   )
 }
