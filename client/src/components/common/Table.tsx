@@ -4,13 +4,22 @@ import {
   useReactTable,
   getCoreRowModel,
   getFilteredRowModel,
+  getPaginationRowModel,
 } from "@tanstack/react-table"
 import { TableProps } from "../../type/tableType"
 import { IoIosAdd } from "react-icons/io"
 import { VscSettings } from "react-icons/vsc"
 import { CiExport, CiImport } from "react-icons/ci"
+import { FaChevronUp, FaChevronDown } from "react-icons/fa"
+import {
+  FiChevronsLeft,
+  FiChevronsRight,
+  FiChevronLeft,
+  FiChevronRight,
+} from "react-icons/fi"
 import Search from "./Search"
 import Buttons from "./Buttons"
+
 const Table: React.FC<TableProps> = ({ data, columns }) => {
   const [globalFilter, setGlobalFilter] = useState<string>("")
   const table = useReactTable({
@@ -19,13 +28,19 @@ const Table: React.FC<TableProps> = ({ data, columns }) => {
     state: {
       globalFilter,
     },
+    initialState: {
+      pagination: {
+        pageSize: 10,
+      },
+    },
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
   })
 
   return (
     <>
-      {/* Search, Buttons, Filter */}
+      {/* Search, Imports, Export, Add Buttons, Filter */}
       <div className='flex items-center justify-between py-2'>
         <div className='flex items-center justify-center'>
           <div className=' relative'>
@@ -53,7 +68,6 @@ const Table: React.FC<TableProps> = ({ data, columns }) => {
         </div>
       </div>
 
-      {/* Table */}
       <div className='overflow-x-auto bg-white shadow-md rounded-lg scrollbar'>
         <table className='min-w-full divide-y divide-gray-200'>
           <thead className='bg-gray-50 sticky top-0 z-10'>
@@ -88,6 +102,111 @@ const Table: React.FC<TableProps> = ({ data, columns }) => {
             ))}
           </tbody>
         </table>
+      </div>
+
+      <div className='flex items-center md:justify-between justify-end py-2'>
+        <div className='hidden md:flex items-center justify-center '>
+          <span className='text-xs text-gray-700'>
+            Showing{" "}
+            <span className='font-medium'>
+              {table.getRowModel().rows.length}
+            </span>{" "}
+            of <span className='font-medium'>{data?.length}</span> results
+          </span>
+        </div>
+
+        <div className='flex items-center gap-3'>
+          <div className='flex items-center'>
+            <div className='flex items-center justify-between py-2 border-primary rounded-md'>
+              <label
+                htmlFor='pageSize'
+                className=' hidden md:block text-xs text-gray-700 mr-2'
+              >
+                Rows per page:
+              </label>
+              <label
+                htmlFor='pageSize'
+                className='md:hidden text-xs text-gray-700 mr-2'
+              >
+                Per page:
+              </label>
+              <div className='flex items-center justify-between gap-2.5 border border-gray-300 rounded-md p-1 px-3'>
+                <span className='text-xs text-gray-700'>
+                  {table.getState().pagination.pageSize}
+                </span>
+                <div className='flex flex-col ml-1'>
+                  <button
+                    type='button'
+                    className='hover:bg-gray-200 px-1'
+                    onClick={() => {
+                      let current = table.getState().pagination.pageSize
+                      if (current < 100) {
+                        table.setPageSize(current + 10) // Increment by 10
+                      }
+                    }}
+                  >
+                    <FaChevronUp size={8} />
+                  </button>
+                  <button
+                    type='button'
+                    className='hover:bg-gray-200 px-1'
+                    onClick={() => {
+                      let current = table.getState().pagination.pageSize
+                      if (current > 10) {
+                        table.setPageSize(current - 10) // Decrement by 10
+                      }
+                    }}
+                  >
+                    <FaChevronDown size={8} />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className='text-xs text-gray-700'>
+            Page{" "}
+            <span className='font-medium'>
+              {table.getState().pagination.pageIndex + 1}
+            </span>{" "}
+            of <span className='font-medium'>{table.getPageCount()}</span>
+          </div>
+
+          {/* Buttons */}
+          <div className='flex items-center space-x-2'>
+            <button
+              className='p-1 border rounded-md bg-gray-200 hover:bg-gray-300 disabled:opacity-50'
+              disabled={!table.getCanPreviousPage()}
+              onClick={() => table.setPageIndex(0)}
+            >
+              <FiChevronsLeft size={12} />
+            </button>
+
+            <button
+              className='p-1 border rounded-md bg-gray-200 hover:bg-gray-300 disabled:opacity-50'
+              disabled={!table.getCanPreviousPage()}
+              onClick={() => table.previousPage()}
+            >
+              <FiChevronLeft size={12} />
+            </button>
+
+            <button
+              className='p-1 border rounded-md bg-gray-200 hover:bg-gray-300 disabled:opacity-50'
+              disabled={!table.getCanNextPage()}
+              onClick={() => table.nextPage()}
+            >
+              <FiChevronRight size={12} />
+            </button>
+
+            <button
+              className='p-1 border rounded-md bg-gray-200 hover:bg-gray-300 disabled:opacity-50'
+              disabled={!table.getCanNextPage()}
+              onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+            >
+              <FiChevronsRight size={12} />
+            </button>
+          </div>
+        </div>
       </div>
     </>
   )

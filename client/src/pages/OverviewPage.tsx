@@ -56,7 +56,7 @@ const OverviewPage = () => {
     queryKey: ["comments"],
     queryFn: async () => {
       const response = await fetch(
-        "https://jsonplaceholder.typicode.com/comments?_start=0&_limit=20"
+        "https://jsonplaceholder.typicode.com/comments"
       )
       if (!response.ok) {
         throw new Error("Failed to fetch users")
@@ -64,6 +64,7 @@ const OverviewPage = () => {
       return response.json()
     },
   })
+ 
 
   return (
     <div className='flex flex-col max-w-full mx-auto px-4 lg:px-8 py-4 h-dynamic-sm lg:h-dynamic-lg'>

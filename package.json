@@ -8,9 +8,5 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "@tanstack/react-query": "^5.62.3",
-    "axios": "^1.7.9"
-  }
+  "license": "ISC"
 }
