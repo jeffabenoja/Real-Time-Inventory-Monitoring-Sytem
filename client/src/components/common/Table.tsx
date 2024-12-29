@@ -40,8 +40,6 @@ const Table: React.FC<TableProps> = ({ data, columns }) => {
     getPaginationRowModel: getPaginationRowModel(),
   })
 
-  console.log(data)
-
   const handleExport = () => {
     // Optional if we wanted to set the specific headers
     // const modifiedData = data.map((item) => ({
