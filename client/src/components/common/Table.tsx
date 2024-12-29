@@ -19,6 +19,8 @@ import {
 } from "react-icons/fi"
 import Search from "./Search"
 import Buttons from "./Buttons"
+import Papa from "papaparse"
+import { flattenObject } from "../../utils/flattenObject"
 
 const Table: React.FC<TableProps> = ({ data, columns }) => {
   const [globalFilter, setGlobalFilter] = useState<string>("")
@@ -38,6 +40,33 @@ const Table: React.FC<TableProps> = ({ data, columns }) => {
     getPaginationRowModel: getPaginationRowModel(),
   })
 
+  console.log(data)
+
+  const handleExport = () => {
+    // Optional if we wanted to set the specific headers
+    // const modifiedData = data.map((item) => ({
+    //   "Post ID": item.postId,
+    //   "Full Name": item.name,
+    //   "Email Address": item.email,
+    // }))
+
+    // Flatten data before exporting
+    const flattenData = data.map((item) => flattenObject(item))
+
+    const csv = Papa.unparse(flattenData, {
+      header: true,
+    })
+
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement("a")
+    link.href = url
+    link.download = "export.csv"
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
   return (
     <>
       {/* Search, Imports, Export, Add Buttons, Filter */}
@@ -55,7 +84,7 @@ const Table: React.FC<TableProps> = ({ data, columns }) => {
           </div>
 
           <div className='ml-2'>
-            <Buttons label={"Export"} Icon={CiExport} />
+            <Buttons label={"Export"} Icon={CiExport} onClick={handleExport} />
           </div>
 
           <div className='ml-2'>

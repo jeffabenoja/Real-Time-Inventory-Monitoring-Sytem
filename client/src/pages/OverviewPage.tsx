@@ -5,6 +5,7 @@ import { MdOutlineEmail } from "react-icons/md"
 import Spinner from "../components/common/Spinner"
 import { useQuery } from "@tanstack/react-query"
 
+
 const columnHelper = createColumnHelper<any>()
 
 const columns = [
@@ -64,7 +65,6 @@ const OverviewPage = () => {
       return response.json()
     },
   })
- 
 
   return (
     <div className='flex flex-col max-w-full mx-auto px-4 lg:px-8 py-4 h-dynamic-sm lg:h-dynamic-lg'>
