@@ -25,7 +25,7 @@ const Header = () => {
   }
 
   return (
-    <header className='relative flex justify-between items-center px-4 lg:px-8 py-4 shadow-sm border-gray-200 mx-auto max-w-full transition-all duration-300 ease-in-out'>
+    <header className='relative flex justify-between items-center px-4 lg:px-8 py-4 shadow-md border-gray-200 mx-auto max-w-full transition-all duration-300 ease-in-out z-40'>
       <div className='hidden lg:block font-bold text-2xl text-primary'>
         E&L Delicatessen
       </div>

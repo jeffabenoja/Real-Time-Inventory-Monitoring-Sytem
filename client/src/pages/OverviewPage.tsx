@@ -5,7 +5,6 @@ import { MdOutlineEmail } from "react-icons/md"
 import Spinner from "../components/common/Spinner"
 import { useQuery } from "@tanstack/react-query"
 
-
 const columnHelper = createColumnHelper<any>()
 
 const columns = [
