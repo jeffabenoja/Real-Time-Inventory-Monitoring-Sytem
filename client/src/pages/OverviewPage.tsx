@@ -4,6 +4,7 @@ import { CiUser } from "react-icons/ci"
 import { MdOutlineEmail } from "react-icons/md"
 import Spinner from "../components/common/Spinner"
 import { useQuery } from "@tanstack/react-query"
+import PageTitle from "../components/common/PageTitle"
 
 const columnHelper = createColumnHelper<any>()
 
@@ -66,10 +67,10 @@ const OverviewPage = () => {
   })
 
   return (
-    <div className='flex flex-col max-w-full mx-auto px-4 lg:px-8 py-4 h-dynamic-sm lg:h-dynamic-lg'>
-      <h1 className='text-2xl font-bold mb-5'>Overview Page</h1>
+    <div className='flex flex-col max-w-full mx-auto h-dynamic-sm lg:h-dynamic-lg'>
+      <PageTitle>Overview Page</PageTitle>
 
-      {isLoading ? <Spinner /> : <Table data={data} columns={columns} />}
+      {isLoading ? <Spinner /> : <Table data={data} columns={columns} search={true} withImport={true} withExport={true} add={true} view={true}  />}
     </div>
   )
 }

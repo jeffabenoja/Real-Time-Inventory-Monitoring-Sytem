@@ -22,7 +22,7 @@ import Buttons from "./Buttons"
 import Papa from "papaparse"
 import { flattenObject } from "../../utils/flattenObject"
 
-const Table: React.FC<TableProps> = ({ data, columns }) => {
+const Table: React.FC<TableProps> = ({ data, columns, search, withImport, withExport, add, view, handleAdd }) => {
   const [globalFilter, setGlobalFilter] = useState<string>("")
   const table = useReactTable({
     data: data || [],
@@ -70,29 +70,29 @@ const Table: React.FC<TableProps> = ({ data, columns }) => {
       {/* Search, Imports, Export, Add Buttons, Filter */}
       <div className='flex items-center justify-between py-2'>
         <div className='flex items-center justify-center'>
-          <div className=' relative'>
+          {search && <div className=' relative'>
             <Search
               columnFilter={globalFilter}
               setColumnFilter={setGlobalFilter}
             />
-          </div>
+          </div>}
 
-          <div className='ml-2'>
+          {withImport && <div className='ml-2'>
             <Buttons label={"Import"} Icon={CiImport} />
-          </div>
+          </div>}
 
-          <div className='ml-2'>
+          {withExport && <div className='ml-2'>
             <Buttons label={"Export"} Icon={CiExport} onClick={handleExport} />
-          </div>
+          </div>}
 
-          <div className='ml-2'>
-            <Buttons label={"Add"} Icon={IoIosAdd} />
-          </div>
+          {add && <div className='ml-2'>
+            <Buttons label={"Add"} Icon={IoIosAdd} onClick={handleAdd} />
+          </div>}
         </div>
 
-        <div className='ml-2'>
+        {view &&<div className='ml-2'>
           <Buttons label={"View"} Icon={VscSettings} />
-        </div>
+        </div>}
       </div>
 
       <div className='overflow-x-auto bg-white shadow-md rounded-lg scrollbar'>

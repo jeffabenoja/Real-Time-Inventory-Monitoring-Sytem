@@ -1,5 +1,7 @@
+import PageTitle from "../components/common/PageTitle"
+
 const StocklistPage = () => {
-  return <div>StocklistPage</div>
+  return <PageTitle>Stocklist Page</PageTitle>
 }
 
 export default StocklistPage

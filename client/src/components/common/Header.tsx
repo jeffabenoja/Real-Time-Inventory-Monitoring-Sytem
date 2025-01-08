@@ -6,11 +6,11 @@ import { NavLink } from "react-router-dom"
 import { useState } from "react"
 
 const NAVIGATION_ITEMS = [
-  { name: "Overview", to: "overview" },
-  { name: "Products", to: "products" },
-  { name: "Sales", to: "sales" },
-  { name: "Stocklist", to: "stocklist" },
-  { name: "Reports", to: "reports" },
+  { name: "Overview", to: "/dashboard/overview" },
+  { name: "Products", to: "/dashboard/products" },
+  { name: "Sales", to: "/dashboard/sales" },
+  { name: "Stocklist", to: "/dashboard/stocklist" },
+  { name: "Reports", to: "/dashboard/reports" },
 ]
 
 const Header = () => {
@@ -66,7 +66,7 @@ const Header = () => {
 
       <div className='flex gap-6 items-center cursor-pointer'>
         <IoIosNotifications className='text-xl hover:text-primary' />
-        <IoIosSettings className='text-xl hover:text-primary' />
+        <NavLink to='/admin'> <IoIosSettings className='text-xl hover:text-primary' /> </NavLink>
         <CgProfile className='text-xl hover:text-primary' />
       </div>
     </header>

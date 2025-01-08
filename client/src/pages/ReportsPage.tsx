@@ -1,5 +1,7 @@
+import PageTitle from "../components/common/PageTitle"
+
 const ReportsPage = () => {
-  return <div>ReportsPage</div>
+  return <PageTitle>Reports Page</PageTitle>
 }
 
 export default ReportsPage

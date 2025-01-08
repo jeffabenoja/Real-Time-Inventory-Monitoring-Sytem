@@ -13,6 +13,7 @@ import ReportsPage from "./pages/ReportsPage"
 import Login from "./components/auth/Login"
 import NotFoundPage from "./pages/NotFoundPage"
 import { Toaster } from "sonner"
+import AdminPage from "./pages/AdminPage"
 
 const App = () => {
   const router = createBrowserRouter(
@@ -20,12 +21,16 @@ const App = () => {
       <>
         <Route path='/' element={<Login />} />
         <Route path='*' element={<NotFoundPage />} />
-        <Route path='/dashboard' element={<MainLayout />}>
-          <Route path='overview' element={<OverviewPage />} />
-          <Route path='products' element={<ProductsPage />} />
-          <Route path='sales' element={<SalesPage />} />
-          <Route path='stocklist' element={<StocklistPage />} />
-          <Route path='reports' element={<ReportsPage />} />
+        {/* <Route path='/admin' element={<AdminPage />} /> */}
+        <Route element={<MainLayout />}>
+          <Route path='/admin' element={<AdminPage />} />
+          <Route path='/dashboard'>
+            <Route path='overview' element={<OverviewPage />} />
+            <Route path='products' element={<ProductsPage />} />
+            <Route path='sales' element={<SalesPage />} />
+            <Route path='stocklist' element={<StocklistPage />} />
+            <Route path='reports' element={<ReportsPage />} />
+          </Route>
         </Route>
       </>
     )
