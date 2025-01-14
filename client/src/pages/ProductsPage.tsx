@@ -2,6 +2,9 @@ import Table from "../components/common/Table"
 import { createColumnHelper } from "@tanstack/react-table"
 import Spinner from "../components/common/Spinner"
 import { useQuery } from "@tanstack/react-query"
+import { useState } from "react"
+import CustomModal from "../components/common/CustomModal"
+import AddItems from "../components/modal/AddItems"
 
 const columnHelper = createColumnHelper<any>()
 
@@ -42,6 +45,7 @@ const columns = [
 ]
 
 const ProductsPage = () => {
+  const [isOpen, setIsOpen] = useState(false)
   const { data, isLoading } = useQuery({
     queryKey: ["products"],
     queryFn: async () => {
@@ -53,6 +57,10 @@ const ProductsPage = () => {
     },
   })
 
+  const handleModalToggle = () => {
+    setIsOpen((prev) => !prev)
+  }
+
   return (
     <div className='flex flex-col max-w-full mx-auto px-4 lg:px-8 py-4 h-dynamic-sm lg:h-dynamic-lg'>
       <h1 className='text-2xl font-bold mb-5'>Product Page</h1>
@@ -60,7 +68,17 @@ const ProductsPage = () => {
       {isLoading ? (
         <Spinner />
       ) : (
-        <Table data={data?.products} columns={columns} />
+        <Table
+          data={data?.products}
+          columns={columns}
+          openModal={handleModalToggle}
+        />
+      )}
+
+      {isOpen && (
+        <CustomModal toggleModal={handleModalToggle}>
+          <AddItems toggleModal={handleModalToggle}/>
+        </CustomModal>
       )}
     </div>
   )
