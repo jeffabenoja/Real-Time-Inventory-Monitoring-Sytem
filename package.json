@@ -8,5 +8,9 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@hookform/resolvers": "^3.10.0",
+    "zod": "^3.24.1"
+  }
 }

@@ -14,11 +14,21 @@ export interface UserLogin {
 }
 
 export interface User {
-  id: string
-  loginCredentials: UserLogin
-  firstname: string
-  lastname: string
-  email: string
-  userGroup: UserGroup
-  status: "active" | "inactive" | "pending" // String union for known statuses
-}
+  usercode: string;
+  password: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  userGroup?: UserGroup
+  // status: string;
+};
+
+// export interface User {
+//   id: string
+//   loginCredentials: UserLogin
+//   firstname: string
+//   lastname: string
+//   email: string
+//   userGroup: UserGroup
+//   status: "active" | "inactive" | "pending" // String union for known statuses
+// }

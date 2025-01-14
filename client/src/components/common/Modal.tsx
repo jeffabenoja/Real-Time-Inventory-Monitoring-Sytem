@@ -16,7 +16,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
 
   return ReactDOM.createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="relative bg-white rounded-lg shadow-lg min-w-[460px] p-6">
+      <div className="relative bg-white rounded-lg shadow-lg w-[570px] p-6">
         <div className="absolute top-3 right-3">
           <ImCross size={15} onClick={onClose} className="cursor-pointer"/>
         </div>
