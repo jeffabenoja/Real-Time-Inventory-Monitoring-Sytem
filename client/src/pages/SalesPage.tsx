@@ -1,4 +1,4 @@
-import PageTitle from "../components/common/PageTitle"
+import PageTitle from "../components/common/utils/PageTitle"
 
 const SalesPage = () => {
   return (

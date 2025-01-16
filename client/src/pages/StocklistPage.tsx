@@ -1,76 +1,57 @@
-import Table from "../components/common/Table"
-import { createColumnHelper } from "@tanstack/react-table"
-import Spinner from "../components/common/Spinner"
-import { useQuery } from "@tanstack/react-query"
-import PageTitle from "../components/common/PageTitle"
-import { getItemListByCategoryRawMats } from "../api/services/item"
+import Table from "../components/common/table/Table"
+import Columns from "../components/common/table/Columns"
+import Spinner from "../components/common/utils/Spinner"
+import PageTitle from "../components/common/utils/PageTitle"
 import { ItemType } from "../type/itemType"
 import { useState } from "react"
-import CustomModal from "../components/common/CustomModal"
+import CustomModal from "../components/common/utils/CustomModal"
 import AddItems from "../components/modal/AddItems"
+import { useItemMaterials } from "../hooks/items/useItemMaterials"
+import { FaExclamationTriangle } from "react-icons/fa"
 
-const columnHelper = createColumnHelper<any>()
-
-const columns = [
-  columnHelper.accessor("code", {
-    cell: (info) => info.getValue(),
-    header: () => <span className='flex items-center truncate'>Code</span>,
-  }),
-
-  columnHelper.accessor("description", {
-    cell: (info) => info.getValue(),
-    header: () => (
-      <span className='flex items-center truncate'>Description</span>
-    ),
-  }),
-
-  columnHelper.accessor("category", {
-    cell: (info) => info.getValue(),
-    header: () => <span className='flex items-center truncate'>Category</span>,
-  }),
-
-  columnHelper.accessor("brand", {
-    cell: (info) => info.getValue(),
-    header: () => <span className='flex items-center truncate'>Brand</span>,
-  }),
-
-  columnHelper.accessor("unit", {
-    cell: (info) => info.getValue(),
-    header: () => <span className='flex items-center truncate'>Unit</span>,
-  }),
-
-  columnHelper.accessor("reorderPoint", {
-    cell: (info) => info.getValue(),
-    header: () => (
-      <span className='flex items-center truncate'>Re-ordering Point</span>
-    ),
-  }),
-
-  columnHelper.accessor("price", {
-    cell: (info) => info.getValue(),
-    header: () => <span className='flex items-center truncate'>Price</span>,
-  }),
-
-  columnHelper.accessor("cost", {
-    cell: (info) => info.getValue(),
-    header: () => <span className='flex items-center truncate'>Price</span>,
-  }),
-
-  columnHelper.accessor("status", {
-    cell: (info) => info.getValue(),
-    header: () => <span className='flex items-center truncate'>Status</span>,
-  }),
+const fields = [
+  { key: "code", label: "Code" },
+  { key: "description", label: "Description" },
+  { key: "category", label: "Category" },
+  { key: "brand", label: "Brand" },
+  { key: "unit", label: "Unit" },
+  { key: "reorderPoint", label: "Re-ordering Point" },
+  { key: "status", label: "Status" },
 ]
+
+const handleUpdate = (item: ItemType) => {
+  console.log("Update Item:", item)
+}
+
+const handleDelete = (item: ItemType) => {
+  console.log("Delete Item:", item)
+}
+
+const columns = Columns({
+  fields,
+  onUpdate: handleUpdate,
+  onDelete: handleDelete,
+})
 
 const StocklistPage = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  const { data, isLoading } = useQuery<ItemType[]>({
-    queryKey: ["Items"],
-    queryFn: getItemListByCategoryRawMats,
-  })
+
+  const { data, isLoading, isError, createItem, isPending } = useItemMaterials()
 
   const handleModalToggle = () => {
     setIsOpen((prev) => !prev)
+  }
+
+  if (isError) {
+    return (
+      <section className='text-center flex flex-col justify-center items-center h-96'>
+        <FaExclamationTriangle className='text-red-900 text-6xl mb-4' />
+        <h1 className='text-6xl font-bold mb-4'>Something went wrong</h1>
+        <p className='text-xl mb-5 text-primary'>
+          Please contact your administrator
+        </p>
+      </section>
+    )
   }
 
   return (
@@ -97,6 +78,8 @@ const StocklistPage = () => {
           <AddItems
             title={"Raw Materials"}
             isStocklist={true}
+            isOnSubmit={createItem}
+            isLoading={isPending}
             toggleModal={handleModalToggle}
           />
         </CustomModal>

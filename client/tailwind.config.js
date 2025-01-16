@@ -19,6 +19,15 @@ export default {
         "dynamic-sm": "calc(100vh - 52px)",
         "dynamic-lg": "calc(100vh - 77px)",
       },
+      animation: {
+        spin: "spin 1s linear infinite", // Define the spinning animation
+      },
+      keyframes: {
+        spin: {
+          "0%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(360deg)" },
+        },
+      },
     },
   },
   plugins: [

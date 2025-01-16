@@ -6,7 +6,7 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
 } from "@tanstack/react-table"
-import { TableProps } from "../../type/tableType"
+import { TableProps } from "../../../type/tableType"
 import { IoIosAdd } from "react-icons/io"
 import { VscSettings } from "react-icons/vsc"
 import { CiExport, CiImport } from "react-icons/ci"
@@ -18,9 +18,9 @@ import {
   FiChevronRight,
 } from "react-icons/fi"
 import Search from "./Search"
-import Buttons from "./Buttons"
+import Buttons from "../buttons/Buttons"
 import Papa from "papaparse"
-import { flattenObject } from "../../utils/flattenObject"
+import { flattenObject } from "../../../utils/flattenObject"
 
 const Table: React.FC<TableProps> = ({
   data,
@@ -132,11 +132,7 @@ const Table: React.FC<TableProps> = ({
 
           {add && (
             <div className='ml-2'>
-              <Buttons
-                label={"Add"}
-                Icon={IoIosAdd}
-                onClick={handleAdd}
-              />
+              <Buttons label={"Add"} Icon={IoIosAdd} onClick={handleAdd} />
             </div>
           )}
         </div>

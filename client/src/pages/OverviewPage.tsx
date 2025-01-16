@@ -4,7 +4,7 @@
 // import { MdOutlineEmail } from "react-icons/md"
 // import Spinner from "../components/common/Spinner"
 // import { useQuery } from "@tanstack/react-query"
-import PageTitle from "../components/common/PageTitle"
+import PageTitle from "../components/common/utils/PageTitle"
 
 // const columnHelper = createColumnHelper<any>()
 

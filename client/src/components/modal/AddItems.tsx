@@ -1,39 +1,33 @@
 import React, { useState } from "react"
 import { showToast } from "../../utils/Toast"
+import { ItemType } from "../../type/itemType"
 
 interface AddItemsProps {
   title?: String
   isProduct?: boolean
   isStocklist?: boolean
+  isOnSubmit: (item: ItemType) => void
+  isLoading: boolean
   toggleModal: () => void
-}
-
-interface ProductProps {
-  code: string
-  description: string
-  category: string
-  brand: string
-  unit: string
-  reorderPoint: string
-  price: string
-  cost: string
 }
 
 const AddItems: React.FC<AddItemsProps> = ({
   title,
   isProduct,
   isStocklist,
+  isOnSubmit,
+  isLoading,
   toggleModal,
 }) => {
-  const [product, setProduct] = useState<ProductProps>({
+  const [product, setProduct] = useState<ItemType>({
     code: "",
     description: "",
     category: "",
     brand: "",
     unit: "",
-    reorderPoint: "",
-    price: "",
-    cost: "",
+    reorderPoint: 0,
+    price: undefined,
+    cost: undefined,
   })
 
   const [invalidFields, setInvalidFields] = useState<string[]>([])
@@ -53,33 +47,47 @@ const AddItems: React.FC<AddItemsProps> = ({
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    const requiredFields = [
+    const requiredFields: string[] = [
       "code",
       "description",
-      "category",
       "unit",
       "reorderPoint",
-      "price",
-      "cost",
     ]
 
+    if (isProduct) {
+      requiredFields.push("price")
+    } else {
+      requiredFields.push("cost")
+    }
+
+    const category = isProduct ? "Finished Goods" : "Raw Mats"
+
     const emptyFields = requiredFields.filter(
-      (field) => !product[field as keyof ProductProps]
+      (field) => !product[field as keyof ItemType]
     )
 
     if (emptyFields.length > 0) {
       setInvalidFields(emptyFields)
-      showToast.error("Fill all the required Fields")
+      showToast.error("Please fill out all required fields.")
       return
     }
 
-    if (product.brand === "") {
-      product.brand = "N/A"
+    // Validate unit type
+    if (product.unit !== "kg" && product.unit !== "pcs") {
+      setInvalidFields((prev) => [...prev, "unit"])
+      showToast.error("Invalid unit type")
+      return
     }
 
-    // Add logic to save the product
-    console.log("Product Data:", product)
-    toggleModal() // Close modal after submission
+    const updatedProduct: ItemType = {
+      ...product,
+      category,
+      brand: product.brand || "N/A",
+    }
+
+    isOnSubmit(updatedProduct)
+
+    toggleModal()
   }
 
   return (
@@ -114,8 +122,8 @@ const AddItems: React.FC<AddItemsProps> = ({
           </label>
           <textarea
             id='description'
-            rows={2}
-            placeholder="e.g. It's always good to take a break. Try our Ube Halaya to help you relax."
+            rows={1}
+            placeholder='e.g. Product Name'
             name='description'
             value={product.description}
             autoComplete='off'
@@ -137,8 +145,8 @@ const AddItems: React.FC<AddItemsProps> = ({
               id='category'
               name='category'
               autoComplete='off'
-              value={product.category}
-              onChange={handleChange}
+              value={isProduct ? "Finished Goods" : "Raw Mats"}
+              readOnly
               className={`${
                 invalidFields.includes("category") && "border-primary"
               } w-[120px] md:w-[200px] py-1 px-4 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent
@@ -188,7 +196,7 @@ const AddItems: React.FC<AddItemsProps> = ({
             </label>
             <input
               type='number'
-              step='1'
+              step='0.01'
               min='1'
               id='reorderPoint'
               autoComplete='off'
@@ -252,7 +260,11 @@ const AddItems: React.FC<AddItemsProps> = ({
            font-medium my-5 cursor-pointer text-white bg-primary'
           type='submit'
         >
-          <p>Add New Product</p>
+          {isLoading ? (
+            <div className='w-5 h-5 border-2 border-t-2 border-[#0A140A] border-t-white rounded-full animate-spin'></div>
+          ) : (
+            <p>Add New Product</p>
+          )}
         </button>
       </form>
     </div>

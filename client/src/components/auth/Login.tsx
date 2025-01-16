@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { UserLogin } from "../../type/userType"
 import { useLoginUser } from "../../hooks/user/useLoginUser"
-import Spinner from "../common/Spinner"
+import Spinner from "../common/utils/Spinner"
 
 const Login = () => {
   const [login, setLogin] = useState<UserLogin>({

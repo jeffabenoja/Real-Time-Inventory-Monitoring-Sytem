@@ -1,16 +1,16 @@
-import { createSlice } from '@reduxjs/toolkit'
-import { User } from '../../type/userType'
+import { createSlice } from "@reduxjs/toolkit"
+import { User } from "../../type/userType"
 
 interface state {
   users: User[]
 }
 
-const initialState : state = {
-  users: []
+const initialState: state = {
+  users: [],
 }
 
 const adminSlice = createSlice({
-  name: 'admin',
+  name: "admin",
   initialState,
   reducers: {
     replaceUserList: (state, action) => {
@@ -18,8 +18,8 @@ const adminSlice = createSlice({
     },
     appendUserList: (state, action) => {
       state.users.push(action.payload)
-    }
-  }
+    },
+  },
 })
 
 export const { replaceUserList, appendUserList } = adminSlice.actions
