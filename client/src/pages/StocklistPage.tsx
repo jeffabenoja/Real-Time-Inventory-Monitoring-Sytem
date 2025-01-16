@@ -3,8 +3,11 @@ import { createColumnHelper } from "@tanstack/react-table"
 import Spinner from "../components/common/Spinner"
 import { useQuery } from "@tanstack/react-query"
 import PageTitle from "../components/common/PageTitle"
-import { getItemList } from "../api/services/admin"
-import { Items } from "../type/itemType"
+import { getItemListByCategoryRawMats } from "../api/services/item"
+import { ItemType } from "../type/itemType"
+import { useState } from "react"
+import CustomModal from "../components/common/CustomModal"
+import AddItems from "../components/modal/AddItems"
 
 const columnHelper = createColumnHelper<any>()
 
@@ -16,7 +19,9 @@ const columns = [
 
   columnHelper.accessor("description", {
     cell: (info) => info.getValue(),
-    header: () => <span className='flex items-center truncate'>Description</span>,
+    header: () => (
+      <span className='flex items-center truncate'>Description</span>
+    ),
   }),
 
   columnHelper.accessor("category", {
@@ -30,57 +35,71 @@ const columns = [
   }),
 
   columnHelper.accessor("unit", {
-    cell: (info) => (
-      <span className='italic text-primary'>{info.getValue()}</span>
-    ),
+    cell: (info) => info.getValue(),
     header: () => <span className='flex items-center truncate'>Unit</span>,
   }),
 
-  columnHelper.accessor("reoderPoint", {
-    cell: (info) => (
-      <span className='italic text-primary'>{info.getValue()}</span>
+  columnHelper.accessor("reorderPoint", {
+    cell: (info) => info.getValue(),
+    header: () => (
+      <span className='flex items-center truncate'>Re-ordering Point</span>
     ),
-    header: () => <span className='flex items-center truncate'>Reorder Point</span>,
   }),
 
   columnHelper.accessor("price", {
-    cell: (info) => (
-      <span className='italic text-primary'>${info.getValue()}</span>
-    ),
+    cell: (info) => info.getValue(),
     header: () => <span className='flex items-center truncate'>Price</span>,
   }),
 
   columnHelper.accessor("cost", {
-    cell: (info) => (
-      <span className='italic text-primary'>${info.getValue()}</span>
-    ),
+    cell: (info) => info.getValue(),
     header: () => <span className='flex items-center truncate'>Price</span>,
   }),
 
   columnHelper.accessor("status", {
-    cell: (info) => (
-      <span className='italic text-primary'>{info.getValue()}</span>
-    ),
+    cell: (info) => info.getValue(),
     header: () => <span className='flex items-center truncate'>Status</span>,
   }),
 ]
 
 const StocklistPage = () => {
-  const { data, isLoading } = useQuery({
-    queryKey: ["products"],
-    queryFn: getItemList
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const { data, isLoading } = useQuery<ItemType[]>({
+    queryKey: ["Items"],
+    queryFn: getItemListByCategoryRawMats,
   })
 
-  const tableData = data.filter((data: Items) => data.category === "Raw Mats")
+  const handleModalToggle = () => {
+    setIsOpen((prev) => !prev)
+  }
 
   return (
-    <div className='flex flex-col max-w-full mx-auto h-dynamic-sm lg:h-dynamic-lg'>
+    <div className='flex flex-col max-w-full mx-auto h-dynamic-sm lg:h-dynamic-lg px-4 lg:px-8 py-4'>
       <PageTitle>Stocklist Page</PageTitle>
 
       {isLoading ? (
         <Spinner />
       ) : (
-        <Table data={tableData} columns={columns} search={true} withImport={true} withExport={true} add={true} view={true} />
+        <Table
+          data={data || []}
+          columns={columns}
+          search={true}
+          withImport={true}
+          withExport={true}
+          add={true}
+          view={true}
+          handleAdd={handleModalToggle}
+        />
+      )}
+
+      {isOpen && (
+        <CustomModal toggleModal={handleModalToggle}>
+          <AddItems
+            title={"Raw Materials"}
+            isStocklist={true}
+            toggleModal={handleModalToggle}
+          />
+        </CustomModal>
       )}
     </div>
   )

@@ -16,13 +16,11 @@ export const useLoginUser = () => {
       navigate("/dashboard/overview")
       showToast.success("Login Successful")
 
-     //temp consumption as api response is still being modified
-     const user =  
-     {
-      ...data['userDetails:  '],
-      loggedInAt: data['loggedInAt:   ']
-     }
-      
+      const user = {
+        ...data["userDetails:  "],
+        loggedInAt: data["loggedInAt:   "],
+      }
+
       dispatch(login(user))
     },
     onError: () => {

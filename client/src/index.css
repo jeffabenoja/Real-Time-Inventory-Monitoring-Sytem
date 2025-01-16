@@ -95,3 +95,12 @@ h6 {
   /* scrollbar-color: #7f1d1d #edf2f7;  */
   scrollbar-color: #cbd5e0 #edf2f7;
 }
+
+textarea {
+  resize: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}

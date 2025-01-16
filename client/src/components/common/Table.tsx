@@ -22,7 +22,17 @@ import Buttons from "./Buttons"
 import Papa from "papaparse"
 import { flattenObject } from "../../utils/flattenObject"
 
-const Table: React.FC<TableProps> = ({ data, columns, search, withImport, withExport, add, view, handleAdd }) => {
+const Table: React.FC<TableProps> = ({
+  data,
+  columns,
+  search,
+  withImport,
+  withExport,
+  add,
+  view,
+  handleAdd,
+}) => {
+  const [isOpenExport, setIsOpenExport] = useState<boolean>(false)
   const [globalFilter, setGlobalFilter] = useState<string>("")
   const table = useReactTable({
     data: data || [],
@@ -40,7 +50,7 @@ const Table: React.FC<TableProps> = ({ data, columns, search, withImport, withEx
     getPaginationRowModel: getPaginationRowModel(),
   })
 
-  const handleExport = () => {
+  const handleExport = (exportCurrentPage: boolean) => {
     // Optional if we wanted to set the specific headers
     // const modifiedData = data.map((item) => ({
     //   "Post ID": item.postId,
@@ -48,8 +58,13 @@ const Table: React.FC<TableProps> = ({ data, columns, search, withImport, withEx
     //   "Email Address": item.email,
     // }))
 
+    // Data to export: all data or just current page
+    const dataToExport = exportCurrentPage
+      ? table.getRowModel().rows.map((row) => row.original) // Current page data
+      : data // All data
+
     // Flatten data before exporting
-    const flattenData = data.map((item) => flattenObject(item))
+    const flattenData = dataToExport.map((item) => flattenObject(item))
 
     const csv = Papa.unparse(flattenData, {
       header: true,
@@ -59,10 +74,18 @@ const Table: React.FC<TableProps> = ({ data, columns, search, withImport, withEx
     const url = URL.createObjectURL(blob)
     const link = document.createElement("a")
     link.href = url
-    link.download = "export.csv"
+    link.download = exportCurrentPage
+      ? "current_page_export.csv"
+      : "all_pages_export.csv"
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
+
+    setIsOpenExport((prev) => !prev)
+  }
+
+  const openExport = () => {
+    setIsOpenExport((prev) => !prev)
   }
 
   return (
@@ -70,29 +93,59 @@ const Table: React.FC<TableProps> = ({ data, columns, search, withImport, withEx
       {/* Search, Imports, Export, Add Buttons, Filter */}
       <div className='flex items-center justify-between py-2'>
         <div className='flex items-center justify-center'>
-          {search && <div className=' relative'>
-            <Search
-              columnFilter={globalFilter}
-              setColumnFilter={setGlobalFilter}
-            />
-          </div>}
+          {search && (
+            <div className=' relative'>
+              <Search
+                columnFilter={globalFilter}
+                setColumnFilter={setGlobalFilter}
+              />
+            </div>
+          )}
 
-          {withImport && <div className='ml-2'>
-            <Buttons label={"Import"} Icon={CiImport} />
-          </div>}
+          {withImport && (
+            <div className='ml-2'>
+              <Buttons label={"Import"} Icon={CiImport} />
+            </div>
+          )}
 
-          {withExport && <div className='ml-2'>
-            <Buttons label={"Export"} Icon={CiExport} onClick={handleExport} />
-          </div>}
+          {withExport && (
+            <div className='ml-2 relative'>
+              <Buttons label={"Export"} Icon={CiExport} onClick={openExport} />
+              {isOpenExport && (
+                <div className='absolute z-20 top-10 left-0 bg-white shadow-lg w-[120px] rounded-md'>
+                  <p
+                    className='text-xs cursor-pointer  p-2 hover:bg-gray-100'
+                    onClick={() => handleExport(false)}
+                  >
+                    Export all pages
+                  </p>
+                  <p
+                    className='text-xs cursor-pointer  p-2 hover:bg-gray-100'
+                    onClick={() => handleExport(true)}
+                  >
+                    Export current pages
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
 
-          {add && <div className='ml-2'>
-            <Buttons label={"Add"} Icon={IoIosAdd} onClick={handleAdd} />
-          </div>}
+          {add && (
+            <div className='ml-2'>
+              <Buttons
+                label={"Add"}
+                Icon={IoIosAdd}
+                onClick={handleAdd}
+              />
+            </div>
+          )}
         </div>
 
-        {view &&<div className='ml-2'>
-          <Buttons label={"View"} Icon={VscSettings} />
-        </div>}
+        {view && (
+          <div className='ml-2'>
+            <Buttons label={"View"} Icon={VscSettings} />
+          </div>
+        )}
       </div>
 
       <div className='overflow-x-auto bg-white shadow-md rounded-lg scrollbar'>
