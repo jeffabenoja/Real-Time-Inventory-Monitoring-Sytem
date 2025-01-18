@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { showToast } from "../../utils/Toast"
 import { ItemType } from "../../type/itemType"
 
@@ -9,6 +9,7 @@ interface AddItemsProps {
   isOnSubmit: (item: ItemType) => void
   isLoading: boolean
   toggleModal: () => void
+  productData?: ItemType | null
 }
 
 const AddItems: React.FC<AddItemsProps> = ({
@@ -18,6 +19,7 @@ const AddItems: React.FC<AddItemsProps> = ({
   isOnSubmit,
   isLoading,
   toggleModal,
+  productData,
 }) => {
   const [product, setProduct] = useState<ItemType>({
     code: "",
@@ -26,9 +28,26 @@ const AddItems: React.FC<AddItemsProps> = ({
     brand: "",
     unit: "",
     reorderPoint: 0,
-    price: undefined,
-    cost: undefined,
+    price: 0,
+    cost: 0,
+    status: "",
   })
+
+  useEffect(() => {
+    if (productData) {
+      setProduct({
+        code: productData.code || "",
+        description: productData.description || "",
+        category: productData.category || "",
+        brand: productData.brand || "",
+        unit: productData.unit || "",
+        reorderPoint: productData.reorderPoint || 0,
+        price: productData.price ?? 0,
+        cost: productData.cost ?? 0,
+        status: productData.status || "",
+      })
+    }
+  }, [productData])
 
   const [invalidFields, setInvalidFields] = useState<string[]>([])
 
@@ -72,8 +91,7 @@ const AddItems: React.FC<AddItemsProps> = ({
       return
     }
 
-    // Validate unit type
-    if (product.unit !== "kg" && product.unit !== "pcs") {
+    if (product.unit !== "KG" && product.unit !== "PCS") {
       setInvalidFields((prev) => [...prev, "unit"])
       showToast.error("Invalid unit type")
       return
@@ -95,7 +113,14 @@ const AddItems: React.FC<AddItemsProps> = ({
       <h3 className='heading-l text-primary font-bold text-2xl'>{title}</h3>
       <form
         className='flex flex-col gap-4 text-secondary-200'
-        onSubmit={handleSubmit}
+        onSubmit={
+          productData
+            ? (e) => {
+                e.preventDefault()
+                console.log(productData)
+              }
+            : handleSubmit
+        }
       >
         <div className='flex flex-col gap-2'>
           <label htmlFor='productCode' className='text-sm font-bold'>
@@ -111,7 +136,7 @@ const AddItems: React.FC<AddItemsProps> = ({
             autoComplete='off'
             className={`${
               invalidFields.includes("code") && "border-primary"
-            } py-2 px-4 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent placeholder:text-sm
+            } py-2 px-4 border uppercase border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent placeholder:text-sm
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
           />
         </div>
@@ -130,7 +155,7 @@ const AddItems: React.FC<AddItemsProps> = ({
             onChange={handleChange}
             className={`${
               invalidFields.includes("description") && "border-primary"
-            } py-2 px-4 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent placeholder:text-sm
+            } py-2 px-4 border capitalize border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent placeholder:text-sm
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
           />
         </div>
@@ -166,7 +191,7 @@ const AddItems: React.FC<AddItemsProps> = ({
               value={product.brand}
               onChange={handleChange}
               className='w-[120px] md:w-[150px] py-1 px-4 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent
-              focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary'
+              focus:border-primary capitalize focus:outline-none active:border-primary active:outline-none hover:border-primary'
             />
           </div>
         </div>
@@ -185,7 +210,7 @@ const AddItems: React.FC<AddItemsProps> = ({
               onChange={handleChange}
               className={`${
                 invalidFields.includes("unit") && "border-primary"
-              } w-[120px] py-1 px-4 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent
+              } w-[120px] py-1 lowercase px-4 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
             />
           </div>
@@ -250,6 +275,25 @@ const AddItems: React.FC<AddItemsProps> = ({
                   invalidFields.includes("cost") && "border-primary"
                 } w-[120px] md:w-[180px] py-1 pl-4 pr-1 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
+              />
+            </div>
+          )}
+
+          {productData && (
+            <div className='flex flex-col gap-2'>
+              <label htmlFor='status' className='text-sm'>
+                Status
+              </label>
+              <input
+                type='text'
+                id='status'
+                autoComplete='off'
+                name='status'
+                value={product.status}
+                onChange={handleChange}
+                className='
+                   w-[120px] md:w-[150px] capitalize py-1 pl-4 pr-1 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent
+                focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary'
               />
             </div>
           )}

@@ -11,7 +11,7 @@ export const useItemMaterials = () => {
 
   // Fetch Finished Goods
   const { data, isLoading, isError, error } = useQuery<ItemType[]>({
-    queryKey: ["Raw Mats"],
+    queryKey: ["Item", "Raw Mats"],
     queryFn: getItemListByCategoryRawMats,
   })
 
@@ -20,7 +20,8 @@ export const useItemMaterials = () => {
     mutationFn: createItem,
     onSuccess: () => {
       // Refetch the list of items
-      queryClient.invalidateQueries({ queryKey: ["Raw Mats"] })
+      queryClient.invalidateQueries({ queryKey: ["Item", "Raw Mats"] })
+      showToast.success("Successfully added new item")
     },
     onError: (error) => {
       const message =

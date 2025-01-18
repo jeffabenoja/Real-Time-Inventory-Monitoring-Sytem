@@ -1,5 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table"
 
+
 export interface TableProps {
   columns: Array<ColumnDef<any>>
   data: Array<any>
@@ -11,4 +12,6 @@ export interface TableProps {
   openModal?: () => void
   handleExport?: () => void
   handleAdd?: () => void
+  handleImport?: () => void
+  handleUpdate?: (row: any) => void
 }

@@ -11,7 +11,7 @@ export const useItemComponents = () => {
 
   // Fetch Finished Goods
   const { data, isLoading, isError, error } = useQuery<ItemType[]>({
-    queryKey: ["Finished Goods"],
+    queryKey: ["Item", "Finished Goods"],
     queryFn: getItemListByCategoryFinishedGoods,
   })
 
@@ -20,7 +20,8 @@ export const useItemComponents = () => {
     mutationFn: createItem,
     onSuccess: () => {
       // Refetch the list of items
-      queryClient.invalidateQueries({ queryKey: ["Finished Goods"] })
+      queryClient.invalidateQueries({ queryKey: ["Item", "Finished Goods"] })
+      showToast.success("Successfully added new item")
     },
     onError: (error) => {
       const message =
@@ -29,5 +30,12 @@ export const useItemComponents = () => {
     },
   })
 
-  return { data, isLoading, isError, error, createItem: itemMutation.mutate, isPending: itemMutation.isPending }
+  return {
+    data,
+    isLoading,
+    isError,
+    error,
+    createItem: itemMutation.mutate,
+    isPending: itemMutation.isPending,
+  }
 }

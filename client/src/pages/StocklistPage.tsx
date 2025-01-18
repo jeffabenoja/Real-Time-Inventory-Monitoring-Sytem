@@ -8,38 +8,55 @@ import CustomModal from "../components/common/utils/CustomModal"
 import AddItems from "../components/modal/AddItems"
 import { useItemMaterials } from "../hooks/items/useItemMaterials"
 import { FaExclamationTriangle } from "react-icons/fa"
+import CSVUploader from "../components/modal/CsvUploader"
 
 const fields = [
-  { key: "code", label: "Code" },
-  { key: "description", label: "Description" },
-  { key: "category", label: "Category" },
-  { key: "brand", label: "Brand" },
-  { key: "unit", label: "Unit" },
+  { key: "code", label: "Code", classes: "uppercase" },
+  { key: "description", label: "Description", classes: "capitalize" },
+  { key: "category", label: "Category", classes: "capitalize" },
+  { key: "brand", label: "Brand", classes: "uppercase" },
+  { key: "unit", label: "Unit", classes: "lowercase" },
   { key: "reorderPoint", label: "Re-ordering Point" },
-  { key: "status", label: "Status" },
+  { key: "cost", label: "Cost" },
+  { key: "status", label: "Status", classes: "lowercase" },
 ]
 
 const handleUpdate = (item: ItemType) => {
-  console.log("Update Item:", item)
+  console.log("Update Stock:", item)
 }
 
-const handleDelete = (item: ItemType) => {
-  console.log("Delete Item:", item)
+const handleAdd = (item: ItemType) => {
+  console.log("Add Stock:", item)
 }
 
 const columns = Columns({
   fields,
   onUpdate: handleUpdate,
-  onDelete: handleDelete,
+  onAdd: handleAdd,
 })
 
 const StocklistPage = () => {
-  const [isOpen, setIsOpen] = useState<boolean>(false)
-
+  const [isOpenAdd, setIsOpenAdd] = useState<boolean>(false)
+  const [isOpenImport, setIsOpenImport] = useState<boolean>(false)
+  const [isOpenUpdate, setIsOpenUpdate] = useState<boolean>(false)
+  const [productData, setProductData] = useState<ItemType | null>(null)
   const { data, isLoading, isError, createItem, isPending } = useItemMaterials()
 
-  const handleModalToggle = () => {
-    setIsOpen((prev) => !prev)
+  const handleModalAdd = () => {
+    setIsOpenAdd((prev) => !prev)
+  }
+
+  const handleModalImport = () => {
+    setIsOpenImport((prev) => !prev)
+  }
+
+  const handleModalUpdate = () => {
+    setIsOpenUpdate((prev) => !prev)
+  }
+
+  const handleUpdate = (row: ItemType) => {
+    handleModalUpdate()
+    setProductData(row)
   }
 
   if (isError) {
@@ -69,18 +86,42 @@ const StocklistPage = () => {
           withExport={true}
           add={true}
           view={true}
-          handleAdd={handleModalToggle}
+          handleAdd={handleModalAdd}
+          handleImport={handleModalImport}
+          handleUpdate={handleUpdate}
         />
       )}
 
-      {isOpen && (
-        <CustomModal toggleModal={handleModalToggle}>
+      {isOpenAdd && (
+        <CustomModal toggleModal={handleModalAdd}>
           <AddItems
             title={"Raw Materials"}
             isStocklist={true}
             isOnSubmit={createItem}
             isLoading={isPending}
-            toggleModal={handleModalToggle}
+            toggleModal={handleModalAdd}
+          />
+        </CustomModal>
+      )}
+
+      {isOpenUpdate && (
+        <CustomModal toggleModal={handleModalUpdate}>
+          <AddItems
+            title={"Raw Materials"}
+            isStocklist={true}
+            isOnSubmit={createItem}
+            isLoading={isPending}
+            toggleModal={handleModalUpdate}
+            productData={productData}
+          />
+        </CustomModal>
+      )}
+
+      {isOpenImport && (
+        <CustomModal toggleModal={handleModalImport}>
+          <CSVUploader
+            isOnSubmit={createItem}
+            toggleModal={handleModalImport}
           />
         </CustomModal>
       )}

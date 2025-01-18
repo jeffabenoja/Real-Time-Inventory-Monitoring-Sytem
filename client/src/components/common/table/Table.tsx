@@ -31,6 +31,8 @@ const Table: React.FC<TableProps> = ({
   add,
   view,
   handleAdd,
+  handleImport,
+  handleUpdate,
 }) => {
   const [isOpenExport, setIsOpenExport] = useState<boolean>(false)
   const [globalFilter, setGlobalFilter] = useState<string>("")
@@ -52,7 +54,7 @@ const Table: React.FC<TableProps> = ({
 
   const handleExport = (exportCurrentPage: boolean) => {
     // Optional if we wanted to set the specific headers
-    // const modifiedData = data.map((item) => ({
+    // const modifiedData = data.map(() => ({
     //   "Post ID": item.postId,
     //   "Full Name": item.name,
     //   "Email Address": item.email,
@@ -104,7 +106,11 @@ const Table: React.FC<TableProps> = ({
 
           {withImport && (
             <div className='ml-2'>
-              <Buttons label={"Import"} Icon={CiImport} />
+              <Buttons
+                label={"Import"}
+                Icon={CiImport}
+                onClick={handleImport}
+              />
             </div>
           )}
 
@@ -165,11 +171,21 @@ const Table: React.FC<TableProps> = ({
           </thead>
           <tbody className='bg-white divide-y divide-gray-200'>
             {table.getRowModel().rows.map((row) => (
-              <tr key={row.id} className='hover:bg-gray-50'>
+              <tr
+                key={row.id}
+                className='hover:bg-gray-50'
+                onClick={(e) => e.stopPropagation()}
+              >
                 {row.getVisibleCells().map((cell) => (
                   <td
                     key={cell.id}
-                    className='px-6 py-4 whitespace-nowrap text-sm text-gray-900'
+                    className='px-6 py-4 whitespace-nowrap text-sm text-gray-900 cursor-pointer'
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      if (handleUpdate) {
+                        handleUpdate(row.original)
+                      }
+                    }}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
