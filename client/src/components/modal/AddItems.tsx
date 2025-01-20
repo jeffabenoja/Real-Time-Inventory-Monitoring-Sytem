@@ -91,7 +91,10 @@ const AddItems: React.FC<AddItemsProps> = ({
       return
     }
 
-    if (product.unit !== "KG" && product.unit !== "PCS") {
+    if (
+      product.unit.toLowerCase() !== "kg" &&
+      product.unit.toLowerCase() !== "pcs"
+    ) {
       setInvalidFields((prev) => [...prev, "unit"])
       showToast.error("Invalid unit type")
       return
@@ -105,22 +108,27 @@ const AddItems: React.FC<AddItemsProps> = ({
 
     isOnSubmit(updatedProduct)
 
+    console.log(updatedProduct)
+
     toggleModal()
   }
 
   return (
     <div className='flex flex-col gap-6'>
-      <h3 className='heading-l text-primary font-bold text-2xl'>{title}</h3>
+      <h3 className='heading-l text-primary font-bold text-2xl'>
+        {!productData ? title : `Update ${title}`}
+      </h3>
       <form
         className='flex flex-col gap-4 text-secondary-200'
-        onSubmit={
-          productData
-            ? (e) => {
-                e.preventDefault()
-                console.log(productData)
-              }
-            : handleSubmit
-        }
+        // onSubmit={
+        //   productData
+        //     ? (e) => {
+        //         e.preventDefault()
+        //         console.log(productData)
+        //       }
+        //     : handleSubmit
+        // }
+        onSubmit={handleSubmit}
       >
         <div className='flex flex-col gap-2'>
           <label htmlFor='productCode' className='text-sm font-bold'>
@@ -134,6 +142,7 @@ const AddItems: React.FC<AddItemsProps> = ({
             onChange={handleChange}
             placeholder='e.g Ube Halaya'
             autoComplete='off'
+            readOnly={!!productData}
             className={`${
               invalidFields.includes("code") && "border-primary"
             } py-2 px-4 border uppercase border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent placeholder:text-sm
@@ -307,7 +316,7 @@ const AddItems: React.FC<AddItemsProps> = ({
           {isLoading ? (
             <div className='w-5 h-5 border-2 border-t-2 border-[#0A140A] border-t-white rounded-full animate-spin'></div>
           ) : (
-            <p>Add New Product</p>
+            <p>{!productData ? "Add New Product" : "Update Product"}</p>
           )}
         </button>
       </form>

@@ -3,11 +3,18 @@ import {
   GET_ITEMS,
   GET_ITEMS_BY_CATEGORY_AND_STATUS,
   CREATE_ITEM,
+  UPDATE_ITEM,
 } from "../urls/itemUrls"
 import { ItemType } from "../../type/itemType"
 
 export const createItem = async (item: ItemType) => {
   const response = await apiClient.post(CREATE_ITEM, item)
+
+  return response.data
+}
+
+export const updateItem = async (item: ItemType) => {
+  const response = await apiClient.put(UPDATE_ITEM(item.code), item)
 
   return response.data
 }

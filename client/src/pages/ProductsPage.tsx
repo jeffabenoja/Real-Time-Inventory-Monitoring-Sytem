@@ -21,18 +21,18 @@ const fields = [
   { key: "status", label: "Status", classes: "lowercase" },
 ]
 
-const handleUpdate = (item: ItemType) => {
+const handleUpdateStock = (item: ItemType) => {
   console.log("Update Stock:", item)
 }
 
-const handleAdd = (item: ItemType) => {
+const handleAddStock = (item: ItemType) => {
   console.log("Add Stock:", item)
 }
 
 const columns = Columns({
   fields,
-  onUpdate: handleUpdate,
-  onAdd: handleAdd,
+  onUpdate: handleUpdateStock,
+  onAdd: handleAddStock,
 })
 
 const ProductsPage = () => {
@@ -40,8 +40,15 @@ const ProductsPage = () => {
   const [isOpenImport, setIsOpenImport] = useState<boolean>(false)
   const [isOpenUpdate, setIsOpenUpdate] = useState<boolean>(false)
   const [productData, setProductData] = useState<ItemType | null>(null)
-  const { data, isLoading, isError, createItem, isPending } =
-    useItemComponents()
+  const {
+    data,
+    isLoading,
+    isError,
+    createItem,
+    isPending,
+    updateItem,
+    isPendingUpdate,
+  } = useItemComponents()
 
   const handleModalAdd = () => {
     setIsOpenAdd((prev) => !prev)
@@ -110,8 +117,8 @@ const ProductsPage = () => {
           <AddItems
             title={"Finished Goods"}
             isProduct={true}
-            isOnSubmit={createItem}
-            isLoading={isPending}
+            isOnSubmit={updateItem}
+            isLoading={isPendingUpdate}
             toggleModal={handleModalUpdate}
             productData={productData}
           />

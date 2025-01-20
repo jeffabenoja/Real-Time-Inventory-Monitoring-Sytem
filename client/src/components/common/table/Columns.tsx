@@ -1,6 +1,7 @@
 import { createColumnHelper } from "@tanstack/react-table"
 import { CiEdit } from "react-icons/ci"
 import { IoIosAdd } from "react-icons/io"
+import { ItemType } from "../../../type/itemType"
 
 // Define a reusable function to generate columns
 const Columns = ({
@@ -9,8 +10,8 @@ const Columns = ({
   onAdd,
 }: {
   fields: { key: string; label: string; classes?: string }[]
-  onUpdate: (item: any) => void
-  onAdd: (item: any) => void
+  onUpdate: (item: ItemType) => void
+  onAdd: (item: ItemType) => void
 }) => {
   const columnHelper = createColumnHelper<any>()
 

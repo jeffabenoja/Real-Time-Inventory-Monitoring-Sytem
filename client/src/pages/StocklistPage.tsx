@@ -40,7 +40,15 @@ const StocklistPage = () => {
   const [isOpenImport, setIsOpenImport] = useState<boolean>(false)
   const [isOpenUpdate, setIsOpenUpdate] = useState<boolean>(false)
   const [productData, setProductData] = useState<ItemType | null>(null)
-  const { data, isLoading, isError, createItem, isPending } = useItemMaterials()
+  const {
+    data,
+    isLoading,
+    isError,
+    createItem,
+    isPending,
+    updateItem,
+    isPendingUpdate,
+  } = useItemMaterials()
 
   const handleModalAdd = () => {
     setIsOpenAdd((prev) => !prev)
@@ -109,8 +117,8 @@ const StocklistPage = () => {
           <AddItems
             title={"Raw Materials"}
             isStocklist={true}
-            isOnSubmit={createItem}
-            isLoading={isPending}
+            isOnSubmit={updateItem}
+            isLoading={isPendingUpdate}
             toggleModal={handleModalUpdate}
             productData={productData}
           />

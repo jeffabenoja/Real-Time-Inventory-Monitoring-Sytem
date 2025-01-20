@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import {
   getItemListByCategoryRawMats,
   createItem,
+  updateItem,
 } from "../../api/services/item"
 import { ItemType } from "../../type/itemType"
 import { showToast } from "../../utils/Toast"
@@ -30,6 +31,21 @@ export const useItemMaterials = () => {
     },
   })
 
+  const updateItemMutation = useMutation({
+    mutationFn: updateItem,
+    onSuccess: () => {
+      // Refetch the list of items
+      queryClient.invalidateQueries({ queryKey: ["Item", "Raw Mats"] })
+      showToast.success("Successfully added new item")
+      showToast.success("Updated item successfully")
+    },
+    onError: (error) => {
+      const message =
+        error instanceof Error ? error.message : "Error updating the item"
+      showToast.error(message)
+    },
+  })
+
   return {
     data,
     isLoading,
@@ -37,5 +53,7 @@ export const useItemMaterials = () => {
     error,
     createItem: itemMutation.mutate,
     isPending: itemMutation.isPending,
+    updateItem: updateItemMutation.mutate,
+    isPendingUpdate: updateItemMutation.isPending,
   }
 }
