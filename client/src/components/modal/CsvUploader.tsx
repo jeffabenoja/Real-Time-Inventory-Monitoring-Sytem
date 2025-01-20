@@ -4,12 +4,13 @@ import Papa from "papaparse"
 
 interface CsvUploaderProps {
   isOnSubmit: (item: any) => void
-
+  isLoading: boolean
   toggleModal: () => void
 }
 
 const CSVUploader: React.FC<CsvUploaderProps> = ({
   isOnSubmit,
+  isLoading,
   toggleModal,
 }) => {
   const [fileData, setFileData] = useState<Record<string, any>[] | null>(null)
@@ -60,7 +61,15 @@ const CSVUploader: React.FC<CsvUploaderProps> = ({
       brand: row.brand || "N/A",
     }))
 
-    isOnSubmit(updatedData)
+    // Check the length of updatedData
+    if (updatedData.length > 1) {
+      console.log("Multiple rows to submit:", updatedData)
+    } else if (updatedData.length === 1) {
+      isOnSubmit(updatedData[0])
+      console.log(updatedData)
+    } else {
+      console.log("No data to submit.")
+    }
 
     toggleModal()
   }
@@ -85,7 +94,11 @@ const CSVUploader: React.FC<CsvUploaderProps> = ({
           className='w-28 rounded-md border-0 outline-transparent p-2 font-medium mt-3 cursor-pointer text-white bg-primary'
           onClick={handleSubmit}
         >
-          Submit
+          {isLoading ? (
+            <div className='w-5 h-5 border-2 border-t-2 border-[#0A140A] border-t-white rounded-full animate-spin'></div>
+          ) : (
+            "Submit"
+          )}
         </button>
         <button
           className='w-28 rounded-md border-0 outline-transparent p-2 font-medium mt-3 cursor-pointer bg-gray-100 hover:bg-gray-300'
