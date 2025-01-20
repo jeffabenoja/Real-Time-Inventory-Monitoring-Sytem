@@ -129,6 +129,7 @@ const StocklistPage = () => {
         <CustomModal toggleModal={handleModalImport}>
           <CSVUploader
             isOnSubmit={createItem}
+            isLoading={isPending}
             toggleModal={handleModalImport}
           />
         </CustomModal>
