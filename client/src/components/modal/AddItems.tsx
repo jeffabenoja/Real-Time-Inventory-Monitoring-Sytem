@@ -30,7 +30,7 @@ const AddItems: React.FC<AddItemsProps> = ({
     reorderPoint: 0,
     price: 0,
     cost: 0,
-    status: "",
+    status: "ACTIVE",
   })
 
   useEffect(() => {
@@ -44,7 +44,7 @@ const AddItems: React.FC<AddItemsProps> = ({
         reorderPoint: productData.reorderPoint || 0,
         price: productData.price ?? 0,
         cost: productData.cost ?? 0,
-        status: productData.status || "",
+        status: productData.status,
       })
     }
   }, [productData])
@@ -79,6 +79,10 @@ const AddItems: React.FC<AddItemsProps> = ({
       requiredFields.push("cost")
     }
 
+    if (productData) {
+      requiredFields.push("status")
+    }
+
     const category = isProduct ? "Finished Goods" : "Raw Mats"
 
     const emptyFields = requiredFields.filter(
@@ -100,15 +104,26 @@ const AddItems: React.FC<AddItemsProps> = ({
       return
     }
 
+    if (
+      product.status?.toLowerCase() !== "active" &&
+      product.status?.toLowerCase() !== "inactive"
+    ) {
+      setInvalidFields((prev) => [...prev, "unit"])
+      showToast.error("Invalid status type")
+    }
+
+    const normalizeStatus = product.status?.toUpperCase() as
+      | "ACTIVE"
+      | "INACTIVE"
+
     const updatedProduct: ItemType = {
       ...product,
       category,
       brand: product.brand || "N/A",
+      status: normalizeStatus,
     }
 
     isOnSubmit(updatedProduct)
-
-    console.log(updatedProduct)
 
     toggleModal()
   }
@@ -120,14 +135,6 @@ const AddItems: React.FC<AddItemsProps> = ({
       </h3>
       <form
         className='flex flex-col gap-4 text-secondary-200'
-        // onSubmit={
-        //   productData
-        //     ? (e) => {
-        //         e.preventDefault()
-        //         console.log(productData)
-        //       }
-        //     : handleSubmit
-        // }
         onSubmit={handleSubmit}
       >
         <div className='flex flex-col gap-2'>
@@ -301,7 +308,7 @@ const AddItems: React.FC<AddItemsProps> = ({
                 value={product.status}
                 onChange={handleChange}
                 className='
-                   w-[120px] md:w-[150px] capitalize py-1 pl-4 pr-1 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent
+                   w-[120px] md:w-[150px] uppercase py-1 pl-4 pr-1 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent
                 focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary'
               />
             </div>
