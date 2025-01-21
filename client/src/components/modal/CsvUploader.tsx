@@ -63,7 +63,7 @@ const CSVUploader: React.FC<CsvUploaderProps> = ({
 
     // Check the length of updatedData
     if (updatedData.length > 1) {
-      console.log("Multiple rows to submit:", updatedData)
+      console.log("Multiple rows to submit:", JSON.stringify(updatedData))
     } else if (updatedData.length === 1) {
       isOnSubmit(updatedData[0])
       console.log(updatedData)

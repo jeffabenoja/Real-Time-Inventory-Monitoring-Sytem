@@ -21,24 +21,12 @@ const fields = [
   { key: "status", label: "Status", classes: "lowercase" },
 ]
 
-const handleUpdate = (item: ItemType) => {
-  console.log("Update Stock:", item)
-}
-
-const handleAdd = (item: ItemType) => {
-  console.log("Add Stock:", item)
-}
-
-const columns = Columns({
-  fields,
-  onUpdate: handleUpdate,
-  onAdd: handleAdd,
-})
-
 const StocklistPage = () => {
   const [isOpenAdd, setIsOpenAdd] = useState<boolean>(false)
   const [isOpenImport, setIsOpenImport] = useState<boolean>(false)
   const [isOpenUpdate, setIsOpenUpdate] = useState<boolean>(false)
+  const [isAddStock, setIsAddStock] = useState<boolean>(false)
+  const [isUpdateStock, setIsUpdateStock] = useState<boolean>(false)
   const [productData, setProductData] = useState<ItemType | null>(null)
   const {
     data,
@@ -67,6 +55,30 @@ const StocklistPage = () => {
     setProductData(row)
   }
 
+  /* Stock functionality */
+  const handleAddStockToggle = () => {
+    setIsAddStock((prev) => !prev)
+  }
+  const handleUpdateStockToggle = () => {
+    setIsUpdateStock((prev) => !prev)
+  }
+
+  const handleUpdateStock = (item: ItemType) => {
+    handleUpdateStockToggle()
+    setProductData(item)
+  }
+
+  const handleAddStock = (item: ItemType) => {
+    handleAddStockToggle()
+    setProductData(item)
+  }
+
+  const columns = Columns({
+    fields,
+    onUpdate: handleUpdateStock,
+    onAdd: handleAddStock,
+  })
+
   if (isError) {
     return (
       <section className='text-center flex flex-col justify-center items-center h-96'>
@@ -82,7 +94,6 @@ const StocklistPage = () => {
   return (
     <div className='flex flex-col max-w-full mx-auto h-dynamic-sm lg:h-dynamic-lg px-4 lg:px-8 py-4'>
       <PageTitle>Stocklist Page</PageTitle>
-
       {isLoading ? (
         <Spinner />
       ) : (
@@ -99,7 +110,6 @@ const StocklistPage = () => {
           handleUpdate={handleUpdate}
         />
       )}
-
       {isOpenAdd && (
         <CustomModal toggleModal={handleModalAdd}>
           <AddItems
@@ -111,7 +121,6 @@ const StocklistPage = () => {
           />
         </CustomModal>
       )}
-
       {isOpenUpdate && (
         <CustomModal toggleModal={handleModalUpdate}>
           <AddItems
@@ -124,7 +133,6 @@ const StocklistPage = () => {
           />
         </CustomModal>
       )}
-
       {isOpenImport && (
         <CustomModal toggleModal={handleModalImport}>
           <CSVUploader
@@ -132,6 +140,17 @@ const StocklistPage = () => {
             isLoading={isPending}
             toggleModal={handleModalImport}
           />
+        </CustomModal>
+      )}
+      /* Stocking functionality */
+      {isAddStock && (
+        <CustomModal toggleModal={handleAddStockToggle}>
+          <h1>Add Stock</h1>
+        </CustomModal>
+      )}
+      {isUpdateStock && (
+        <CustomModal toggleModal={handleUpdateStockToggle}>
+          <h1>Update Stock</h1>
         </CustomModal>
       )}
     </div>

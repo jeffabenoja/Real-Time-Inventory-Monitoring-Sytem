@@ -22,16 +22,14 @@ const Columns = ({
         cell: (info) => (
           <span className={`${field.classes}`}>{info.getValue()}</span>
         ),
-        header: () => (
-          <span className='flex items-center truncate'>{field.label}</span>
-        ),
+        header: () => <span className='truncate'>{field.label}</span>,
       })
     ),
     // Add the actions column
     columnHelper.accessor("actions", {
       id: "actions",
       cell: (info) => (
-        <div className='flex space-x-2'>
+        <div className='flex gap-2 items-center justify-center'>
           {/* Add Button */}
           <button
             onClick={(e) => {
@@ -55,7 +53,7 @@ const Columns = ({
           </button>
         </div>
       ),
-      header: () => <span className='flex items-center truncate'>Actions</span>,
+      header: () => <span className='text-center truncate'>Actions</span>,
     }),
   ]
 }

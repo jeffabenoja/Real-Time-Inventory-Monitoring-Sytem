@@ -158,7 +158,7 @@ const Table: React.FC<TableProps> = ({
                 {headerGroup.headers.map((header) => (
                   <th
                     key={header.id}
-                    className='px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider bg-gray-50'
+                    className='px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider  bg-gray-50'
                   >
                     {flexRender(
                       header.column.columnDef.header,
@@ -179,7 +179,7 @@ const Table: React.FC<TableProps> = ({
                 {row.getVisibleCells().map((cell) => (
                   <td
                     key={cell.id}
-                    className='px-6 py-4 whitespace-nowrap text-sm text-gray-900 cursor-pointer'
+                    className='px-6 py-4 whitespace-nowrap text-sm text-gray-900 cursor-pointer text-center'
                     onClick={(e) => {
                       e.stopPropagation()
                       if (handleUpdate) {
