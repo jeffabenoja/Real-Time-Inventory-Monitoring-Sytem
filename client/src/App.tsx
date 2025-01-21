@@ -15,7 +15,7 @@ import NotFoundPage from "./pages/NotFoundPage"
 import { Toaster } from "sonner"
 import AdminPage from "./pages/AdminPage"
 import UsersRoute from "./components/route/UsersRoute"
-import AdminRoute from "./components/route/adminRoute"
+import AdminRoute from "./components/route/AdminRoute"
 
 const App = () => {
   const router = createBrowserRouter(
