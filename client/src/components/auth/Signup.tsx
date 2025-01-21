@@ -175,6 +175,7 @@ export default function SignUp({ close }: Props) {
           ))} */}
       <div className='flex self-center gap-4 pt-3'>
         <button
+          type='button'
           className='px-4 py-2 bg-red-500 text-white font-semibold rounded-md hover:bg-red-400 focus:outline-none focus:ring-2 focus:ring-red-200 active:bg-red-500 transition duration-150 ease-in-out'
           onClick={closeModal}
         >
