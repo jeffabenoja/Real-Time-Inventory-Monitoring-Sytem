@@ -18,11 +18,8 @@ export default function Input({
   attributes,
   registrationKey,
   error,
-  touched,
 }: Props) {
-  const classes = `text-base p-1 border border-gray-500 focus:border-sky-500 focus-visible:outline-none rounded ${
-    error && "border-red-500"
-  } ${touched && !error && "border-green-500"}`
+  const classes = `text-base p-1 border border-gray-500 focus:border-sky-500 focus-visible:outline-none rounded`
   return (
     <div className='flex flex-col gap-1'>
       {label && (

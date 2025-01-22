@@ -152,7 +152,7 @@ const Table: React.FC<TableProps> = ({
 
       <div className='overflow-x-auto bg-white shadow-md rounded-lg scrollbar'>
         <table className='min-w-full divide-y divide-gray-200'>
-          <thead className='bg-gray-50 sticky top-0 z-10'>
+          <thead className='bg-gray-50 sticky top-0'>
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (

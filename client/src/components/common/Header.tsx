@@ -66,7 +66,7 @@ const Header = () => {
 
       <div className='flex gap-6 items-center cursor-pointer'>
         <IoIosNotifications className='text-xl hover:text-primary' />
-        <NavLink to='/admin'> <IoIosSettings className='text-xl hover:text-primary' /> </NavLink>
+        <NavLink to='/admin/users'> <IoIosSettings className='text-xl hover:text-primary' /> </NavLink>
         <CgProfile className='text-xl hover:text-primary' />
       </div>
     </header>

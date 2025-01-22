@@ -1,6 +1,6 @@
 // Define types for user data
 export interface UserGroup {
-  id: string
+  id?: string
   code?: string
   isAdmin?: boolean
   isCreator?: boolean

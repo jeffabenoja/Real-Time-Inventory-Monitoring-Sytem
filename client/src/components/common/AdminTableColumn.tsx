@@ -18,7 +18,7 @@ const AdminTableColumn = ({
     ...fields.map((field) =>
       columnHelper.accessor(field.key, {
         cell: (info) => (
-          <span className={`${field.classes}`}>{info.getValue()}</span>
+          <span className={`${field.classes}`}>{info.getValue() === true ? "Yes" : info.getValue() === false ? "No" : info.getValue()}</span>
         ),
         header: () => <span className='truncate'>{field.label}</span>,
       })
