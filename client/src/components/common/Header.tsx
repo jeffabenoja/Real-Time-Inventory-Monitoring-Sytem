@@ -4,6 +4,8 @@ import { IoIosSettings } from "react-icons/io"
 import { CgProfile } from "react-icons/cg"
 import { NavLink } from "react-router-dom"
 import { useState } from "react"
+import { useSelector } from "react-redux"
+import { RootState } from "../../store"
 
 const NAVIGATION_ITEMS = [
   { name: "Overview", to: "/dashboard/overview" },
@@ -13,7 +15,10 @@ const NAVIGATION_ITEMS = [
   { name: "Reports", to: "/dashboard/reports" },
 ]
 
+
+
 const Header = () => {
+  const { user } = useSelector((state: RootState) => state.auth)
   const [menu, setMenu] = useState(false)
 
   const menuToggle = () => {
@@ -66,7 +71,7 @@ const Header = () => {
 
       <div className='flex gap-6 items-center cursor-pointer'>
         <IoIosNotifications className='text-xl hover:text-primary' />
-        <NavLink to='/admin/users'> <IoIosSettings className='text-xl hover:text-primary' /> </NavLink>
+        {user?.userGroup.isAdmin && <NavLink to='/admin/users'> <IoIosSettings className='text-xl hover:text-primary' /> </NavLink>}
         <CgProfile className='text-xl hover:text-primary' />
       </div>
     </header>

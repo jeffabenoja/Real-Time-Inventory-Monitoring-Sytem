@@ -113,7 +113,7 @@ export default function Sidebar({ navItems, button, children }: Props) {
         )}
       </div>
 
-      <div className="lg:ml-80 lg:mr-10 lg:pt-10 h-screen">{children}</div>
+      <div className="lg:ml-80 lg:mr-10 h-screen">{children}</div>
     </div>
   );
 }
