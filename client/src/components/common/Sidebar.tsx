@@ -36,7 +36,7 @@ export default function Sidebar({ navItems, button, children }: Props) {
   };
 
   return (
-    <div className="relative">
+    <div>
       {!sidebarOpen && (
         <div
           onClick={() => setIsSidebarOpen(true)}
@@ -86,7 +86,7 @@ export default function Sidebar({ navItems, button, children }: Props) {
       <div className="hidden lg:fixed lg:flex lg:flex-col lg:justify-between bg-white lg:w-72 lg:h-screen p-8">
         <div className="flex flex-col gap-7">
           <h2 className="text-center text-2xl">E&L Delicatessen</h2>
-          <div className="text-lg flex flex-col gap-3">
+          <div className="text-lg flex flex-col gap-3"> 
             {navItems &&
               navItems.map((item) => (
                 <NavLink
@@ -113,7 +113,7 @@ export default function Sidebar({ navItems, button, children }: Props) {
         )}
       </div>
 
-      <div className="lg:ml-80 lg:mr-10 lg:py-10">{children}</div>
+      <div className="lg:ml-80 lg:mr-10 lg:pt-10 h-screen">{children}</div>
     </div>
   );
 }

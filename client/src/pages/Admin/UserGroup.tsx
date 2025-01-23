@@ -110,7 +110,7 @@ export default function UserGroups() {
 
   return (
     <Sidebar navItems={sidebarItems} button={sidebarButton}>
-      <div className="flex flex-col max-w-full py-4 px-4 lg:py-0 lg:px-0 overflow-hidden">
+      <div className="flex flex-col max-w-full mx-auto h-dynamic-sm lg:h-dynamic-lg px-4 lg:px-8 py-4">
         <h1 className="text-3xl text-center font-bold mb-2">Admin Settings</h1>
         <h2 className="text-2xl lg:hidden">Users</h2>
 
