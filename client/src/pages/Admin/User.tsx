@@ -2,10 +2,10 @@ import AdminTableColumn from "../../components/common/AdminTableColumn";
 import Table from "../../components/common/table/Table";
 import SignUp from "../../components/admin/User";
 import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { getUserList } from "../../api/services/admin";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { deleteUser, getUserGroupList, getUserList } from "../../api/services/admin";
 import Spinner from "../../components/common/utils/Spinner";
-import { replaceUserList } from "../../store/slices/admin";
+import { replaceUserList, updateUser } from "../../store/slices/admin";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store/index";
 import CustomModal from "../../components/common/utils/CustomModal";
@@ -13,6 +13,9 @@ import Sidebar from "../../components/common/Sidebar";
 import { LuUser } from "react-icons/lu";
 import { LuUsers } from "react-icons/lu";
 import { IoMdArrowRoundBack } from "react-icons/io";
+import { showToast } from "../../utils/Toast";
+import { Delete } from "../../components/common/utils/Delete";
+import User from "../../components/admin/User";
 
 const fields = [
   { key: "usercode", label: "User Code", classes: "uppercase" },
@@ -41,7 +44,35 @@ const sidebarButton = {
 export default function Users() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isUpdateUser, setIsUpdateUser] = useState<boolean>(false);
+  const [isDeleteUser, setIsDeleteUser] = useState<boolean>(false);
+  const [defaultValues, setDefaultValues] = useState<any>(undefined);
+
+  const { data: userListData } = useQuery({
+      queryFn: getUserGroupList,
+      queryKey: ["admin", "getUserGroups"],
+    });
+  
+
   const dispatch = useDispatch<AppDispatch>();
+
+  const success = (data: any) => {
+    dispatch(updateUser(data));
+    setIsDeleteUser(false);
+    showToast.success("User deleted successfully");
+  };
+
+  const error = () => {
+    showToast.error("Deletion Failed");
+  };
+
+  const { mutateAsync: deleteUserFn, isPending } = useMutation({
+    mutationFn: deleteUser,
+    mutationKey: ["admin", "deleteUser"],
+    onSuccess: success,
+    onError: error,
+  });
+
+
 
   const handleUpdateUserToggle = () => {
     setIsUpdateUser((prev) => !prev);
@@ -49,11 +80,21 @@ export default function Users() {
 
   const handleUpdateUser = (user: any) => {
     handleUpdateUserToggle();
-    console.log("Update User", user);
+    setDefaultValues(user);
+    console.log(user)
+  };
+
+  const handleDeleteToggle = () => {
+    setIsDeleteUser((prev) => !prev);
   };
 
   const handleDeleteUser = (user: any) => {
-    console.log("Delete User", user);
+    handleDeleteToggle()
+    setDefaultValues(user);
+  };
+
+  const onDelete = async () => {
+    await deleteUserFn(defaultValues);
   };
 
   const columns = AdminTableColumn({
@@ -101,13 +142,31 @@ export default function Users() {
         {isModalOpen && (
           <CustomModal toggleModal={handleModalToggle}>
             <h2 className="text-center text-2xl">Create User</h2>
-            <SignUp close={handleModalToggle} />
+            <SignUp close={handleModalToggle} userList={userListData} />
           </CustomModal>
         )}
 
         {isUpdateUser && (
           <CustomModal toggleModal={handleUpdateUserToggle}>
-            <h2 className="text-2xl">Update User</h2>
+            <h2 className="text-center text-2xl">Update User Group</h2>
+            <User
+              close={() => setIsUpdateUser(false)}
+              defaultValue={defaultValues}
+              userList={userListData}
+            />
+          </CustomModal>
+        )}
+        {isDeleteUser && (
+          <CustomModal toggleModal={handleDeleteToggle}>
+            <div className="text-center">
+              <Delete
+                pending={isPending}
+                clicked={onDelete}
+                closeModal={() => setIsDeleteUser(false)}
+              >
+                {defaultValues!.usercode}
+              </Delete>
+            </div>
           </CustomModal>
         )}
       </div>

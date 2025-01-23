@@ -14,7 +14,7 @@ interface Props {
   error?: string
   attributes?: {}
   touched?: boolean,
-  isLoading: boolean,
+  isLoading?: boolean,
   options: Option[]
 }
 

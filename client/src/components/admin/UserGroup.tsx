@@ -24,7 +24,6 @@ interface Props {
     isEditor: string;
     code: string;
   };
-  update?: boolean;
 }
 
 const schema = z.object({
@@ -196,10 +195,10 @@ export default function UserGroupForm({ close, defaultValue }: Props) {
         >
           {!defaultValue
             ? adding || editing
-              ? "Creating"
+              ? "Creating..."
               : "Create"
             : adding || editing
-            ? "Updating"
+            ? "Updating..."
             : "Update"}
         </button>
       </div>

@@ -34,11 +34,9 @@ const adminSlice = createSlice({
       state.userGroup.push(action.payload)
     },
     updateUserGroup: (state, action) => {
-      console.log(action.payload)
       const index = state.userGroup.findIndex((user) => user.id === action.payload.id)
       if (index >= 0) {
-        console.log(index)
-        state.users[index] = action.payload
+        state.userGroup[index] = action.payload
       }
     }
   },

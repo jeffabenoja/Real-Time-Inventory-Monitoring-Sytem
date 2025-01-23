@@ -14,11 +14,12 @@ export interface UserLogin {
 }
 
 export interface User {
+  password: string
   usercode: string
   first_name: string
   last_name: string
   email: string
   userGroup: UserGroup
   status: "ACTIVE" | "INACTIVE"
-  loggedInAt: string
+  loggedInAt?: string
 }

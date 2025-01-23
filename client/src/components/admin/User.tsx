@@ -1,18 +1,28 @@
 import Input from "../common/utils/Input";
 import { useDispatch } from "react-redux";
 import { User } from "../../type/userType";
-import { appendUserList } from "../../store/slices/admin";
+import { appendUserList, updateUser } from "../../store/slices/admin";
 import { AppDispatch } from "../../store";
 import { useForm } from "react-hook-form";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { createUser, getUserGroupList } from "../../api/services/admin";
+import { useMutation } from "@tanstack/react-query";
+import {
+  createUser,
+  updateUser as updateUserFn,
+} from "../../api/services/admin";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { showToast } from "../../utils/Toast";
 import Select from "../common/utils/Select";
 
+interface UserList {
+  id: any,
+  code: any
+}
+
 interface Props {
   close: () => void;
+  defaultValue?: User;
+  userList?: UserList[];
 }
 
 const schema = z.object({
@@ -31,31 +41,65 @@ const schema = z.object({
 
 type FormFields = z.infer<typeof schema>;
 
-export default function UserForm({ close }: Props) {
-  const { data, isLoading } = useQuery({
-    queryFn: getUserGroupList,
-    queryKey: ["admin", "getUserGroups"],
-  });
+export default function UserForm({ close, defaultValue, userList }: Props) {
+  let defaultValueTransformed = {
+    usercode: defaultValue?.usercode,
+    password: defaultValue?.password,
+    first_name: defaultValue?.first_name,
+    last_name: defaultValue?.last_name,
+    email: defaultValue?.email,
+    userGroup: {
+      id: defaultValue?.userGroup?.id?.toString(),
+    },
+  };
+
+  // const { data, isLoading } = useQuery({
+  //   queryFn: getUserGroupList,
+  //   queryKey: ["admin", "getUserGroups"],
+  // });
 
   const {
     handleSubmit,
     register,
     reset,
     formState: { errors, touchedFields },
-  } = useForm<FormFields>({ resolver: zodResolver(schema), mode: "onBlur" });
+  } = useForm<FormFields>({
+    resolver: zodResolver(schema),
+    mode: "onBlur",
+    defaultValues: defaultValue ? defaultValueTransformed : undefined,
+  });
   const dispatch = useDispatch<AppDispatch>();
 
   const success = (data: User) => {
-    dispatch(appendUserList(data));
-    showToast.success("User Succesfully Added");
-    close()
+    if (!defaultValue) {
+      dispatch(appendUserList(data));
+    } else {
+      dispatch(updateUser(data));
+    }
+    showToast.success(
+      !defaultValue
+        ? "User Group Succesfully Added"
+        : "User Group Succesfully Updated"
+    );
+    close();
   };
 
-  const error = () => showToast.error("Adding User Failed");
+  const error = () => {
+    showToast.error(
+      !defaultValue ? "Adding User Failed" : "Updating User Failed"
+    );
+  };
 
-  const { mutateAsync: addUser, isPending } = useMutation({
+  const { mutateAsync: addUser, isPending: adding } = useMutation({
     mutationFn: createUser,
     mutationKey: ["admin", "createUser"],
+    onSuccess: success,
+    onError: error,
+  });
+
+  const { mutateAsync: updateUserMutate, isPending: editing } = useMutation({
+    mutationFn: updateUserFn,
+    mutationKey: ["admin", "updateUser"],
     onSuccess: success,
     onError: error,
   });
@@ -64,12 +108,15 @@ export default function UserForm({ close }: Props) {
     try {
       const user: User = {
         ...data,
-        status: "ACTIVE", // Default value for status
-        loggedInAt: new Date().toISOString(),
+        status: "ACTIVE",
       };
-      await addUser(user);
+      if (!defaultValue) {
+        await addUser(user);
+      } else {
+        await updateUserMutate(user);
+      }
     } catch (error) {
-      throw new Error("user not added");
+      throw new Error(!defaultValue ? "user added" : "user not updated");
     }
     reset();
   };
@@ -79,7 +126,10 @@ export default function UserForm({ close }: Props) {
     reset();
   };
 
-  const groupList = data.map((item: { id: any; code: any; }) => ({value: item.id, label: item.code})) 
+  let groupList = userList?.map((item) => ({
+      value: item.id,
+      label: item.code,
+  }));
 
   return (
     <form
@@ -118,15 +168,6 @@ export default function UserForm({ close }: Props) {
           />
         </div>
 
-        {/* <Input
-        register={register}
-        label='User Group'
-        id='user-group'
-        registrationKey='userGroup.id'
-        attributes={{ type: "number" }}
-        error={errors.userGroup?.id?.message}
-        touched={touchedFields.userGroup?.id}
-      /> */}
         <div className="w-[48%]">
           <Select
             register={register}
@@ -136,7 +177,6 @@ export default function UserForm({ close }: Props) {
             options={groupList || []}
             error={errors.userGroup?.id?.message}
             touched={touchedFields.userGroup?.id}
-            isLoading={isLoading}
           />
         </div>
       </div>
@@ -155,7 +195,6 @@ export default function UserForm({ close }: Props) {
         id="password"
         error={errors.password?.message}
         touched={touchedFields.password}
-        attributes={{ type: "password" }}
       />
       <div className="flex self-center gap-4 pt-3">
         <button
@@ -168,9 +207,15 @@ export default function UserForm({ close }: Props) {
         <button
           type="submit"
           className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-200 active:bg-blue-500 transition duration-150 ease-in-out"
-          disabled={isPending}
+          disabled={adding}
         >
-          {isPending ? "Adding" : "Create"}
+          {!defaultValue
+            ? adding || editing
+              ? "Creating..."
+              : "Create"
+            : adding || editing
+            ? "Updating..."
+            : "Update"}
         </button>
       </div>
     </form>

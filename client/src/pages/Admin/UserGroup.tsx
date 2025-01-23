@@ -84,7 +84,6 @@ export default function UserGroups() {
   };
 
   const onDelete = async () => {
-    // console.log(defaultValues)
     await deleteGroup(defaultValues);
   };
 

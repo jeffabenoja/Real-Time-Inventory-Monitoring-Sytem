@@ -15,6 +15,20 @@ export const getUserList = async () => {
   return response.data
 }
 
+export const updateUser = async (user: User) => {
+  const response = await apiClient.put(CREATE_USER, user)
+
+  return response.data
+}
+
+export const deleteUser = async (user: User) => {
+  let data = {...user, status: "INACTIVE"}
+  const response = await apiClient.put(CREATE_USER, data)
+
+  return response.data
+}
+
+
 export const getUserGroupList = async () => {
   const response = await apiClient.get(GET_USER_GROUP_LIST)
 
