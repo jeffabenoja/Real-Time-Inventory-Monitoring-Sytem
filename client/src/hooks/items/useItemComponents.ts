@@ -1,9 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-import {
-  getItemListByCategoryFinishedGoods,
-  createItem,
-  updateItem,
-} from "../../api/services/item"
+import { getItemList, createItem, updateItem } from "../../api/services/item"
 import { ItemType } from "../../type/itemType"
 import { showToast } from "../../utils/Toast"
 
@@ -13,7 +9,7 @@ export const useItemComponents = () => {
   // Fetch Finished Goods
   const { data, isLoading, isError, error } = useQuery<ItemType[]>({
     queryKey: ["Item", "Finished Goods"],
-    queryFn: getItemListByCategoryFinishedGoods,
+    queryFn: getItemList,
   })
 
   // Add New Item Mutation
@@ -41,8 +37,7 @@ export const useItemComponents = () => {
     },
     onError: (error) => {
       const message =
-       
-      error instanceof Error ? error.message : "Error updating the item"
+        error instanceof Error ? error.message : "Error updating the item"
       showToast.error(message)
     },
   })

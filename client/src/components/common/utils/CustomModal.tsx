@@ -1,11 +1,16 @@
 import React, { ReactNode, MouseEvent } from "react"
 
 interface CustomModalProps {
+  classes?: string
   toggleModal: () => void
   children: ReactNode
 }
 
-const CustomModal: React.FC<CustomModalProps> = ({ toggleModal, children }) => {
+const CustomModal: React.FC<CustomModalProps> = ({
+  classes,
+  toggleModal,
+  children,
+}) => {
   return (
     <div
       onClick={toggleModal}
@@ -13,7 +18,9 @@ const CustomModal: React.FC<CustomModalProps> = ({ toggleModal, children }) => {
     >
       <div
         onClick={(e: MouseEvent<HTMLDivElement>) => e.stopPropagation()}
-        className='p-6 md:p-8 w-[343px] md:w-[480px] bg-white dark:bg-secondary-600 rounded-md'
+        className={`${
+          classes ? classes : "md:p-8 w-[343px] md:w-[480px]"
+        } p-6 bg-white dark:bg-secondary-600 rounded-md overflow-hidden overflow-y-auto scrollbar`}
       >
         {/* Content */}
         {children}

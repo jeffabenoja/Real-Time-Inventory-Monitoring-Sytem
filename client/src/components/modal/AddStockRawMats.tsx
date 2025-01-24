@@ -40,18 +40,28 @@ const AddStocksRawMats: React.FC<AddStockProps> = ({
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    // Regex pattern to match yyyy-mm-dd format
-    const datePattern = /^\d{4}-\d{2}-\d{2}$/
+    const requiredFields: string[] = ["transactionDate", "remarks", "quantity"]
 
-    if (!datePattern.test(stock.transactionDate)) {
-      setInvalidFields((prev) => [...prev, "transactionDate"])
-      showToast.error("Invalid date format")
+    const emptyFields = requiredFields.filter(
+      (field) => !stock[field as keyof StockType]
+    )
+
+    if (emptyFields.length > 0) {
+      setInvalidFields(emptyFields)
+
+      showToast.error("Please fill out all required fields.")
+
       return
-    }
+    } else {
+      // Regex pattern to match yyyy-mm-dd format
+      const datePattern = /^\d{4}-\d{2}-\d{2}$/
 
-    console.log("Added Stock", {
-      ...stock,
-    })
+      if (!datePattern.test(stock.transactionDate)) {
+        setInvalidFields((prev) => [...prev, "transactionDate"])
+        showToast.error("Invalid date format")
+        return
+      }
+    }
 
     addStock(stock)
 
@@ -80,7 +90,7 @@ const AddStocksRawMats: React.FC<AddStockProps> = ({
             placeholder='yyyy-mm-dd'
             autoComplete='off'
             className={`${
-              invalidFields.includes("code") && "border-primary"
+              invalidFields.includes("transactionDate") && "border-primary"
             } py-2 px-4 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent placeholder:text-sm
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
           />
@@ -99,7 +109,7 @@ const AddStocksRawMats: React.FC<AddStockProps> = ({
             autoComplete='off'
             onChange={handleChange}
             className={`${
-              invalidFields.includes("description") && "border-primary"
+              invalidFields.includes("remarks") && "border-primary"
             } py-2 px-4 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent placeholder:text-sm
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
           />
@@ -112,14 +122,13 @@ const AddStocksRawMats: React.FC<AddStockProps> = ({
           <input
             type='number'
             step='1'
-            min='1'
             id='quantity'
             autoComplete='off'
             name='quantity'
             value={stock.quantity}
             onChange={handleChange}
             className={`${
-              invalidFields.includes("reorderPoint") && "border-primary"
+              invalidFields.includes("quantity") && "border-primary"
             } w-[120px] md:w-[150px] py-1 pl-4 pr-1 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
           />

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { showToast } from "../../utils/Toast"
 import { ItemType } from "../../type/itemType"
+import ItemComponentsMaterials from "../common/ItemComponentsMaterials"
 
 interface AddItemsProps {
   title?: string
@@ -10,6 +11,7 @@ interface AddItemsProps {
   isLoading: boolean
   toggleModal: () => void
   productData?: ItemType | null
+  productList?: ItemType[]
 }
 
 const AddItems: React.FC<AddItemsProps> = ({
@@ -20,6 +22,7 @@ const AddItems: React.FC<AddItemsProps> = ({
   isLoading,
   toggleModal,
   productData,
+  productList,
 }) => {
   const [product, setProduct] = useState<ItemType>({
     code: "",
@@ -152,7 +155,7 @@ const AddItems: React.FC<AddItemsProps> = ({
             readOnly={!!productData}
             className={`${
               invalidFields.includes("code") && "border-primary"
-            } py-2 px-4 border uppercase border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent placeholder:text-sm
+            } py-2 px-4 border uppercase border-opacity-25 rounded-md outline-transparent bg-transparent placeholder:text-sm
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
           />
         </div>
@@ -171,7 +174,7 @@ const AddItems: React.FC<AddItemsProps> = ({
             onChange={handleChange}
             className={`${
               invalidFields.includes("description") && "border-primary"
-            } py-2 px-4 border capitalize border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent placeholder:text-sm
+            } py-2 px-4 border capitalize border-opacity-25 rounded-md outline-transparent bg-transparent placeholder:text-sm
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
           />
         </div>
@@ -190,7 +193,7 @@ const AddItems: React.FC<AddItemsProps> = ({
               readOnly
               className={`${
                 invalidFields.includes("category") && "border-primary"
-              } w-[120px] md:w-[200px] py-1 px-4 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent
+              } w-[120px] md:w-[200px] py-1 px-4 border border-opacity-25 rounded-md outline-transparent bg-transparent
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
             />
           </div>
@@ -206,7 +209,7 @@ const AddItems: React.FC<AddItemsProps> = ({
               name='brand'
               value={product.brand}
               onChange={handleChange}
-              className='w-[120px] md:w-[150px] py-1 px-4 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent
+              className='w-[120px] md:w-[150px] py-1 px-4 border border-opacity-25 rounded-md outline-transparent bg-transparent
               focus:border-primary capitalize focus:outline-none active:border-primary active:outline-none hover:border-primary'
             />
           </div>
@@ -226,7 +229,7 @@ const AddItems: React.FC<AddItemsProps> = ({
               onChange={handleChange}
               className={`${
                 invalidFields.includes("unit") && "border-primary"
-              } w-[120px] py-1 lowercase px-4 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent
+              } w-[120px] py-1 lowercase px-4 border  border-opacity-25 rounded-md outline-transparent bg-transparent
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
             />
           </div>
@@ -246,7 +249,7 @@ const AddItems: React.FC<AddItemsProps> = ({
               onChange={handleChange}
               className={`${
                 invalidFields.includes("reorderPoint") && "border-primary"
-              } w-[120px] md:w-[150px] py-1 pl-4 pr-1 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent
+              } w-[120px] md:w-[150px] py-1 pl-4 pr-1 border border-opacity-25 rounded-md outline-transparent bg-transparent
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
             />
           </div>
@@ -269,7 +272,7 @@ const AddItems: React.FC<AddItemsProps> = ({
                 onChange={handleChange}
                 className={`${
                   invalidFields.includes("price") && "border-primary"
-                } w-[120px] md:w-[180px] py-1 pl-4 pr-1 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent
+                } w-[120px] md:w-[180px] py-1 pl-4 pr-1 border  border-opacity-25 rounded-md outline-transparent bg-transparent
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
               />
             </div>
@@ -291,7 +294,7 @@ const AddItems: React.FC<AddItemsProps> = ({
                 onChange={handleChange}
                 className={`${
                   invalidFields.includes("cost") && "border-primary"
-                } w-[120px] md:w-[180px] py-1 pl-4 pr-1 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent
+                } w-[120px] md:w-[180px] py-1 pl-4 pr-1 border border-opacity-25 rounded-md outline-transparent bg-transparent
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
               />
             </div>
@@ -310,12 +313,14 @@ const AddItems: React.FC<AddItemsProps> = ({
                 value={product.status}
                 onChange={handleChange}
                 className='
-                   w-[120px] md:w-[150px] uppercase py-1 pl-4 pr-1 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent
+                   w-[120px] md:w-[150px] uppercase py-1 pl-4 pr-1 border border-opacity-25 rounded-md outline-transparent bg-transparent
                 focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary'
               />
             </div>
           )}
         </div>
+
+        {productList && <ItemComponentsMaterials productList={productList} />}
 
         <button
           className='w-full rounded-full border-0 outline-transparent p-2

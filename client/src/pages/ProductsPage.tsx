@@ -29,7 +29,7 @@ const ProductsPage = () => {
   const [isUpdateStock, setIsUpdateStock] = useState<boolean>(false)
   const [productData, setProductData] = useState<ItemType | null>(null)
   const {
-    data,
+    data: prodcut = [],
     isLoading,
     isError,
     createItem,
@@ -37,6 +37,14 @@ const ProductsPage = () => {
     updateItem,
     isPendingUpdate,
   } = useItemComponents()
+
+  const finishedGoodsandActive = prodcut.filter(
+    (item) => item.category === "Finished Goods" && item.status === "ACTIVE"
+  )
+
+  const rawMaterialsandActive = prodcut.filter(
+    (item) => item.category === "Raw Mats" && item.status === "ACTIVE"
+  )
 
   const handleModalAdd = () => {
     setIsOpenAdd((prev) => !prev)
@@ -98,7 +106,7 @@ const ProductsPage = () => {
         <Spinner />
       ) : (
         <Table
-          data={data || []}
+          data={finishedGoodsandActive}
           columns={columns}
           search={true}
           withImport={true}
@@ -111,13 +119,17 @@ const ProductsPage = () => {
         />
       )}
       {isOpenAdd && (
-        <CustomModal toggleModal={handleModalAdd}>
+        <CustomModal
+          classes='h-[590px] md:p-8 w-[343px] md:w-[480px]'
+          toggleModal={handleModalAdd}
+        >
           <AddItems
             title={"Finished Goods"}
             isProduct={true}
             isOnSubmit={createItem}
             isLoading={isPending}
             toggleModal={handleModalAdd}
+            productList={rawMaterialsandActive}
           />
         </CustomModal>
       )}
