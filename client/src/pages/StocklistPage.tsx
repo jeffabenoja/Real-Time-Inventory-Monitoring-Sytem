@@ -17,7 +17,7 @@ const fields = [
   { key: "category", label: "Category", classes: "capitalize" },
   { key: "brand", label: "Brand", classes: "uppercase" },
   { key: "unit", label: "Unit", classes: "lowercase" },
-  { key: "reorderPoint", label: "Re-ordering Point" },
+  { key: "reorderPoint", label: "Stock Level" },
   { key: "cost", label: "Cost" },
   { key: "status", label: "Status", classes: "lowercase" },
 ]
