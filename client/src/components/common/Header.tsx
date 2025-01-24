@@ -15,8 +15,6 @@ const NAVIGATION_ITEMS = [
   { name: "Reports", to: "/dashboard/reports" },
 ]
 
-
-
 const Header = () => {
   const { user } = useSelector((state: RootState) => state.auth)
   const [menu, setMenu] = useState(false)
@@ -43,7 +41,7 @@ const Header = () => {
       <nav
         className={`${
           menu
-            ? "block absolute top-[52px] left-0 w-full bg-[#FAFAFA]"
+            ? "block absolute top-[52px] left-0 w-full bg-[#FAFAFA] shadow-md"
             : "hidden"
         } px-4 lg:px-6 py-2.5 lg:flex items-center justify-between `}
       >
@@ -71,7 +69,12 @@ const Header = () => {
 
       <div className='flex gap-6 items-center cursor-pointer'>
         <IoIosNotifications className='text-xl hover:text-primary' />
-        {user?.userGroup.isAdmin && <NavLink to='/admin/users'> <IoIosSettings className='text-xl hover:text-primary' /> </NavLink>}
+        {user?.userGroup.isAdmin && (
+          <NavLink to='/admin/users'>
+            {" "}
+            <IoIosSettings className='text-xl hover:text-primary' />{" "}
+          </NavLink>
+        )}
         <CgProfile className='text-xl hover:text-primary' />
       </div>
     </header>

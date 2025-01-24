@@ -3,7 +3,7 @@ import { showToast } from "../../utils/Toast"
 import { ItemType } from "../../type/itemType"
 
 interface AddItemsProps {
-  title?: String
+  title?: string
   isProduct?: boolean
   isStocklist?: boolean
   isOnSubmit: (item: ItemType) => void
@@ -261,6 +261,7 @@ const AddItems: React.FC<AddItemsProps> = ({
               <input
                 type='number'
                 step='0.01'
+                min='0.01'
                 id='price'
                 name='price'
                 autoComplete='off'
@@ -282,6 +283,7 @@ const AddItems: React.FC<AddItemsProps> = ({
               <input
                 type='number'
                 step='0.01'
+                min='0.01'
                 id='cost'
                 autoComplete='off'
                 name='cost'

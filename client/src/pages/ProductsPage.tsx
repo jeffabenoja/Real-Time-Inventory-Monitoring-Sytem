@@ -142,7 +142,7 @@ const ProductsPage = () => {
           />
         </CustomModal>
       )}
-      /* Stocking functionality */
+      {/* Stocking functionality  */}
       {isAddStock && (
         <CustomModal toggleModal={handleAddStockToggle}>
           <h1>Add Stock</h1>

@@ -6,6 +6,7 @@ import { ItemType } from "../type/itemType"
 import { useState } from "react"
 import CustomModal from "../components/common/utils/CustomModal"
 import AddItems from "../components/modal/AddItems"
+import AddStocksRawMats from "../components/modal/AddStockRawMats"
 import { useItemMaterials } from "../hooks/items/useItemMaterials"
 import { FaExclamationTriangle } from "react-icons/fa"
 import CSVUploader from "../components/modal/CsvUploader"
@@ -59,6 +60,7 @@ const StocklistPage = () => {
   const handleAddStockToggle = () => {
     setIsAddStock((prev) => !prev)
   }
+
   const handleUpdateStockToggle = () => {
     setIsUpdateStock((prev) => !prev)
   }
@@ -142,10 +144,13 @@ const StocklistPage = () => {
           />
         </CustomModal>
       )}
-      /* Stocking functionality */
+      {/* Stocking functionality  */}
       {isAddStock && (
         <CustomModal toggleModal={handleAddStockToggle}>
-          <h1>Add Stock</h1>
+          <AddStocksRawMats
+            productCode={productData?.code || ""}
+            toggleModal={handleAddStockToggle}
+          />
         </CustomModal>
       )}
       {isUpdateStock && (
