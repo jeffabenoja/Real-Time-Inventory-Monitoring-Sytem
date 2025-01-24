@@ -1,7 +1,13 @@
 import apiClient from "../../utils/apiClient"
-import { CREATE_USER, GET_USER_GROUP_LIST, GET_USERS, CREATE_USER_GROUP } from "../urls/adminUrls"
+import {
+  CREATE_USER,
+  GET_USER_GROUP_LIST,
+  GET_USERS,
+  CREATE_USER_GROUP,
+  DELETE_USER_GROUP,
+  UPDATE_USER_GROUP,
+} from "../urls/adminUrls"
 import { User, UserGroup } from "../../type/userType"
-
 
 export const createUser = async (user: User) => {
   const response = await apiClient.post(CREATE_USER, user)
@@ -22,12 +28,11 @@ export const updateUser = async (user: User) => {
 }
 
 export const deleteUser = async (user: User) => {
-  let data = {...user, status: "INACTIVE"}
+  let data = { ...user, status: "INACTIVE" }
   const response = await apiClient.put(CREATE_USER, data)
 
   return response.data
 }
-
 
 export const getUserGroupList = async () => {
   const response = await apiClient.get(GET_USER_GROUP_LIST)
@@ -42,17 +47,22 @@ export const createUserGroup = async (userGroup: UserGroup) => {
 }
 
 export const updateUserGroup = async (userGroup: UserGroup) => {
-  const response = await apiClient.put(CREATE_USER_GROUP, userGroup)
-
+  if (!userGroup.id) {
+    throw new Error("User group ID is required")
+  }
+  const response = await apiClient.put(
+    UPDATE_USER_GROUP(userGroup.id),
+    userGroup
+  )
   return response.data
 }
 
 export const deleteUserGroup = async (userGroup: UserGroup) => {
-  let data = {...userGroup, status: "INACTIVE"}
-  const response = await apiClient.put(CREATE_USER_GROUP, data)
-
+  if (!userGroup.id) {
+    throw new Error("User group ID is required")
+  }
+  let data = { ...userGroup, status: "INACTIVE" }
+  const response = await apiClient.put(DELETE_USER_GROUP(userGroup.id), data)
   console.log(response.data)
   return response.data
 }
-
-
