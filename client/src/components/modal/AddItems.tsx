@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { showToast } from "../../utils/Toast"
 import { ItemType } from "../../type/itemType"
-import ItemComponentsMaterials from "../common/ItemComponentsMaterials"
 
 interface AddItemsProps {
   title?: string
@@ -11,7 +10,6 @@ interface AddItemsProps {
   isLoading: boolean
   toggleModal: () => void
   productData?: ItemType | null
-  productList?: ItemType[]
 }
 
 const AddItems: React.FC<AddItemsProps> = ({
@@ -22,7 +20,6 @@ const AddItems: React.FC<AddItemsProps> = ({
   isLoading,
   toggleModal,
   productData,
-  productList,
 }) => {
   const [product, setProduct] = useState<ItemType>({
     code: "",
@@ -150,7 +147,7 @@ const AddItems: React.FC<AddItemsProps> = ({
             name='code'
             value={product.code}
             onChange={handleChange}
-            placeholder='e.g Ube Halaya'
+            placeholder='e.g. ITEM101'
             autoComplete='off'
             readOnly={!!productData}
             className={`${
@@ -161,13 +158,13 @@ const AddItems: React.FC<AddItemsProps> = ({
         </div>
 
         <div className='flex flex-col gap-2'>
-          <label htmlFor='description' className='body-l'>
-            Description
+          <label htmlFor='description' className='text-sm font-bold'>
+            Product Name
           </label>
           <textarea
             id='description'
             rows={1}
-            placeholder='e.g. Product Name'
+            placeholder='e.g. Ube Halaya'
             name='description'
             value={product.description}
             autoComplete='off'
@@ -320,11 +317,11 @@ const AddItems: React.FC<AddItemsProps> = ({
           )}
         </div>
 
-        {productList && <ItemComponentsMaterials productList={productList} />}
-
         <button
-          className='w-full rounded-full border-0 outline-transparent p-2
-           font-medium mt-5 cursor-pointer text-white bg-primary'
+          className={`${
+            productData ? "" : "mt-5"
+          } w-full rounded-full border-0 outline-transparent p-2
+           font-medium cursor-pointer text-white bg-primary`}
           type='submit'
         >
           {isLoading ? (

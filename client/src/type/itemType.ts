@@ -9,3 +9,13 @@ export interface ItemType {
   cost?: number
   status?: "ACTIVE" | "INACTIVE"
 }
+
+export interface ComponentsMaterials {
+  rawMaterial: ItemType
+  quantity?: string
+}
+
+export interface ProductWithComponents {
+  finishProduct: ItemType
+  components: ComponentsMaterials[]
+}

@@ -4,8 +4,10 @@ import {
   GET_ITEMS_BY_CATEGORY_AND_STATUS,
   CREATE_ITEM,
   UPDATE_ITEM,
+  GET_ITEM,
+  CREATE_ITEM_COMPONENTS,
 } from "../urls/itemUrls"
-import { ItemType } from "../../type/itemType"
+import { ItemType, ProductWithComponents } from "../../type/itemType"
 
 export const createItem = async (item: ItemType) => {
   const response = await apiClient.post(CREATE_ITEM, item)
@@ -38,6 +40,23 @@ export const getItemListByCategoryFinishedGoods = async (): Promise<
 > => {
   const response = await apiClient.get(
     GET_ITEMS_BY_CATEGORY_AND_STATUS("Finished Goods", "ACTIVE")
+  )
+
+  return response.data
+}
+
+export const getItem = async (code: string): Promise<ItemType> => {
+  const response = await apiClient.get(GET_ITEM(code))
+
+  return response.data
+}
+
+export const createItemComponents = async (
+  productComponents: ProductWithComponents
+) => {
+  const response = await apiClient.post(
+    CREATE_ITEM_COMPONENTS,
+    productComponents
   )
 
   return response.data

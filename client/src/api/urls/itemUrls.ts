@@ -9,3 +9,4 @@ export const GET_ITEMS_BY_CATEGORY_AND_STATUS = (
 ) => `/v1/itemList?category=${category}&status=${status}`
 export const GET_ITEM = (itemCode: String) => `/v1/item?code=${itemCode}`
 export const UPDATE_ITEM = (itemCode: String) => `/v1/item/${itemCode}`
+export const CREATE_ITEM_COMPONENTS = `/v1/item-with-components`

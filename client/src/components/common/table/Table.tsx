@@ -28,19 +28,25 @@ const Table: React.FC<TableProps> = ({
   search,
   withImport,
   withExport,
+  withSubmit,
+  materials,
   add,
   view,
   handleAdd,
   handleImport,
   handleUpdate,
+  handleSubmit,
+  toggleModal,
 }) => {
   const [isOpenExport, setIsOpenExport] = useState<boolean>(false)
   const [globalFilter, setGlobalFilter] = useState<string>("")
+  const [rowSelection, setRowSelection] = useState({})
   const table = useReactTable({
     data: data || [],
     columns,
     state: {
       globalFilter,
+      rowSelection: rowSelection,
     },
     initialState: {
       pagination: {
@@ -50,6 +56,8 @@ const Table: React.FC<TableProps> = ({
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    onRowSelectionChange: setRowSelection,
+    enableRowSelection: true,
   })
 
   const handleExport = (exportCurrentPage: boolean) => {
@@ -88,6 +96,15 @@ const Table: React.FC<TableProps> = ({
 
   const openExport = () => {
     setIsOpenExport((prev) => !prev)
+  }
+
+  const handleSubmitButton = () => {
+    const selectedRows = table
+      .getSelectedRowModel()
+      .rows.map((row) => row.original)
+    if (handleSubmit && toggleModal) {
+      handleSubmit(selectedRows)
+    }
   }
 
   return (
@@ -146,6 +163,16 @@ const Table: React.FC<TableProps> = ({
         {view && (
           <div className='ml-2'>
             <Buttons label={"View"} Icon={VscSettings} />
+          </div>
+        )}
+
+        {materials && (
+          <div className='ml-2'>
+            <Buttons
+              label={"Add Materials"}
+              Icon={IoIosAdd}
+              onClick={toggleModal}
+            />
           </div>
         )}
       </div>
@@ -233,7 +260,7 @@ const Table: React.FC<TableProps> = ({
                     onClick={() => {
                       let current = table.getState().pagination.pageSize
                       if (current < 100) {
-                        table.setPageSize(current + 10) // Increment by 10
+                        table.setPageSize(current + 10)
                       }
                     }}
                   >
@@ -259,7 +286,9 @@ const Table: React.FC<TableProps> = ({
           <div className='text-xs text-gray-700'>
             Page{" "}
             <span className='font-medium'>
-              {table.getState().pagination.pageIndex + 1}
+              {table.getPageCount() === 0
+                ? table.getState().pagination.pageIndex
+                : table.getState().pagination.pageIndex + 1}
             </span>{" "}
             of <span className='font-medium'>{table.getPageCount()}</span>
           </div>
@@ -267,6 +296,7 @@ const Table: React.FC<TableProps> = ({
           {/* Buttons */}
           <div className='flex items-center space-x-2'>
             <button
+              type='button'
               className='p-1 border rounded-md bg-gray-200 hover:bg-gray-300 disabled:opacity-50'
               disabled={!table.getCanPreviousPage()}
               onClick={() => table.setPageIndex(0)}
@@ -275,6 +305,7 @@ const Table: React.FC<TableProps> = ({
             </button>
 
             <button
+              type='button'
               className='p-1 border rounded-md bg-gray-200 hover:bg-gray-300 disabled:opacity-50'
               disabled={!table.getCanPreviousPage()}
               onClick={() => table.previousPage()}
@@ -283,6 +314,7 @@ const Table: React.FC<TableProps> = ({
             </button>
 
             <button
+              type='button'
               className='p-1 border rounded-md bg-gray-200 hover:bg-gray-300 disabled:opacity-50'
               disabled={!table.getCanNextPage()}
               onClick={() => table.nextPage()}
@@ -291,6 +323,7 @@ const Table: React.FC<TableProps> = ({
             </button>
 
             <button
+              type='button'
               className='p-1 border rounded-md bg-gray-200 hover:bg-gray-300 disabled:opacity-50'
               disabled={!table.getCanNextPage()}
               onClick={() => table.setPageIndex(table.getPageCount() - 1)}
@@ -300,6 +333,26 @@ const Table: React.FC<TableProps> = ({
           </div>
         </div>
       </div>
+      {withSubmit && (
+        <div className='flex items-center justify-end'>
+          <div className='flex gap-5'>
+            <button
+              onClick={toggleModal}
+              type='button'
+              className='bg-red-700 rounded-md py-2.5 w-[150px]'
+            >
+              <p className='text-white font-bold text-xs'>Cancel</p>
+            </button>
+            <button
+              type='button'
+              onClick={handleSubmitButton}
+              className='bg-blue-700 rounded-md py-2.5 w-[150px]'
+            >
+              <p className='text-white font-bold text-xs'>Submit</p>
+            </button>
+          </div>
+        </div>
+      )}
     </>
   )
 }

@@ -9,6 +9,7 @@ import { useItemComponents } from "../hooks/items/useItemComponents"
 import { FaExclamationTriangle } from "react-icons/fa"
 import { ItemType } from "../type/itemType"
 import CSVUploader from "../components/modal/CsvUploader"
+import { Navigate } from "react-router-dom"
 
 const fields = [
   { key: "code", label: "Code", classes: "uppercase" },
@@ -29,7 +30,7 @@ const ProductsPage = () => {
   const [isUpdateStock, setIsUpdateStock] = useState<boolean>(false)
   const [productData, setProductData] = useState<ItemType | null>(null)
   const {
-    data: prodcut = [],
+    data,
     isLoading,
     isError,
     createItem,
@@ -37,14 +38,6 @@ const ProductsPage = () => {
     updateItem,
     isPendingUpdate,
   } = useItemComponents()
-
-  const finishedGoodsandActive = prodcut.filter(
-    (item) => item.category === "Finished Goods" && item.status === "ACTIVE"
-  )
-
-  const rawMaterialsandActive = prodcut.filter(
-    (item) => item.category === "Raw Mats" && item.status === "ACTIVE"
-  )
 
   const handleModalAdd = () => {
     setIsOpenAdd((prev) => !prev)
@@ -106,7 +99,7 @@ const ProductsPage = () => {
         <Spinner />
       ) : (
         <Table
-          data={finishedGoodsandActive}
+          data={data || []}
           columns={columns}
           search={true}
           withImport={true}
@@ -118,21 +111,7 @@ const ProductsPage = () => {
           handleUpdate={handleUpdate}
         />
       )}
-      {isOpenAdd && (
-        <CustomModal
-          classes='h-[590px] md:p-8 w-[343px] md:w-[480px]'
-          toggleModal={handleModalAdd}
-        >
-          <AddItems
-            title={"Finished Goods"}
-            isProduct={true}
-            isOnSubmit={createItem}
-            isLoading={isPending}
-            toggleModal={handleModalAdd}
-            productList={rawMaterialsandActive}
-          />
-        </CustomModal>
-      )}
+      {isOpenAdd && <Navigate to='/dashboard/products/create/components' />}
       {isOpenUpdate && (
         <CustomModal toggleModal={handleModalUpdate}>
           <AddItems
