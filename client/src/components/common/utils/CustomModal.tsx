@@ -14,7 +14,7 @@ const CustomModal: React.FC<CustomModalProps> = ({
   return (
     <div
       onClick={toggleModal}
-      className='fixed left-0 right-0 bottom-0 top-0 bg-[rgba(0,0,0,0.2)] z-20 flex items-center justify-center overflow-y-auto max-h-screen scrollbar-hide'
+      className='fixed left-0 right-0 bottom-0 top-0 bg-[rgba(0,0,0,0.2)] z-20 flex items-center justify-center max-h-screen scrollbar-hide overflow-y-auto '
     >
       <div
         onClick={(e: MouseEvent<HTMLDivElement>) => e.stopPropagation()}

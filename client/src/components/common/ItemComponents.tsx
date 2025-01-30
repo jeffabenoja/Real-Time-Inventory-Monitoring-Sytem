@@ -12,7 +12,7 @@ import { createItemComponents } from "../../api/services/item"
 
 const fields = [
   { key: "code", label: "Code", classes: "uppercase" },
-  { key: "description", label: "Description", classes: "capitalize" },
+  { key: "description", label: "Product Name", classes: "capitalize" },
   { key: "category", label: "Category", classes: "capitalize" },
   { key: "brand", label: "Brand", classes: "uppercase" },
   { key: "unit", label: "Unit", classes: "lowercase" },
@@ -391,23 +391,26 @@ const ItemComponents = () => {
           <div className='flex justify-between items-center'>
             {isOpenModal && (
               <CustomModal
-                classes='h-[590px] md:p-8 w-[343px] md:w-[970px]'
+                classes='h-[480px] md:p-8 w-[343px] md:w-[1200px]'
                 toggleModal={handleModalToggle}
               >
                 {/* Material Items Table */}
-                <Table
-                  data={data || []}
-                  columns={columns}
-                  search={true}
-                  withImport={false}
-                  withExport={false}
-                  withSubmit={true}
-                  withCancel={true}
-                  add={false}
-                  view={false}
-                  handleSubmit={handleSubmit}
-                  toggleModal={handleModalToggle}
-                />
+                <>
+                  <PageTitle>Material List</PageTitle>
+                  <Table
+                    data={data || []}
+                    columns={columns}
+                    search={true}
+                    withImport={false}
+                    withExport={false}
+                    withSubmit={true}
+                    withCancel={true}
+                    add={false}
+                    view={false}
+                    handleSubmit={handleSubmit}
+                    toggleModal={handleModalToggle}
+                  />
+                </>
               </CustomModal>
             )}
           </div>

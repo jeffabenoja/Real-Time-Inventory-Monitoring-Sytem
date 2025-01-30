@@ -10,10 +10,11 @@ import AddStocksRawMats from "../components/modal/AddStockRawMats"
 import { useItemMaterials } from "../hooks/items/useItemMaterials"
 import { FaExclamationTriangle } from "react-icons/fa"
 import CSVUploader from "../components/modal/CsvUploader"
+import UpdateStockTable from "../components/common/UpdateStockTable"
 
 const fields = [
   { key: "code", label: "Code", classes: "uppercase" },
-  { key: "description", label: "Description", classes: "capitalize" },
+  { key: "description", label: "Product Name", classes: "capitalize" },
   { key: "category", label: "Category", classes: "capitalize" },
   { key: "brand", label: "Brand", classes: "uppercase" },
   { key: "unit", label: "Unit", classes: "lowercase" },
@@ -29,6 +30,8 @@ const StocklistPage = () => {
   const [isAddStock, setIsAddStock] = useState<boolean>(false)
   const [isUpdateStock, setIsUpdateStock] = useState<boolean>(false)
   const [productData, setProductData] = useState<ItemType | null>(null)
+  const [itemId, setItemId] = useState<string>("")
+
   const {
     data,
     isLoading,
@@ -65,9 +68,9 @@ const StocklistPage = () => {
     setIsUpdateStock((prev) => !prev)
   }
 
-  const handleUpdateStock = (item: ItemType) => {
+  const handleUpdateStock = async (item: ItemType) => {
     handleUpdateStockToggle()
-    setProductData(item)
+    setItemId(item.id ?? "")
   }
 
   const handleAddStock = (item: ItemType) => {
@@ -154,8 +157,11 @@ const StocklistPage = () => {
         </CustomModal>
       )}
       {isUpdateStock && (
-        <CustomModal toggleModal={handleUpdateStockToggle}>
-          <h1>Update Stock</h1>
+        <CustomModal
+          toggleModal={handleUpdateStockToggle}
+          classes='h-[480px] md:p-8 w-[343px] md:w-[970px]'
+        >
+          <UpdateStockTable itemId={itemId} />
         </CustomModal>
       )}
     </div>

@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import { showToast } from "../../utils/Toast"
+import { createMultipleItems } from "../../api/services/item"
 import Papa from "papaparse"
 
 interface CsvUploaderProps {
@@ -59,11 +60,15 @@ const CSVUploader: React.FC<CsvUploaderProps> = ({
     const updatedData = fileData.map((row) => ({
       ...row,
       brand: row.brand || "N/A",
+      code: row.code || "",
+      description: row.description || "",
+      category: row.category || "",
+      unit: row.unit || "",
     }))
 
     // Check the length of updatedData
     if (updatedData.length > 1) {
-      console.log("Multiple rows to submit:", JSON.stringify(updatedData))
+      createMultipleItems(updatedData)
     } else if (updatedData.length === 1) {
       isOnSubmit(updatedData[0])
       console.log(updatedData)

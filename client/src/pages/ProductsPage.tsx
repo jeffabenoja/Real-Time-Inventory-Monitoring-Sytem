@@ -8,12 +8,12 @@ import Columns from "../components/common/table/Columns"
 import { useItemComponents } from "../hooks/items/useItemComponents"
 import { FaExclamationTriangle } from "react-icons/fa"
 import { ItemType } from "../type/itemType"
-import CSVUploader from "../components/modal/CsvUploader"
 import { Navigate } from "react-router-dom"
+import AddStocksFinishedProduct from "../components/modal/AddStockFinishedProduct"
 
 const fields = [
   { key: "code", label: "Code", classes: "uppercase" },
-  { key: "description", label: "Description", classes: "capitalize" },
+  { key: "description", label: "Product Name", classes: "capitalize" },
   { key: "category", label: "Category", classes: "capitalize" },
   { key: "brand", label: "Brand", classes: "uppercase" },
   { key: "unit", label: "Unit", classes: "lowercase" },
@@ -24,27 +24,15 @@ const fields = [
 
 const ProductsPage = () => {
   const [isOpenAdd, setIsOpenAdd] = useState<boolean>(false)
-  const [isOpenImport, setIsOpenImport] = useState<boolean>(false)
   const [isOpenUpdate, setIsOpenUpdate] = useState<boolean>(false)
   const [isAddStock, setIsAddStock] = useState<boolean>(false)
   const [isUpdateStock, setIsUpdateStock] = useState<boolean>(false)
   const [productData, setProductData] = useState<ItemType | null>(null)
-  const {
-    data,
-    isLoading,
-    isError,
-    createItem,
-    isPending,
-    updateItem,
-    isPendingUpdate,
-  } = useItemComponents()
+  const { data, isLoading, isError, updateItem, isPendingUpdate } =
+    useItemComponents()
 
   const handleModalAdd = () => {
     setIsOpenAdd((prev) => !prev)
-  }
-
-  const handleModalImport = () => {
-    setIsOpenImport((prev) => !prev)
   }
 
   const handleModalUpdate = () => {
@@ -102,16 +90,17 @@ const ProductsPage = () => {
           data={data || []}
           columns={columns}
           search={true}
-          withImport={true}
+          withImport={false}
           withExport={true}
           add={true}
           view={true}
           handleAdd={handleModalAdd}
-          handleImport={handleModalImport}
           handleUpdate={handleUpdate}
         />
       )}
+
       {isOpenAdd && <Navigate to='/dashboard/products/create/components' />}
+
       {isOpenUpdate && (
         <CustomModal toggleModal={handleModalUpdate}>
           <AddItems
@@ -124,19 +113,13 @@ const ProductsPage = () => {
           />
         </CustomModal>
       )}
-      {isOpenImport && (
-        <CustomModal toggleModal={handleModalImport}>
-          <CSVUploader
-            isOnSubmit={createItem}
-            isLoading={isPending}
-            toggleModal={handleModalImport}
-          />
-        </CustomModal>
-      )}
       {/* Stocking functionality  */}
       {isAddStock && (
         <CustomModal toggleModal={handleAddStockToggle}>
-          <h1>Add Stock</h1>
+          <AddStocksFinishedProduct
+            product={productData}
+            toggleModal={handleAddStockToggle}
+          />
         </CustomModal>
       )}
       {isUpdateStock && (

@@ -8,6 +8,7 @@ export interface ItemType {
   price?: number
   cost?: number
   status?: "ACTIVE" | "INACTIVE"
+  id?: string
 }
 
 export interface ComponentsMaterials {

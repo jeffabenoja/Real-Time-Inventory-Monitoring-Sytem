@@ -348,7 +348,7 @@ const Table: React.FC<TableProps> = ({
               onClick={handleSubmitButton}
               className='bg-blue-700 rounded-md py-2.5 w-[150px]'
             >
-              <p className='text-white font-bold text-xs'>Submit</p>
+              <p className='text-white font-bold text-xs'>Select</p>
             </button>
           </div>
         </div>

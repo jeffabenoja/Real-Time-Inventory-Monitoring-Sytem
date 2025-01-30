@@ -6,12 +6,18 @@ import {
   UPDATE_ITEM,
   GET_ITEM,
   CREATE_ITEM_COMPONENTS,
+  CREATE_MULTIPLE_ITEMS,
 } from "../urls/itemUrls"
 import { ItemType, ProductWithComponents } from "../../type/itemType"
 
 export const createItem = async (item: ItemType) => {
   const response = await apiClient.post(CREATE_ITEM, item)
 
+  return response.data
+}
+
+export const createMultipleItems = async (item: ItemType[]) => {
+  const response = await apiClient.post(CREATE_MULTIPLE_ITEMS, item)
   return response.data
 }
 

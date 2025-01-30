@@ -10,3 +10,4 @@ export const GET_ITEMS_BY_CATEGORY_AND_STATUS = (
 export const GET_ITEM = (itemCode: String) => `/v1/item?code=${itemCode}`
 export const UPDATE_ITEM = (itemCode: String) => `/v1/item/${itemCode}`
 export const CREATE_ITEM_COMPONENTS = `/v1/item-with-components`
+export const CREATE_MULTIPLE_ITEMS = `/v1/items//mass-upload`

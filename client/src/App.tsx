@@ -18,6 +18,7 @@ import UserGroup from "./pages/Admin/UserGroup"
 import UsersRoute from "./components/route/UsersRoute"
 import AdminRoute from "./components/route/AdminRoute"
 import ItemComponents from "./components/common/ItemComponents"
+import CreateSalesOrder from "./components/common/sales/CreateSalesOrder"
 
 const App = () => {
   const router = createBrowserRouter(
@@ -46,6 +47,7 @@ const App = () => {
                 path='products/create/components'
                 element={<ItemComponents />}
               />
+              <Route path='sales/create/customer-order' element={<CreateSalesOrder />} />
             </Route>
           </Route>
         </Route>

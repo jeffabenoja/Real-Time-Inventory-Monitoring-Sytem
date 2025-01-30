@@ -1,28 +1,46 @@
 import React, { useState } from "react"
 import { showToast } from "../../utils/Toast"
-import { StockInType } from "../../type/StockType"
 import { useAddStock } from "../../hooks/stock/useAddStock"
+import { ItemType } from "../../type/itemType"
 
 interface AddStockProps {
-  productCode?: string
+  product: ItemType | null
   toggleModal: () => void
 }
 
-const AddStocksRawMats: React.FC<AddStockProps> = ({
-  productCode,
+interface UpdateStockType {
+  transactionDate: string
+  remarks: string
+  item: ItemType
+  quantity: number
+  batchNo: string
+}
+
+const AddStocksFinishedProduct: React.FC<AddStockProps> = ({
+  product,
   toggleModal,
 }) => {
-  const [stock, setStock] = useState<StockInType>({
+  const defaultItem: ItemType = {
+    id: "",
+    code: "",
+    description: "",
+    category: "",
+    brand: "",
+    unit: "",
+    reorderPoint: 0,
+    price: 0,
+    cost: 0,
+    status: "INACTIVE",
+  }
+  const [stock, setStock] = useState<UpdateStockType>({
     transactionDate: "",
     remarks: "",
-    item: {
-      code: productCode || "",
-    },
+    item: product || defaultItem,
     quantity: 0,
     batchNo: "",
   })
 
-  const { addStock, isPending } = useAddStock()
+  const { addStockFinishGoods, isPendingFinishedGoods } = useAddStock()
 
   const [invalidFields, setInvalidFields] = useState<string[]>([])
 
@@ -49,7 +67,7 @@ const AddStocksRawMats: React.FC<AddStockProps> = ({
     ]
 
     const emptyFields = requiredFields.filter(
-      (field) => !stock[field as keyof StockInType]
+      (field) => !stock[field as keyof UpdateStockType]
     )
 
     if (emptyFields.length > 0) {
@@ -69,7 +87,19 @@ const AddStocksRawMats: React.FC<AddStockProps> = ({
       }
     }
 
-    addStock(stock)
+    const finishProduct = stock.item
+
+    const updatedStock = {
+      ...stock,
+      assemble_quantity: stock.quantity,
+      finishProduct: {
+        ...finishProduct,
+      },
+    }
+
+    // console.log(JSON.stringify(updatedStock))
+
+    addStockFinishGoods(updatedStock)
 
     toggleModal()
   }
@@ -77,7 +107,7 @@ const AddStocksRawMats: React.FC<AddStockProps> = ({
   return (
     <div className='flex flex-col gap-6'>
       <h3 className='heading-l text-primary font-bold text-2xl'>
-        {productCode}
+        {product?.code}
       </h3>
       <form
         className='flex flex-col gap-4 text-secondary-200'
@@ -164,7 +194,7 @@ const AddStocksRawMats: React.FC<AddStockProps> = ({
            font-medium mt-5 cursor-pointer text-white bg-primary'
           type='submit'
         >
-          {isPending ? (
+          {isPendingFinishedGoods ? (
             <div className='w-5 h-5 border-2 border-t-2 border-[#0A140A] border-t-white rounded-full animate-spin'></div>
           ) : (
             <p>Add New Stock</p>
@@ -175,4 +205,4 @@ const AddStocksRawMats: React.FC<AddStockProps> = ({
   )
 }
 
-export default AddStocksRawMats
+export default AddStocksFinishedProduct
