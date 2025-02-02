@@ -3,3 +3,4 @@ export const GET_STOCK_LIST = (id: String) => `/v1//stockInList/${id}`
 export const UPDATE_STOCK = (transactionNumber: String) =>
   `/v1//stockIn/${transactionNumber}`
 export const ADD_STOCK_FOR_FINISHED_GOODS = `/v1/assemble`
+

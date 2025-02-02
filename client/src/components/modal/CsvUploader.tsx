@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { showToast } from "../../utils/Toast"
-import { createMultipleItems } from "../../api/services/item"
+import { useItemMaterials } from "../../hooks/items/useItemMaterials"
 import Papa from "papaparse"
 
 interface CsvUploaderProps {
@@ -15,6 +15,8 @@ const CSVUploader: React.FC<CsvUploaderProps> = ({
   toggleModal,
 }) => {
   const [fileData, setFileData] = useState<Record<string, any>[] | null>(null)
+
+  const { multipleItems, isPendingMultiple } = useItemMaterials()
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
@@ -68,10 +70,9 @@ const CSVUploader: React.FC<CsvUploaderProps> = ({
 
     // Check the length of updatedData
     if (updatedData.length > 1) {
-      createMultipleItems(updatedData)
+      multipleItems(updatedData)
     } else if (updatedData.length === 1) {
       isOnSubmit(updatedData[0])
-      console.log(updatedData)
     } else {
       console.log("No data to submit.")
     }
@@ -99,7 +100,7 @@ const CSVUploader: React.FC<CsvUploaderProps> = ({
           className='w-28 rounded-md border-0 outline-transparent p-2 font-medium mt-3 cursor-pointer text-white bg-primary'
           onClick={handleSubmit}
         >
-          {isLoading ? (
+          {isLoading || isPendingMultiple ? (
             <div className='w-5 h-5 border-2 border-t-2 border-[#0A140A] border-t-white rounded-full animate-spin'></div>
           ) : (
             "Submit"

@@ -97,7 +97,6 @@ const AddStocksFinishedProduct: React.FC<AddStockProps> = ({
       },
     }
 
-    // console.log(JSON.stringify(updatedStock))
 
     addStockFinishGoods(updatedStock)
 

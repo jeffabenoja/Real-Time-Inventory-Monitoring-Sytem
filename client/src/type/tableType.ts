@@ -14,6 +14,7 @@ export interface TableProps {
   openModal?: () => void
   handleExport?: () => void
   handleAdd?: () => void
+  handleView?: () => void
   handleImport?: () => void
   handleUpdate?: (row: any) => void
   handleSubmit?: (data: any) => void

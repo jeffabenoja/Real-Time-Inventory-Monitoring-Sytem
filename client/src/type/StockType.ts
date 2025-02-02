@@ -30,3 +30,18 @@ export interface StockListType {
   createdDateTime: string
   id: number
 }
+
+export interface InventoryPerItemType {
+  item: ItemType
+  id: string
+  inQuantity: number
+  outQuantity: number
+}
+
+export interface InventoryPerCategory {
+  item: ItemType
+  id: string
+  itemType: string
+  inQuantity: number
+  outQuantity: number
+}

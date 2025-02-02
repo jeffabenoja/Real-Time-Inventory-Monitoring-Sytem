@@ -1,5 +1,9 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-import { getItemListByCategoryFinishedGoods, createItem, updateItem } from "../../api/services/item"
+import {
+  getItemListByCategoryFinishedGoods,
+  createItemComponents,
+  updateItem,
+} from "../../api/services/item"
 import { ItemType } from "../../type/itemType"
 import { showToast } from "../../utils/Toast"
 
@@ -14,7 +18,7 @@ export const useItemComponents = () => {
 
   // Add New Item Mutation
   const itemMutation = useMutation({
-    mutationFn: createItem,
+    mutationFn: createItemComponents,
     onSuccess: () => {
       // Refetch the list of items
       queryClient.invalidateQueries({ queryKey: ["Item", "Finished Goods"] })

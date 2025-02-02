@@ -77,7 +77,7 @@ const AddStocksRawMats: React.FC<AddStockProps> = ({
   return (
     <div className='flex flex-col gap-6'>
       <h3 className='heading-l text-primary font-bold text-2xl'>
-        {productCode}
+        Add Stock for {productCode}
       </h3>
       <form
         className='flex flex-col gap-4 text-secondary-200'

@@ -1,23 +1,18 @@
 import Table from "./table/Table"
-import { useState } from "react"
 import Spinner from "./utils/Spinner"
-import { useStockInList } from "../../hooks/stock/useStockInList"
 import { createColumnHelper } from "@tanstack/react-table"
 import { FaExclamationTriangle } from "react-icons/fa"
-import { StockListType } from "../../type/StockType"
-import CustomModal from "./utils/CustomModal"
-import UpdateStockRawMats from "../modal/UpdateStockRawMats"
+import { useQuery } from "@tanstack/react-query"
+import { getInventoryByCategory } from "../../api/services/inventory"
+import { InventoryPerCategory } from "../../type/StockType"
+
 const fields = [
-  { key: "transactionNo", label: "Transaction Number", classes: "uppercase" },
-  { key: "batchNo", label: "Batch Number", classes: "uppercase" },
   { key: "item.code", label: "Product Code", classes: "uppercase" },
   { key: "item.description", label: "Product Name", classes: "uppercase" },
-  { key: "quantity", label: "Quantity" },
-  { key: "status", label: "Status", classes: "uppercase" },
+  { key: "itemType", label: "Category", classes: "uppercase" },
+  { key: "inQuantity", label: "Current Stock" },
+  { key: "outQuantity", label: "Sold Item" },
 ]
-type UpdateStockTableProps = {
-  itemId: string
-}
 
 const Columns = ({
   fields,
@@ -38,16 +33,21 @@ const Columns = ({
   ]
 }
 
-const UpdateStockTable = ({ itemId }: UpdateStockTableProps) => {
+interface InventoryTableProps {
+  category: string
+}
+
+const InventoryTable = ({ category }: InventoryTableProps) => {
   const {
-    data: stockData = [],
+    data: inventoryData = [],
     isLoading,
     isError,
-    updateStock,
-    isPending,
-  } = useStockInList(itemId)
-  const [productData, setProductData] = useState<StockListType | null>(null)
-  const [isOpenUpdate, setIsOpenUpdate] = useState<boolean>(false)
+  } = useQuery<InventoryPerCategory[]>({
+    queryKey: ["Inventory"],
+    queryFn: () => getInventoryByCategory(category),
+
+    enabled: !!category,
+  })
 
   const columns = Columns({
     fields,
@@ -65,25 +65,13 @@ const UpdateStockTable = ({ itemId }: UpdateStockTableProps) => {
     )
   }
 
-  if (stockData.length === 0) {
+  if (inventoryData.length === 0) {
     return (
       <section className='text-center flex flex-col justify-center items-center h-96'>
         <FaExclamationTriangle className='text-red-900 text-6xl mb-4' />
-        <h1 className='text-6xl font-bold mb-4'>
-          No transaction data available
-        </h1>
+        <h1 className='text-6xl font-bold mb-4'>No inventory data available</h1>
       </section>
     )
-  }
-
-  const handleModalUpdate = () => {
-    setIsOpenUpdate((prev) => !prev)
-  }
-
-  const handleUpdate = (row: StockListType) => {
-    handleModalUpdate()
-
-    setProductData(row)
   }
 
   return (
@@ -93,10 +81,10 @@ const UpdateStockTable = ({ itemId }: UpdateStockTableProps) => {
       ) : (
         <>
           <h1 className='font-bold text-xl mb-2'>
-            Transaction Stock for {stockData[0]?.item?.code}
+            Inventory for Raw Materials
           </h1>
           <Table
-            data={stockData}
+            data={inventoryData}
             columns={columns}
             search={true}
             withImport={false}
@@ -105,22 +93,10 @@ const UpdateStockTable = ({ itemId }: UpdateStockTableProps) => {
             withCancel={false}
             add={false}
             view={false}
-            handleUpdate={handleUpdate}
           />
         </>
-      )}
-
-      {isOpenUpdate && (
-        <CustomModal toggleModal={handleModalUpdate}>
-          <UpdateStockRawMats
-            product={productData}
-            toggleModal={handleModalUpdate}
-            onSubmit={updateStock}
-            isLoading={isPending}
-          />
-        </CustomModal>
       )}
     </>
   )
 }
-export default UpdateStockTable
+export default InventoryTable

@@ -3,6 +3,7 @@ import {
   getItemListByCategoryRawMats,
   createItem,
   updateItem,
+  createMultipleItems,
 } from "../../api/services/item"
 import { ItemType } from "../../type/itemType"
 import { showToast } from "../../utils/Toast"
@@ -19,6 +20,21 @@ export const useItemMaterials = () => {
   // Add New Item Mutation
   const itemMutation = useMutation({
     mutationFn: createItem,
+    onSuccess: () => {
+      // Refetch the list of items
+      queryClient.invalidateQueries({ queryKey: ["Item", "Raw Mats"] })
+      showToast.success("Successfully added new item")
+    },
+    onError: (error) => {
+      const message =
+        error instanceof Error ? error.message : "Error adding new item"
+      showToast.error(message)
+    },
+  })
+
+  // Add Multiple Item Mutation
+  const multipleItemMutation = useMutation({
+    mutationFn: createMultipleItems,
     onSuccess: () => {
       // Refetch the list of items
       queryClient.invalidateQueries({ queryKey: ["Item", "Raw Mats"] })
@@ -53,6 +69,8 @@ export const useItemMaterials = () => {
     error,
     createItem: itemMutation.mutate,
     isPending: itemMutation.isPending,
+    multipleItems: multipleItemMutation.mutate,
+    isPendingMultiple: multipleItemMutation.isPending,
     updateItem: updateItemMutation.mutate,
     isPendingUpdate: updateItemMutation.isPending,
   }

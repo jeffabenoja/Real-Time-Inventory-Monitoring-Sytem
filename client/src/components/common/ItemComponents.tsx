@@ -8,10 +8,10 @@ import { IoIosClose } from "react-icons/io"
 import { createColumnHelper } from "@tanstack/react-table"
 import { Link, useNavigate } from "react-router-dom"
 import { showToast } from "../../utils/Toast"
-import { createItemComponents } from "../../api/services/item"
+import { useItemComponents } from "../../hooks/items/useItemComponents"
 
 const fields = [
-  { key: "code", label: "Code", classes: "uppercase" },
+  { key: "code", label: "Product Code", classes: "uppercase" },
   { key: "description", label: "Product Name", classes: "capitalize" },
   { key: "category", label: "Category", classes: "capitalize" },
   { key: "brand", label: "Brand", classes: "uppercase" },
@@ -124,6 +124,7 @@ const ItemColumns = ({
 
 const ItemComponents = () => {
   const { data } = useItemMaterials()
+  const { createItem, isPending } = useItemComponents()
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
   const [rawMaterials, setRawMaterials] = useState<ComponentsMaterials[]>([])
   const [invalidFields, setInvalidFields] = useState<string[]>([])
@@ -233,7 +234,7 @@ const ItemComponents = () => {
       })),
     }
 
-    createItemComponents(updateProductComponent)
+    createItem(updateProductComponent)
     navigate("/dashboard/products")
   }
 
@@ -446,7 +447,11 @@ const ItemComponents = () => {
               type='submit'
               className='bg-blue-700 rounded-md py-2.5 w-[150px]'
             >
-              <p className='text-white font-bold text-xs'>Submit</p>
+              {isPending ? (
+                <div className='w-5 h-5 border-2 border-t-2 border-[#0A140A] border-t-white rounded-full animate-spin'></div>
+              ) : (
+                <p className='text-white font-bold text-xs'>Submit</p>
+              )}
             </button>
           </div>
         </div>

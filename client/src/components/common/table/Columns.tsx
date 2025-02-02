@@ -1,6 +1,7 @@
 import { createColumnHelper } from "@tanstack/react-table"
 import { CiEdit } from "react-icons/ci"
 import { IoIosAdd } from "react-icons/io"
+import { HiOutlineViewfinderCircle } from "react-icons/hi2"
 import { ItemType } from "../../../type/itemType"
 
 // Define a reusable function to generate columns
@@ -8,10 +9,12 @@ const Columns = ({
   fields,
   onUpdate,
   onAdd,
+  onView,
 }: {
   fields: { key: string; label: string; classes?: string }[]
   onUpdate: (item: ItemType) => void
   onAdd: (item: ItemType) => void
+  onView: (item: ItemType) => void
 }) => {
   const columnHelper = createColumnHelper<any>()
 
@@ -29,14 +32,25 @@ const Columns = ({
     columnHelper.accessor("actions", {
       id: "actions",
       cell: (info) => (
-        <div className='flex gap-2 items-center justify-center'>
+        <div className='flex gap-2 items-center justify-center w-[150px] lg:w-full'>
+          {/* View Button */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              onView(info.row.original)
+            }}
+            className=' py-2 px-4 bg-gray-200 hover:bg-gray-300 hover:text-primary rounded-md shadow-md'
+          >
+            <HiOutlineViewfinderCircle size={20} />
+          </button>
+
           {/* Add Button */}
           <button
             onClick={(e) => {
               e.stopPropagation()
               onAdd(info.row.original)
             }}
-            className='px-4 py-2 bg-gray-200 hover:bg-gray-300 hover:text-primary rounded-md shadow-md'
+            className='py-2 px-4 bg-gray-200 hover:bg-gray-300 hover:text-primary rounded-md shadow-md'
           >
             <IoIosAdd size={20} />
           </button>
@@ -47,7 +61,7 @@ const Columns = ({
               e.stopPropagation()
               onUpdate(info.row.original)
             }}
-            className='px-4 py-2 bg-gray-200 hover:bg-gray-300 hover:text-blue-700 rounded-md shadow-md'
+            className='py-2 px-4 bg-gray-200 hover:bg-gray-300 hover:text-blue-700 rounded-md shadow-md'
           >
             <CiEdit size={20} />
           </button>

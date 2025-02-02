@@ -24,7 +24,7 @@ export const useAddStock = () => {
     mutationFn: addStockForFinishedGoods,
     onSuccess: () => {
       // Refetch the list of items
-      queryClient.invalidateQueries({ queryKey: ["Stock", "Raw Mats"] })
+      queryClient.invalidateQueries({ queryKey: ["Stock", "Finished Goods"] })
       showToast.success("Successfully added new stock")
     },
     onError: (error) => {

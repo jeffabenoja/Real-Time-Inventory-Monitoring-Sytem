@@ -11,9 +11,11 @@ import { useItemMaterials } from "../hooks/items/useItemMaterials"
 import { FaExclamationTriangle } from "react-icons/fa"
 import CSVUploader from "../components/modal/CsvUploader"
 import UpdateStockTable from "../components/common/UpdateStockTable"
+import ViewItemStock from "../components/modal/ViewItemStock"
+import InventoryTable from "../components/common/InventoryTable"
 
 const fields = [
-  { key: "code", label: "Code", classes: "uppercase" },
+  { key: "code", label: "Product Code", classes: "uppercase" },
   { key: "description", label: "Product Name", classes: "capitalize" },
   { key: "category", label: "Category", classes: "capitalize" },
   { key: "brand", label: "Brand", classes: "uppercase" },
@@ -27,8 +29,10 @@ const StocklistPage = () => {
   const [isOpenAdd, setIsOpenAdd] = useState<boolean>(false)
   const [isOpenImport, setIsOpenImport] = useState<boolean>(false)
   const [isOpenUpdate, setIsOpenUpdate] = useState<boolean>(false)
+  const [isOpenInventory, setIsOpenInventory] = useState<boolean>(false)
   const [isAddStock, setIsAddStock] = useState<boolean>(false)
   const [isUpdateStock, setIsUpdateStock] = useState<boolean>(false)
+  const [isViewItemInventory, setIsViewItemInventory] = useState<boolean>(false)
   const [productData, setProductData] = useState<ItemType | null>(null)
   const [itemId, setItemId] = useState<string>("")
 
@@ -78,10 +82,24 @@ const StocklistPage = () => {
     setProductData(item)
   }
 
+  const handleViewStockToggle = () => {
+    setIsViewItemInventory((prev) => !prev)
+  }
+
+  const handleViewStock = (item: ItemType) => {
+    handleViewStockToggle()
+    setProductData(item)
+  }
+
+  const handleModalViewInventory = () => {
+    setIsOpenInventory((prev) => !prev)
+  }
+
   const columns = Columns({
     fields,
     onUpdate: handleUpdateStock,
     onAdd: handleAddStock,
+    onView: handleViewStock,
   })
 
   if (isError) {
@@ -113,6 +131,7 @@ const StocklistPage = () => {
           handleAdd={handleModalAdd}
           handleImport={handleModalImport}
           handleUpdate={handleUpdate}
+          handleView={handleModalViewInventory}
         />
       )}
       {isOpenAdd && (
@@ -162,6 +181,21 @@ const StocklistPage = () => {
           classes='h-[480px] md:p-8 w-[343px] md:w-[970px]'
         >
           <UpdateStockTable itemId={itemId} />
+        </CustomModal>
+      )}
+
+      {isViewItemInventory && (
+        <CustomModal toggleModal={handleViewStockToggle}>
+          <ViewItemStock product={productData} />
+        </CustomModal>
+      )}
+
+      {isOpenInventory && (
+        <CustomModal
+          toggleModal={handleModalViewInventory}
+          classes='h-[480px] md:p-8 w-[343px] md:w-[970px]'
+        >
+          <InventoryTable category='Raw Mats' />
         </CustomModal>
       )}
     </div>

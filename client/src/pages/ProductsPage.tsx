@@ -10,9 +10,11 @@ import { FaExclamationTriangle } from "react-icons/fa"
 import { ItemType } from "../type/itemType"
 import { Navigate } from "react-router-dom"
 import AddStocksFinishedProduct from "../components/modal/AddStockFinishedProduct"
+import ViewItemStock from "../components/modal/ViewItemStock"
+import InventoryTable from "../components/common/InventoryTable"
 
 const fields = [
-  { key: "code", label: "Code", classes: "uppercase" },
+  { key: "code", label: "Product Code", classes: "uppercase" },
   { key: "description", label: "Product Name", classes: "capitalize" },
   { key: "category", label: "Category", classes: "capitalize" },
   { key: "brand", label: "Brand", classes: "uppercase" },
@@ -26,8 +28,10 @@ const ProductsPage = () => {
   const [isOpenAdd, setIsOpenAdd] = useState<boolean>(false)
   const [isOpenUpdate, setIsOpenUpdate] = useState<boolean>(false)
   const [isAddStock, setIsAddStock] = useState<boolean>(false)
+  const [isOpenInventory, setIsOpenInventory] = useState<boolean>(false)
   const [isUpdateStock, setIsUpdateStock] = useState<boolean>(false)
   const [productData, setProductData] = useState<ItemType | null>(null)
+  const [isViewItemInventory, setIsViewItemInventory] = useState<boolean>(false)
   const { data, isLoading, isError, updateItem, isPendingUpdate } =
     useItemComponents()
 
@@ -62,10 +66,24 @@ const ProductsPage = () => {
     setProductData(item)
   }
 
+  const handleViewStockToggle = () => {
+    setIsViewItemInventory((prev) => !prev)
+  }
+
+  const handleViewStock = (item: ItemType) => {
+    handleViewStockToggle()
+    setProductData(item)
+  }
+
+  const handleModalViewInventory = () => {
+    setIsOpenInventory((prev) => !prev)
+  }
+
   const columns = Columns({
     fields,
     onUpdate: handleUpdateStock,
     onAdd: handleAddStock,
+    onView: handleViewStock,
   })
 
   if (isError) {
@@ -96,6 +114,7 @@ const ProductsPage = () => {
           view={true}
           handleAdd={handleModalAdd}
           handleUpdate={handleUpdate}
+          handleView={handleModalViewInventory}
         />
       )}
 
@@ -125,6 +144,20 @@ const ProductsPage = () => {
       {isUpdateStock && (
         <CustomModal toggleModal={handleUpdateStockToggle}>
           <h1>Update Stock</h1>
+        </CustomModal>
+      )}
+      {isViewItemInventory && (
+        <CustomModal toggleModal={handleViewStockToggle}>
+          <ViewItemStock product={productData} />
+        </CustomModal>
+      )}
+
+      {isOpenInventory && (
+        <CustomModal
+          toggleModal={handleModalViewInventory}
+          classes='h-[480px] md:p-8 w-[343px] md:w-[970px]'
+        >
+          <InventoryTable category='Finished Goods' />
         </CustomModal>
       )}
     </div>

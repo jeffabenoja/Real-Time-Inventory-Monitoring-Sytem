@@ -8,7 +8,7 @@ import {
 } from "@tanstack/react-table"
 import { TableProps } from "../../../type/tableType"
 import { IoIosAdd } from "react-icons/io"
-import { VscSettings } from "react-icons/vsc"
+import { HiOutlineViewfinderCircle } from "react-icons/hi2"
 import { CiExport, CiImport } from "react-icons/ci"
 import { FaChevronUp, FaChevronDown } from "react-icons/fa"
 import {
@@ -35,6 +35,7 @@ const Table: React.FC<TableProps> = ({
   handleAdd,
   handleImport,
   handleUpdate,
+  handleView,
   handleSubmit,
   toggleModal,
 }) => {
@@ -162,7 +163,11 @@ const Table: React.FC<TableProps> = ({
 
         {view && (
           <div className='ml-2'>
-            <Buttons label={"View"} Icon={VscSettings} />
+            <Buttons
+              label={"View"}
+              Icon={HiOutlineViewfinderCircle}
+              onClick={handleView}
+            />
           </div>
         )}
 
