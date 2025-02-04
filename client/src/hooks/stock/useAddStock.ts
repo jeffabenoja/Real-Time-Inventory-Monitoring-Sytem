@@ -15,7 +15,9 @@ export const useAddStock = () => {
     },
     onError: (error) => {
       const message =
-        error instanceof Error ? error.message : "Error adding new item"
+        error instanceof Error
+          ? error.message
+          : "Error adding stock for this item"
       showToast.error(message)
     },
   })
@@ -29,7 +31,9 @@ export const useAddStock = () => {
     },
     onError: (error) => {
       const message =
-        error instanceof Error ? error.message : "Error adding new item"
+        error instanceof Error
+          ? error.message
+          : "Error adding stock for this item"
       showToast.error(message)
     },
   })

@@ -11,13 +11,14 @@ const fields = [
   { key: "item.description", label: "Product Name", classes: "uppercase" },
   { key: "itemType", label: "Category", classes: "uppercase" },
   { key: "inQuantity", label: "Current Stock" },
-  { key: "outQuantity", label: "Sold Item" },
 ]
 
 const Columns = ({
   fields,
+  fieldsCategory,
 }: {
   fields: { key: string; label: string; classes?: string }[]
+  fieldsCategory: { key: string; label: string; classes?: string }
 }) => {
   const columnHelper = createColumnHelper<any>()
 
@@ -30,6 +31,13 @@ const Columns = ({
         header: () => <span className='truncate'>{field.label}</span>,
       })
     ),
+
+    columnHelper.accessor(fieldsCategory.key, {
+      cell: (info) => (
+        <span className={`${fieldsCategory.classes}`}>{info.getValue()}</span>
+      ),
+      header: () => <span className='truncate'>{fieldsCategory.label}</span>,
+    }),
   ]
 }
 
@@ -49,8 +57,14 @@ const InventoryTable = ({ category }: InventoryTableProps) => {
     enabled: !!category,
   })
 
+  const fieldsCategory =
+    category === "Finished Goods"
+      ? { key: "outQuantity", label: "Sold Item" }
+      : { key: "outQuantity", label: "Used Materials" }
+
   const columns = Columns({
     fields,
+    fieldsCategory,
   })
 
   if (isError) {
@@ -65,24 +79,22 @@ const InventoryTable = ({ category }: InventoryTableProps) => {
     )
   }
 
-  if (inventoryData.length === 0) {
-    return (
-      <section className='text-center flex flex-col justify-center items-center h-96'>
-        <FaExclamationTriangle className='text-red-900 text-6xl mb-4' />
-        <h1 className='text-6xl font-bold mb-4'>No inventory data available</h1>
-      </section>
-    )
-  }
-
   return (
     <>
       {isLoading ? (
         <Spinner />
       ) : (
         <>
-          <h1 className='font-bold text-xl mb-2'>
-            Inventory for Raw Materials
-          </h1>
+          {category === "Finished Goods" ? (
+            <h1 className='font-bold text-xl mb-2'>
+              Inventory for Finished Products
+            </h1>
+          ) : (
+            <h1 className='font-bold text-xl mb-2'>
+              Inventory for Raw Materials
+            </h1>
+          )}
+
           <Table
             data={inventoryData}
             columns={columns}
