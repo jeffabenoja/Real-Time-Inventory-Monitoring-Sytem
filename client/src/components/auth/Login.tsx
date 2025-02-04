@@ -26,7 +26,7 @@ const Login = () => {
 
   const getErrorMessage = (error: any): string => {
     if (error?.response?.data?.message || error?.message) {
-      return "The information you provided doesn't match our records. Please check and try again."
+      return "The information you provided doesn't match our records. Please check and try again.";
     } else {
       return "Something went wrong. Please try again";
     }
@@ -51,12 +51,12 @@ const Login = () => {
           distinctio?
         </h3>
       </div>
-      <div className="flex flex-col justify-center flex-1 md:px-12 xl:px-20">
+      <div className="flex flex-col justify-center flex-1">
         <h2 className="text-2xl lg:text-4xl mb-10 text-center">
           Welcome Back! Please Sign In
         </h2>
-        <form onSubmit={handleSubmit}>
-          <div>
+        <form onSubmit={handleSubmit} className="flex justify-center">
+          <div className="w-full md:w-3/5 lg:w-4/5 2xl:w-3/5">
             <div className="flex flex-col mb-5">
               <label htmlFor="usercode" className="text-sm">
                 User Code
@@ -87,24 +87,24 @@ const Login = () => {
                 onChange={handleChange}
               />
             </div>
-          </div>
-          <div className="text-right">
-            <span className="text-sm font-bold cursor-pointer hover:text-light-tertiary">
-              Forgot Password?
-            </span>
-          </div>
-          <button
-            className="text-xl w-full my-5 rounded bg-light-primary p-2
-           font-medium cursor-pointer text-[#FAF9F6] hover:bg-light-tertiary"
-            type="submit"
-          >
-            {!isPending ? "Sign In" : "Loading..."}
-          </button>
-          {error && (
-            <div className="text-center text-red-700 font-bold text-xs">
-              {getErrorMessage(error)}
+            <div className="text-right">
+              <span className="text-sm font-bold cursor-pointer hover:text-light-tertiary">
+                Forgot Password?
+              </span>
             </div>
-          )}
+            <button
+              className="text-xl w-full my-5 rounded bg-light-primary p-2
+           font-medium cursor-pointer text-[#FAF9F6] hover:bg-light-tertiary"
+              type="submit"
+            >
+              {!isPending ? "Sign In" : "Loading..."}
+            </button>
+            {error && (
+              <div className="text-center text-red-700 font-bold text-xs">
+                {getErrorMessage(error)}
+              </div>
+            )}
+          </div>
         </form>
       </div>
     </div>
