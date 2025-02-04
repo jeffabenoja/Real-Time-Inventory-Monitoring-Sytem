@@ -6,11 +6,25 @@ export default {
   theme: {
     extend: {
       fontFamily: {
+        primary: ["var(--font-primary)", "sans-serif"],
+        secondary: ["var(--font-secondary)", "sans-serif"],
         sans: ['"Plus Jakarta Sans"', "sans-serif"],
         poppins: ['"Poppins"', "serif"],
       },
       colors: {
         primary: "#7f1d1d",
+        light: {
+          primary: "#3B82F6",
+          secondary: "#DCE8FF",
+          tertiary: "#1E3A8A"
+        },
+        dark: {
+          primary: "#60A5FA",
+          secondary: "#1E293B",
+          tertiary: "#93C5FD"
+        }
+         
+
       },
       boxShadow: {
         login: "25px 30px 55px rgba(85, 87, 115, 0.5)", // Custom box shadow
