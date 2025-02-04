@@ -171,6 +171,7 @@ const StocklistPage = () => {
         <CustomModal toggleModal={handleAddStockToggle}>
           <AddStocksRawMats
             productCode={productData?.code || ""}
+            productName={productData?.description || ""}
             toggleModal={handleAddStockToggle}
           />
         </CustomModal>

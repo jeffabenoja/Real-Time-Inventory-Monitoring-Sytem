@@ -5,10 +5,12 @@ import { useAddStock } from "../../hooks/stock/useAddStock"
 
 interface AddStockProps {
   productCode?: string
+  productName?: string
   toggleModal: () => void
 }
 
 const AddStocksRawMats: React.FC<AddStockProps> = ({
+  productName,
   productCode,
   toggleModal,
 }) => {
@@ -79,6 +81,21 @@ const AddStocksRawMats: React.FC<AddStockProps> = ({
       <h3 className='heading-l text-primary font-bold text-2xl'>
         Add Stock for {productCode}
       </h3>
+      <div className='flex flex-col gap-2'>
+        <label htmlFor='productName' className='text-sm font-bold'>
+          Product Name
+        </label>
+        <input
+          id='productName'
+          type='text'
+          name='productName'
+          value={productName}
+          readOnly
+          autoComplete='off'
+          className={`py-2 px-4 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent placeholder:text-sm
+              focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
+        />
+      </div>
       <form
         className='flex flex-col gap-4 text-secondary-200'
         onSubmit={handleSubmit}
