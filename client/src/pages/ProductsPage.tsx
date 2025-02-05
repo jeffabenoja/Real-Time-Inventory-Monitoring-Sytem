@@ -12,6 +12,7 @@ import { Navigate } from "react-router-dom"
 import AddStocksFinishedProduct from "../components/modal/AddStockFinishedProduct"
 import ViewItemStock from "../components/modal/ViewItemStock"
 import InventoryTable from "../components/common/InventoryTable"
+import ViewAssembleTable from "../components/common/ViewAssembleTable"
 
 const fields = [
   { key: "code", label: "Product Code", classes: "uppercase" },
@@ -31,6 +32,7 @@ const ProductsPage = () => {
   const [isOpenInventory, setIsOpenInventory] = useState<boolean>(false)
   const [isUpdateStock, setIsUpdateStock] = useState<boolean>(false)
   const [productData, setProductData] = useState<ItemType | null>(null)
+  const [itemId, setItemId] = useState<string>("")
   const [isViewItemInventory, setIsViewItemInventory] = useState<boolean>(false)
   const { data, isLoading, isError, updateItem, isPendingUpdate } =
     useItemComponents()
@@ -58,7 +60,7 @@ const ProductsPage = () => {
 
   const handleUpdateStock = (item: ItemType) => {
     handleUpdateStockToggle()
-    setProductData(item)
+    setItemId(item.id ?? "")
   }
 
   const handleAddStock = (item: ItemType) => {
@@ -142,10 +144,14 @@ const ProductsPage = () => {
         </CustomModal>
       )}
       {isUpdateStock && (
-        <CustomModal toggleModal={handleUpdateStockToggle}>
-          <h1>Update Stock</h1>
+        <CustomModal
+          toggleModal={handleUpdateStockToggle}
+          classes='h-[480px] md:p-8 w-[343px] md:w-[970px]'
+        >
+          <ViewAssembleTable itemId={itemId} />
         </CustomModal>
       )}
+
       {isViewItemInventory && (
         <CustomModal toggleModal={handleViewStockToggle}>
           <ViewItemStock product={productData} />

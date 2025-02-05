@@ -9,7 +9,7 @@ export const useStockInList = (id: string) => {
   const { data, isLoading, isError } = useQuery<StockListType[]>({
     queryKey: ["Stock", "Raw Mats"],
     queryFn: () => getStockListPerItem(id),
-
+    retry: 0,
     enabled: !!id,
   })
 

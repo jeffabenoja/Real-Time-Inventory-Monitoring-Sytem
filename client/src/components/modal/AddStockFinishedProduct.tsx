@@ -2,18 +2,11 @@ import React, { useState } from "react"
 import { showToast } from "../../utils/Toast"
 import { useAddStock } from "../../hooks/stock/useAddStock"
 import { ItemType } from "../../type/itemType"
+import { AssembleStock } from "../../type/StockType"
 
 interface AddStockProps {
   product: ItemType | null
   toggleModal: () => void
-}
-
-interface UpdateStockType {
-  transactionDate: string
-  remarks: string
-  item: ItemType
-  quantity: number
-  batchNo: string
 }
 
 const AddStocksFinishedProduct: React.FC<AddStockProps> = ({
@@ -30,12 +23,11 @@ const AddStocksFinishedProduct: React.FC<AddStockProps> = ({
     reorderPoint: 0,
     price: 0,
     cost: 0,
-    status: "INACTIVE",
   }
-  const [stock, setStock] = useState<UpdateStockType>({
+  const [stock, setStock] = useState<AssembleStock>({
     transactionDate: "",
     remarks: "",
-    item: product || defaultItem,
+    finishProduct: product || defaultItem,
     quantity: 0,
     batchNo: "",
   })
@@ -67,7 +59,7 @@ const AddStocksFinishedProduct: React.FC<AddStockProps> = ({
     ]
 
     const emptyFields = requiredFields.filter(
-      (field) => !stock[field as keyof UpdateStockType]
+      (field) => !stock[field as keyof AssembleStock]
     )
 
     if (emptyFields.length > 0) {
@@ -86,14 +78,15 @@ const AddStocksFinishedProduct: React.FC<AddStockProps> = ({
         return
       }
     }
+    const { finishProduct, ...stockWithoutItem } = stock
 
-    const finishProduct = stock.item
+    const finalProduct = finishProduct
 
     const updatedStock = {
-      ...stock,
+      ...stockWithoutItem,
       assemble_quantity: stock.quantity,
       finishProduct: {
-        ...finishProduct,
+        ...finalProduct,
       },
     }
 

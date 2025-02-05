@@ -5,6 +5,7 @@ import {
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
+  getSortedRowModel,
 } from "@tanstack/react-table"
 import { TableProps } from "../../../type/tableType"
 import { IoIosAdd } from "react-icons/io"
@@ -53,8 +54,15 @@ const Table: React.FC<TableProps> = ({
       pagination: {
         pageSize: 10,
       },
+      sorting: [
+        {
+          id: "transactionNo",
+          desc: true,
+        },
+      ],
     },
     getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     onRowSelectionChange: setRowSelection,

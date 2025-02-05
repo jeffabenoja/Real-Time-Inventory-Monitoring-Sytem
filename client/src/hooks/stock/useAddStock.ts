@@ -1,7 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { addStock, addStockForFinishedGoods } from "../../api/services/stock"
-
 import { showToast } from "../../utils/Toast"
+
+// Type Guard to check if error is an AxiosError
 
 export const useAddStock = () => {
   const queryClient = useQueryClient()
@@ -13,11 +14,9 @@ export const useAddStock = () => {
       queryClient.invalidateQueries({ queryKey: ["Stock", "Raw Mats"] })
       showToast.success("Successfully added new stock")
     },
-    onError: (error) => {
-      const message =
-        error instanceof Error
-          ? error.message
-          : "Error adding stock for this item"
+    onError: () => {
+      let message = "Error adding stock for this item"
+
       showToast.error(message)
     },
   })
@@ -29,11 +28,9 @@ export const useAddStock = () => {
       queryClient.invalidateQueries({ queryKey: ["Stock", "Finished Goods"] })
       showToast.success("Successfully added new stock")
     },
-    onError: (error) => {
-      const message =
-        error instanceof Error
-          ? error.message
-          : "Error adding stock for this item"
+    onError: () => {
+      let message = "Insufficient stock for raw materials"
+
       showToast.error(message)
     },
   })

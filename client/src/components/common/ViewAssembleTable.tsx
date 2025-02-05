@@ -1,20 +1,21 @@
-import Table from "./table/Table"
-import { useState } from "react"
-import Spinner from "./utils/Spinner"
-import { useStockInList } from "../../hooks/stock/useStockInList"
 import { createColumnHelper } from "@tanstack/react-table"
 import { FaExclamationTriangle } from "react-icons/fa"
-import { StockListType } from "../../type/StockType"
-import CustomModal from "./utils/CustomModal"
-import UpdateStockRawMats from "../modal/UpdateStockRawMats"
+import Table from "./table/Table"
+import Spinner from "./utils/Spinner"
+import { useAssembleList } from "../../hooks/stock/useAssembleList"
+
 const fields = [
   { key: "transactionNo", label: "Transaction Number", classes: "uppercase" },
   { key: "batchNo", label: "Batch Number", classes: "uppercase" },
-  { key: "item.code", label: "Product Code", classes: "uppercase" },
-  { key: "item.description", label: "Product Name", classes: "uppercase" },
-  { key: "quantity", label: "Quantity" },
+  { key: "finishProduct.code", label: "Product Code", classes: "uppercase" },
+  {
+    key: "finishProduct.description",
+    label: "Product Name",
+    classes: "uppercase",
+  },
+  { key: "assemble_quantity", label: "Quantity" },
 ]
-type UpdateStockTableProps = {
+type AssembleTableProps = {
   itemId: string
 }
 
@@ -37,16 +38,12 @@ const Columns = ({
   ]
 }
 
-const UpdateStockTable = ({ itemId }: UpdateStockTableProps) => {
+const ViewAssembleTable = ({ itemId }: AssembleTableProps) => {
   const {
-    data: stockData = [],
+    data: assembleData = [],
     isLoading,
     isError,
-    updateStock,
-    isPending,
-  } = useStockInList(itemId)
-  const [productData, setProductData] = useState<StockListType | null>(null)
-  const [isOpenUpdate, setIsOpenUpdate] = useState<boolean>(false)
+  } = useAssembleList(itemId)
 
   const columns = Columns({
     fields,
@@ -64,7 +61,7 @@ const UpdateStockTable = ({ itemId }: UpdateStockTableProps) => {
     )
   }
 
-  if (stockData.length === 0) {
+  if (assembleData.length === 0) {
     return (
       <section className='text-center flex flex-col justify-center items-center h-96'>
         <FaExclamationTriangle className='text-red-900 text-6xl mb-4' />
@@ -75,16 +72,6 @@ const UpdateStockTable = ({ itemId }: UpdateStockTableProps) => {
     )
   }
 
-  const handleModalUpdate = () => {
-    setIsOpenUpdate((prev) => !prev)
-  }
-
-  const handleUpdate = (row: StockListType) => {
-    handleModalUpdate()
-
-    setProductData(row)
-  }
-
   return (
     <>
       {isLoading ? (
@@ -92,10 +79,10 @@ const UpdateStockTable = ({ itemId }: UpdateStockTableProps) => {
       ) : (
         <>
           <h1 className='font-bold text-xl mb-2'>
-            Transaction Stock for {stockData[0]?.item?.code}
+            Transaction Stock for {assembleData[0]?.finishProduct?.code}
           </h1>
           <Table
-            data={stockData}
+            data={assembleData}
             columns={columns}
             search={true}
             withImport={false}
@@ -104,22 +91,11 @@ const UpdateStockTable = ({ itemId }: UpdateStockTableProps) => {
             withCancel={false}
             add={false}
             view={false}
-            handleUpdate={handleUpdate}
           />
         </>
-      )}
-
-      {isOpenUpdate && (
-        <CustomModal toggleModal={handleModalUpdate}>
-          <UpdateStockRawMats
-            product={productData}
-            toggleModal={handleModalUpdate}
-            onSubmit={updateStock}
-            isLoading={isPending}
-          />
-        </CustomModal>
       )}
     </>
   )
 }
-export default UpdateStockTable
+
+export default ViewAssembleTable
