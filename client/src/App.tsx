@@ -21,13 +21,18 @@ import UserGroup from "./pages/Admin/UserGroup";
 import UsersRoute from "./components/route/UsersRoute";
 import AdminRoute from "./components/route/AdminRoute";
 import ItemComponents from "./components/common/ItemComponents";
+import { useSelector } from "react-redux";
+import { RootState } from "./store";
 // import CreateSalesOrder from "./components/common/sales/CreateSalesOrder"
 
 const App = () => {
+  const user = useSelector((state: RootState) => state.auth.user) 
+
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>
         <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Navigate to={user ? "/dashboard/overview" : "/login"} replace />} />
         <Route path="*" element={<NotFoundPage />} />
 
         <Route element={<AdminRoute />}>
