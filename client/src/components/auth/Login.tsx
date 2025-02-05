@@ -29,20 +29,16 @@ const Login = () => {
       return "Something went wrong. Please try again";
     }
   };
-
-  // if (isPending) {
-  //   return <Spinner loading={isPending} />;
-  // }
-
+  
   return (
     <div className="flex relative gap-10 p-10 md:p-10 h-screen w-screen justify-center ">
       <div className="lg:hidden absolute top-10  left-1/2 transform -translate-x-1/2">
-        <div className="text-center font-primary">
+        <div className="text-center font-heading">
           <h1 className="text-5xl">E&L</h1>
           <p className="text-2xl">Delicatessen</p>
         </div>
       </div>
-      <div className="hidden lg:flex flex-col justify-between flex-1 bg-light-primary text-[#FAF9F6] p-10 rounded font-primary">
+      <div className="hidden lg:flex flex-col justify-between flex-1 bg-primary text-white p-10 rounded font-heading">
         <h1 className="text-5xl">E&L Delicatessen</h1>
         <h3 className="text-2xl">
           Lorem ipsum, dolor sit amet consectetur adipisicing elit. Magni,
@@ -86,13 +82,13 @@ const Login = () => {
               />
             </div>
             <div className="text-right">
-              <span className="text-sm font-bold cursor-pointer hover:text-light-tertiary">
+              <span className="text-sm font-bold cursor-pointer hover:text-primary">
                 Forgot Password?
               </span>
             </div>
             <button
-              className="text-xl w-full my-5 rounded bg-light-primary p-2
-           font-medium cursor-pointer text-[#FAF9F6] hover:bg-light-tertiary"
+              className="text-xl w-full my-5 rounded bg-primary p-2
+           font-medium cursor-pointer text-white hover:bg-secondary"
               type="submit"
             >
               {!isPending ? "Sign In" : "Loading..."}

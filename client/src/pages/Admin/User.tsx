@@ -9,10 +9,6 @@ import { replaceUserList, updateUser } from "../../store/slices/admin";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store/index";
 import CustomModal from "../../components/common/utils/CustomModal";
-import Sidebar from "../../components/common/Sidebar";
-import { LuUser } from "react-icons/lu";
-import { LuUsers } from "react-icons/lu";
-import { IoMdArrowRoundBack } from "react-icons/io";
 import { showToast } from "../../utils/Toast";
 import { Delete } from "../../components/common/utils/Delete";
 import User from "../../components/admin/User";
@@ -30,16 +26,6 @@ const fields = [
     classes: "lowercase",
   },
 ];
-
-const sidebarItems = [
-  { label: "Users", icon: LuUser, path: "/admin/users" },
-  { label: "User Groups", icon: LuUsers, path: "/admin/user-groups" },
-];
-const sidebarButton = {
-  label: "Dashboard",
-  icon: IoMdArrowRoundBack,
-  path: "/dashboard",
-};
 
 export default function Users() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -119,7 +105,6 @@ export default function Users() {
   }, [data, dispatch]);
 
   return (
-    <Sidebar navItems={sidebarItems} button={sidebarButton}>
       <div className="flex flex-col max-w-full mx-auto h-dynamic-sm lg:h-dynamic-lg px-4 lg:px-8 py-4">
         <h1 className="text-3xl text-center font-bold mb-2">Admin Settings</h1>
         <h2 className="text-2xl lg:hidden">Users</h2>
@@ -170,6 +155,5 @@ export default function Users() {
           </CustomModal>
         )}
       </div>
-    </Sidebar>
   );
 }

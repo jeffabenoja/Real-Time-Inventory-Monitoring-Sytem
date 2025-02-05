@@ -2,6 +2,7 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit"
 import authReducer from "./slices/auth"
 import adminReducer from "./slices/admin"
+import modeReducer from "./slices/mode"
 import {
   persistStore,
   persistReducer,
@@ -17,6 +18,7 @@ import sessionStorage from "redux-persist/lib/storage/session"
 const rootReducer = combineReducers({
   auth: authReducer,
   admin: adminReducer,
+  mode: modeReducer
 })
 
 // Configuration object for redux-persist
