@@ -34,3 +34,19 @@ export interface SalesOrderType {
   createdDateTime: string
   details: DetailsType[]
 }
+
+export interface SalesOrderCreateType {
+  orderDate: string
+  remarks: string
+  customer: {
+    id: string
+  }
+  details: {
+    item: {
+      id: string
+      code: string
+    }
+    orderQuantity: string
+    itemPrice: string
+  }[]
+}

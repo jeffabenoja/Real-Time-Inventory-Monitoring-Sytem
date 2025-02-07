@@ -13,6 +13,7 @@ import { CustomerType } from "../../type/salesType"
 import { showToast } from "../../utils/Toast"
 import ItemSalesOrder from "./ItemSalesOrder"
 import DisplaySalesOrderItems from "./DisplaySalesOrderItems"
+import useSalesOrder from "../../hooks/sales/useSalesOrder"
 
 export interface DetailsProduct {
   item: ItemType
@@ -38,6 +39,7 @@ const SalesOrderComponent: React.FC<SalesOrderProps> = ({ close }) => {
   })
   const [description, setDescription] = useState<string>("")
   const [orderDate, setOrderDate] = useState<string>("")
+  const { createSalesOrder, isPending } = useSalesOrder()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -115,8 +117,55 @@ const SalesOrderComponent: React.FC<SalesOrderProps> = ({ close }) => {
     )
   }
 
+  const [invalidFields, setInvalidFields] = useState<string[]>([])
   const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
+    const requiredFields: string[] = [
+      "customerDetails",
+      "productItems",
+      "orderDate",
+      "description",
+    ]
+
+    // 2. Check for any empty required fields
+    const emptyFields = requiredFields.filter((field) => {
+      if (field === "productItems") {
+        return productItems.length === 0
+      }
+      if (field === "customerDetails") {
+        return !customerDetails.id
+      }
+      if (field === "orderDate") {
+        return !orderDate
+      }
+      if (field === "description") {
+        return !description.trim()
+      }
+      return false
+    })
+
+    if (emptyFields.length > 0) {
+      setInvalidFields(emptyFields)
+
+      if (!customerDetails || !customerDetails.id) {
+        showToast.error("Please select a customer.")
+      } else if (productItems.length === 0) {
+        showToast.error("Please select at least one product.")
+      } else {
+        showToast.error("Please fill out all required fields.")
+      }
+      return
+    }
+
+    const datePattern = /^\d{4}-\d{2}-\d{2}$/
+
+    if (!datePattern.test(orderDate)) {
+      setInvalidFields((prev) => [...prev, "orderDate"])
+      showToast.error("Invalid date format. Please use yyyy-mm-dd.")
+      return
+    }
+
     const salesOrder = {
       orderDate: orderDate,
       remarks: description,
@@ -124,13 +173,18 @@ const SalesOrderComponent: React.FC<SalesOrderProps> = ({ close }) => {
         id: customerDetails.id,
       },
       details: productItems.map((item) => ({
-        item: item.item,
+        item: {
+          id: item.item.id || "",
+          code: item.item.code,
+        },
         orderQuantity: item.orderQuantity,
         itemPrice: item.itemPrice,
       })),
     }
 
-    console.log(salesOrder)
+    createSalesOrder(salesOrder)
+
+    close()
   }
 
   return (
@@ -147,10 +201,12 @@ const SalesOrderComponent: React.FC<SalesOrderProps> = ({ close }) => {
                 id='customer'
                 type='text'
                 name='customer'
-                value={customerDetails.address}
+                value={customerDetails.name}
                 readOnly
                 autoComplete='off'
-                className={`w-full p-2 rounded-md border outline-transparent bg-transparent text-xs
+                className={`${
+                  invalidFields.includes("customerDetails") && "border-red-900"
+                } w-full p-2 rounded-md border outline-transparent bg-transparent text-xs
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
               />
               <TbZoomScan
@@ -202,7 +258,7 @@ const SalesOrderComponent: React.FC<SalesOrderProps> = ({ close }) => {
                 value={customerDetails.address}
                 readOnly
                 autoComplete='off'
-                className={` w-full p-2 rounded-md border outline-transparent bg-transparent text-xs
+                className={`w-full p-2 rounded-md border outline-transparent bg-transparent text-xs
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
               />
             </div>
@@ -217,10 +273,13 @@ const SalesOrderComponent: React.FC<SalesOrderProps> = ({ close }) => {
                   id='orderDate'
                   type='text'
                   name='orderDate'
+                  placeholder='yyyy-mm-dd'
                   value={orderDate}
                   onChange={handleChange}
                   autoComplete='off'
-                  className={` w-full p-2 rounded-md border outline-transparent bg-transparent text-xs
+                  className={`${
+                    invalidFields.includes("orderDate") && "border-red-900"
+                  } w-full p-2 rounded-md border outline-transparent bg-transparent text-xs
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
                 />
               </div>
@@ -237,7 +296,9 @@ const SalesOrderComponent: React.FC<SalesOrderProps> = ({ close }) => {
                   value={description}
                   onChange={handleChange}
                   autoComplete='off'
-                  className={` w-full p-2 rounded-md border outline-transparent bg-transparent text-xs
+                  className={`${
+                    invalidFields.includes("description") && "border-red-900"
+                  } w-full p-2 rounded-md border outline-transparent bg-transparent text-xs
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
                 />
               </div>
@@ -305,12 +366,11 @@ const SalesOrderComponent: React.FC<SalesOrderProps> = ({ close }) => {
                 type='submit'
                 className='bg-blue-700 rounded-md py-2.5 w-[150px]'
               >
-                {/* {isPending ? (
+                {isPending ? (
                   <div className='w-5 h-5 border-2 border-t-2 border-[#0A140A] border-t-white rounded-full animate-spin'></div>
                 ) : (
                   <p className='text-white font-bold text-xs'>Submit</p>
-                )} */}
-                <p className='text-white font-bold text-xs'>Submit</p>
+                )}
               </button>
             </div>
           </div>

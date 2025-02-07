@@ -149,7 +149,7 @@ const SalesPage = () => {
       {openSalesOrderModal && (
         <CustomModal
           toggleModal={handleSalesOrderModalToggle}
-          classes='h-[480px] md:p-8 w-[343px] md:w-[970px]'
+          classes='h-[480px] md:p-8 w-[343px] md:w-[1080px]'
         >
           <SalesOrderComponent close={handleSalesOrderModalToggle} />
         </CustomModal>
