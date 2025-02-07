@@ -97,6 +97,7 @@ const UpdateStockTable = ({ itemId }: UpdateStockTableProps) => {
           <Table
             data={stockData}
             columns={columns}
+            sorting={[{ id: "transactionNo", desc: true }]}
             search={true}
             withImport={false}
             withExport={false}

@@ -84,6 +84,7 @@ const ViewAssembleTable = ({ itemId }: AssembleTableProps) => {
           <Table
             data={assembleData}
             columns={columns}
+            sorting={[{ id: "transactionNo", desc: true }]}
             search={true}
             withImport={false}
             withExport={false}

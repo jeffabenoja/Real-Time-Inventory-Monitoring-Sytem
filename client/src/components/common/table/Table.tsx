@@ -39,10 +39,12 @@ const Table: React.FC<TableProps> = ({
   handleView,
   handleSubmit,
   toggleModal,
+  sorting,
 }) => {
   const [isOpenExport, setIsOpenExport] = useState<boolean>(false)
   const [globalFilter, setGlobalFilter] = useState<string>("")
   const [rowSelection, setRowSelection] = useState({})
+
   const table = useReactTable({
     data: data || [],
     columns,
@@ -54,12 +56,7 @@ const Table: React.FC<TableProps> = ({
       pagination: {
         pageSize: 10,
       },
-      sorting: [
-        {
-          id: "transactionNo",
-          desc: true,
-        },
-      ],
+      sorting: sorting,
     },
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
