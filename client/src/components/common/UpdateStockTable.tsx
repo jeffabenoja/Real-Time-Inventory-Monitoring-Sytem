@@ -91,7 +91,7 @@ const UpdateStockTable = ({ itemId }: UpdateStockTableProps) => {
         <Spinner />
       ) : (
         <>
-          <h1 className='font-bold text-xl mb-2'>
+          <h1 className='font-bold text-xl pb-2 border-b border-[#14aff1] '>
             Transaction Stock for {stockData[0]?.item?.code}
           </h1>
           <Table

@@ -78,7 +78,7 @@ const ViewAssembleTable = ({ itemId }: AssembleTableProps) => {
         <Spinner />
       ) : (
         <>
-          <h1 className='font-bold text-xl mb-2'>
+          <h1 className='font-bold text-xl pb-2 border-b border-[#14aff1]'>
             Transaction Stock for {assembleData[0]?.finishProduct?.code}
           </h1>
           <Table

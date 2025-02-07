@@ -17,7 +17,7 @@ export default {
         background: {
           dark: "#212121",
           light: "#EBEBEB",
-        }
+        },
       },
       boxShadow: {
         login: "25px 30px 55px rgba(85, 87, 115, 0.5)", // Custom box shadow

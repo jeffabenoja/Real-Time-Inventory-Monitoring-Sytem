@@ -51,7 +51,7 @@ const InventoryTable = ({ category }: InventoryTableProps) => {
     isLoading,
     isError,
   } = useQuery<InventoryPerCategory[]>({
-    queryKey: ["Inventory"],
+    queryKey: ["Stock", "Raw Mats", "Finished Goods"],
     queryFn: () => getInventoryByCategory(category),
 
     enabled: !!category,
@@ -86,11 +86,11 @@ const InventoryTable = ({ category }: InventoryTableProps) => {
       ) : (
         <>
           {category === "Finished Goods" ? (
-            <h1 className='font-bold text-xl mb-2'>
+            <h1 className='font-bold text-xl pb-2 border-b border-[#14aff1]'>
               Inventory for Finished Products
             </h1>
           ) : (
-            <h1 className='font-bold text-xl mb-2'>
+            <h1 className='font-bold text-xl pb-2 border-b border-[#14aff1]'>
               Inventory for Raw Materials
             </h1>
           )}

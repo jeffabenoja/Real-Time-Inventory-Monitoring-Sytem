@@ -167,15 +167,25 @@ const ItemComponents = () => {
   }
 
   const handleSubmit = (products: ItemType[]) => {
+    console.log(products)
+
     setRawMaterials((prevProduct) => {
-      const updatedRawMaterials = [
+      const updatedProductItems = [
         ...prevProduct,
-        ...products.map((product) => ({
-          rawMaterial: { ...product },
-          quantity: "1",
-        })),
+        ...products
+          .filter((product) => {
+            const isExisting = prevProduct.some(
+              (existingProduct) =>
+                existingProduct.rawMaterial.code === product.code
+            )
+            return !isExisting
+          })
+          .map((product) => ({
+            rawMaterial: { ...product },
+            quantity: "1",
+          })),
       ]
-      return updatedRawMaterials
+      return updatedProductItems
     })
 
     handleModalToggle()

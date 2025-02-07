@@ -17,7 +17,7 @@ export interface DetailsType {
 }
 
 export interface CustomerType {
-  id: number
+  id: string
   name: string
   address: string
   contactPerson: string

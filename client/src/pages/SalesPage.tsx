@@ -1,12 +1,14 @@
 import PageTitle from "../components/common/utils/PageTitle"
 import { createColumnHelper } from "@tanstack/react-table"
-
+import { useState } from "react"
 import { MdOutlineRemoveRedEye } from "react-icons/md"
 import { DetailsType, SalesOrderType } from "../type/salesType"
 import useSalesOrder from "../hooks/sales/useSalesOrder"
 import { FaExclamationTriangle } from "react-icons/fa"
 import Spinner from "../components/common/utils/Spinner"
 import Table from "../components/common/table/Table"
+import CustomModal from "../components/common/utils/CustomModal"
+import SalesOrderComponent from "../components/common/SalesOrderComponent"
 
 const fields = [
   { key: "salesorderNo", label: "Order Number", classes: "uppercase" },
@@ -87,7 +89,19 @@ const Columns = ({
 
 const SalesPage = () => {
   const { data, isLoading, isError } = useSalesOrder()
+  const [openModal, setOpenModal] = useState<boolean>()
+  const [openSalesOrderModal, setOpenSalesOrderModal] = useState<boolean>()
+
+  const handleSalesOrderModalToggle = () => {
+    setOpenSalesOrderModal((prev) => !prev)
+  }
+
+  const handleOpenModalToggle = () => {
+    setOpenModal((prev) => !prev)
+  }
+
   const handleUpdate = (row: SalesOrderType) => {
+    handleOpenModalToggle()
     console.log(row)
   }
 
@@ -127,9 +141,27 @@ const SalesPage = () => {
           withExport={true}
           add={true}
           view={false}
-          handleAdd={() => {}}
+          handleAdd={handleSalesOrderModalToggle}
           handleUpdate={handleUpdate}
         />
+      )}
+
+      {openSalesOrderModal && (
+        <CustomModal
+          toggleModal={handleSalesOrderModalToggle}
+          classes='h-[480px] md:p-8 w-[343px] md:w-[970px]'
+        >
+          <SalesOrderComponent close={handleSalesOrderModalToggle} />
+        </CustomModal>
+      )}
+
+      {openModal && (
+        <CustomModal
+          toggleModal={handleOpenModalToggle}
+          classes='h-[480px] md:p-8 w-[343px] md:w-[970px]'
+        >
+          <h1>Update Sales Order</h1>
+        </CustomModal>
       )}
     </div>
   )
