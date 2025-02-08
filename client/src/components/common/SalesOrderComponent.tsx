@@ -1,14 +1,9 @@
 import { useState } from "react"
 import CustomModal from "./utils/CustomModal"
-import { useQuery } from "@tanstack/react-query"
 import { InventoryPerCategory } from "../../type/StockType"
-import { getInventoryByCategory } from "../../api/services/inventory"
-import { FaExclamationTriangle } from "react-icons/fa"
-import Spinner from "./utils/Spinner"
 import { ItemType } from "../../type/itemType"
 import SalesOrderCustomer from "../modal/SalesOrderCustomer"
 import { TbZoomScan } from "react-icons/tb"
-import useCustomerHook from "../../hooks/customer/useCustomerHook"
 import { CustomerType } from "../../type/salesType"
 import { showToast } from "../../utils/Toast"
 import ItemSalesOrder from "./ItemSalesOrder"
@@ -51,18 +46,6 @@ const SalesOrderComponent: React.FC<SalesOrderProps> = ({ close }) => {
     }
   }
 
-  const {
-    data: inventoryData = [],
-    isLoading,
-    isError,
-  } = useQuery<InventoryPerCategory[]>({
-    queryKey: ["Stock", "Raw Mats", "Finished Goods"],
-    queryFn: () => getInventoryByCategory("Finished Goods"),
-  })
-
-  const { data: customerData = [], isLoading: customerLoading } =
-    useCustomerHook()
-
   const handleToggleModal = () => {
     setIsOpenModal((prev) => !prev)
   }
@@ -103,18 +86,6 @@ const SalesOrderComponent: React.FC<SalesOrderProps> = ({ close }) => {
     }
 
     handleCustomerToggle()
-  }
-
-  if (isError) {
-    return (
-      <section className='text-center flex flex-col justify-center items-center h-96'>
-        <FaExclamationTriangle className='text-red-900 text-6xl mb-4' />
-        <h1 className='text-6xl font-bold mb-4'>Something went wrong</h1>
-        <p className='text-xl mb-5 text-primary'>
-          Please contact your administrator
-        </p>
-      </section>
-    )
   }
 
   const [invalidFields, setInvalidFields] = useState<string[]>([])
@@ -312,17 +283,10 @@ const SalesOrderComponent: React.FC<SalesOrderProps> = ({ close }) => {
                   classes='h-[420px] md:p-8 w-[343px] md:w-[860px]'
                   toggleModal={handleToggleModal}
                 >
-                  {isLoading ? (
-                    <Spinner />
-                  ) : (
-                    <>
-                      <ItemSalesOrder
-                        inventoryData={inventoryData}
-                        onSubmit={handleSubmit}
-                        toggleModal={handleToggleModal}
-                      />
-                    </>
-                  )}
+                  <ItemSalesOrder
+                    onSubmit={handleSubmit}
+                    toggleModal={handleToggleModal}
+                  />
                 </CustomModal>
               )}
             </div>
@@ -339,17 +303,10 @@ const SalesOrderComponent: React.FC<SalesOrderProps> = ({ close }) => {
                 classes='h-[420px] md:p-8 w-[343px] md:w-[680px]'
                 toggleModal={handleCustomerToggle}
               >
-                {customerLoading ? (
-                  <Spinner />
-                ) : (
-                  <>
-                    <SalesOrderCustomer
-                      customerData={customerData}
-                      onSubmit={handleSubmitCustomer}
-                      toggleModal={handleCustomerToggle}
-                    />
-                  </>
-                )}
+                <SalesOrderCustomer
+                  onSubmit={handleSubmitCustomer}
+                  toggleModal={handleCustomerToggle}
+                />
               </CustomModal>
             )}
 

@@ -130,7 +130,7 @@ const AddItems: React.FC<AddItemsProps> = ({
 
   return (
     <div className='flex flex-col gap-6'>
-      <h3 className='heading-l text-primary font-bold text-2xl'>
+      <h3 className=' border-b border-[#14aff1] pb-1 uppercase'>
         {!productData ? title : `${productData.code}`}
       </h3>
       <form
@@ -138,7 +138,7 @@ const AddItems: React.FC<AddItemsProps> = ({
         onSubmit={handleSubmit}
       >
         <div className={`${productData ? "hidden" : "flex flex-col gap-2"}`}>
-          <label htmlFor='productCode' className='text-sm font-bold'>
+          <label htmlFor='productCode' className='text-sm'>
             Product Code
           </label>
           <input
@@ -158,7 +158,7 @@ const AddItems: React.FC<AddItemsProps> = ({
         </div>
 
         <div className='flex flex-col gap-2'>
-          <label htmlFor='description' className='text-sm font-bold'>
+          <label htmlFor='description' className='text-sm'>
             Product Name
           </label>
           <textarea

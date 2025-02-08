@@ -178,11 +178,7 @@ const Table: React.FC<TableProps> = ({
 
         {materials && (
           <div className='ml-2'>
-            <Buttons
-              label={"Add Materials"}
-              Icon={IoIosAdd}
-              onClick={toggleModal}
-            />
+            <Buttons Icon={IoIosAdd} onClick={toggleModal} />
           </div>
         )}
       </div>

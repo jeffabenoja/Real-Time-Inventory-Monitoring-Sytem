@@ -91,6 +91,7 @@ const SalesPage = () => {
   const { data, isLoading, isError } = useSalesOrder()
   const [openModal, setOpenModal] = useState<boolean>()
   const [openSalesOrderModal, setOpenSalesOrderModal] = useState<boolean>()
+  const [openViewSalesOrder, setOpenViewOrderModal] = useState<boolean>()
 
   const handleSalesOrderModalToggle = () => {
     setOpenSalesOrderModal((prev) => !prev)
@@ -100,14 +101,23 @@ const SalesPage = () => {
     setOpenModal((prev) => !prev)
   }
 
+  const handleViewSalesOrderToggle = () => {
+    setOpenViewOrderModal((prev) => !prev)
+  }
+
   const handleUpdate = (row: SalesOrderType) => {
     handleOpenModalToggle()
     console.log(row)
   }
 
+  const handleViewSalesOrder = (row: SalesOrderType) => {
+    handleViewSalesOrderToggle()
+    console.log(row)
+  }
+
   const columns = Columns({
     fields,
-    onView: () => {},
+    onView: handleViewSalesOrder,
   })
   if (isError) {
     return (
@@ -161,6 +171,15 @@ const SalesPage = () => {
           classes='h-[480px] md:p-8 w-[343px] md:w-[970px]'
         >
           <h1>Update Sales Order</h1>
+        </CustomModal>
+      )}
+
+      {openViewSalesOrder && (
+        <CustomModal
+          toggleModal={handleViewSalesOrderToggle}
+          classes='h-[480px] md:p-8 w-[343px] md:w-[970px]'
+        >
+          <h1>View Sales Order</h1>
         </CustomModal>
       )}
     </div>

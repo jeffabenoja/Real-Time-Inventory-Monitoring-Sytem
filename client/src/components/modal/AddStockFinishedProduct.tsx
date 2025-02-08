@@ -97,11 +97,11 @@ const AddStocksFinishedProduct: React.FC<AddStockProps> = ({
 
   return (
     <div className='flex flex-col gap-6'>
-      <h3 className='heading-l text-primary font-bold text-2xl'>
-        Add Stock for {product?.code}
+      <h3 className='border-b border-[#14aff1] pb-1 font-bold uppercase'>
+        {product?.code}
       </h3>
       <div className='flex flex-col gap-2'>
-        <label htmlFor='productName' className='text-sm font-bold'>
+        <label htmlFor='productName' className='text-sm'>
           Product Name
         </label>
         <input
@@ -120,7 +120,7 @@ const AddStocksFinishedProduct: React.FC<AddStockProps> = ({
         onSubmit={handleSubmit}
       >
         <div className='flex flex-col gap-2'>
-          <label htmlFor='transactionDate' className='text-sm font-bold'>
+          <label htmlFor='transactionDate' className='text-sm'>
             Transaction Date
           </label>
           <input
@@ -177,7 +177,7 @@ const AddStocksFinishedProduct: React.FC<AddStockProps> = ({
             />
           </div>
           <div className='flex flex-col gap-2'>
-            <label htmlFor='batchNumber' className='text-sm font-bold'>
+            <label htmlFor='batchNumber' className='text-sm'>
               Batch Number
             </label>
             <input

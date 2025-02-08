@@ -19,5 +19,5 @@ export interface TableProps {
   handleUpdate?: (row: any) => void
   handleSubmit?: (data: any) => void
   toggleModal?: () => void
-  sorting?: { id: string; desc: boolean }[];
+  sorting?: { id: string; desc: boolean }[]
 }

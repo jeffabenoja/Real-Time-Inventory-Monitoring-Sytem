@@ -39,12 +39,12 @@ const ViewItemStock: React.FC<AddStockProps> = ({ product }) => {
 
   return (
     <div className='flex flex-col gap-6'>
-      <h3 className='heading-l text-primary font-bold text-2xl'>
-        Current Stock of {itemData?.item.code}
+      <h3 className='border-b border-[#14aff1] pb-1 font-bold uppercase'>
+        Stock for {itemData?.item.code}
       </h3>
 
       <div className='flex flex-col gap-2'>
-        <label htmlFor='description' className='text-sm font-bold'>
+        <label htmlFor='description' className='text-sm'>
           Product Name
         </label>
         <input
