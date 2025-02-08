@@ -56,9 +56,10 @@ const ProductItem = ({
 
         return (
           <input
-            type='text'
+            type='number'
             id='qty'
             autoComplete='off'
+            min={1}
             name='qty'
             defaultValue={row.original.orderQuantity}
             onChange={handleQuantityChange}
@@ -86,9 +87,10 @@ const ProductItem = ({
 
         return (
           <input
-            type='text'
+            type='number'
             id='price'
             autoComplete='off'
+            min={1}
             name='price'
             defaultValue={row.original.itemPrice}
             onChange={handlePriceChange}
