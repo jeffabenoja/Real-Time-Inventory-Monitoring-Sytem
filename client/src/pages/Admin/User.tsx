@@ -69,7 +69,6 @@ export default function Users() {
   const handleUpdateUser = (user: TypeUser) => {
     handleUpdateUserToggle();
     setDefaultValues(user);
-    console.log(user);
   };
 
   const handleDeleteToggle = () => {
@@ -97,7 +96,6 @@ export default function Users() {
   });
 
   let tableData = useSelector((state: RootState) => {
-    console.log("gather table data");
     return state.admin.users;
   });
 

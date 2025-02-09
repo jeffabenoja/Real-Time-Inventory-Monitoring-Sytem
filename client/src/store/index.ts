@@ -1,6 +1,6 @@
 // src/store/store.ts
 import { configureStore, combineReducers } from "@reduxjs/toolkit"
-import authReducer from "./slices/auth"
+import authReducer, {logout} from "./slices/auth"
 import adminReducer from "./slices/admin"
 import modeReducer from "./slices/mode"
 import {
@@ -15,11 +15,21 @@ import {
 } from "redux-persist"
 import sessionStorage from "redux-persist/lib/storage/session"
 
-const rootReducer = combineReducers({
+const appReducer = combineReducers({
   auth: authReducer,
   admin: adminReducer,
   mode: modeReducer
 })
+
+const rootReducer = (state: ReturnType<typeof appReducer> | undefined, action: any) => {
+  if (action.type === logout.type) {
+    state = undefined;
+  }
+  return appReducer(state, action);
+};
+
+
+
 
 // Configuration object for redux-persist
 const persistConfig = {

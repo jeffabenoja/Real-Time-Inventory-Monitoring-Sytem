@@ -13,6 +13,10 @@ import { IoIosNotifications } from "react-icons/io";
 
 
 import NavItem from "./NavItem";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../store";
+import { useNavigate } from "react-router-dom";
+import { logout } from "../../../store/slices/auth";
 
 const NAVIGATION_ITEMS = [
   { name: "Overview", to: "/dashboard/overview", icon: HiDocumentSearch },
@@ -37,6 +41,14 @@ const ADMIN_ITEMS = [
 ];
 
 export default function Container() {
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate()
+
+  const logoutHandler = () => {
+    dispatch(logout());                 // ✅ Reset the state first
+    navigate("/login", { replace: true });
+  }
+
   return (
     <div className="font-primary h-screen">
       <div className="hidden text-white lg:flex flex-col items-center py-[3px] border-b-[1px] border-white">
@@ -67,7 +79,7 @@ export default function Container() {
           ))}
         </div>
       </div>
-      <div className="text-white absolute bottom-5 left-5 text-base font-primary flex gap-3 hover:text-primary cursor-pointer font-medium"> <TbLogout2 size={20}/> Logout </div>
+      <div className="text-white absolute bottom-5 left-5 text-base font-primary flex gap-3 hover:text-primary cursor-pointer font-medium" onClick={logoutHandler}> <TbLogout2 size={20}/> Logout </div>
     </div>
   );
 }
