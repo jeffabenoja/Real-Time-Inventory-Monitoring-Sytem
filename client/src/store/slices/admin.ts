@@ -22,10 +22,13 @@ const adminSlice = createSlice({
       state.users.push(action.payload)
     },
     updateUser: (state, action) => {
-      const index = state.users.findIndex((user) => user.usercode === action.payload.usercode)
+      const index = state.users.findIndex((user) => user.id === action.payload.id)
       if (index >= 0) {
         state.users[index] = action.payload
       }
+    },
+    deleteUser: (state, action) => {
+      state.users = state.users.filter((user) => user.id !== action.payload.id)
     },
     replaceUserGroupList: (state, action) => {
       state.userGroup = action.payload
@@ -34,13 +37,16 @@ const adminSlice = createSlice({
       state.userGroup.push(action.payload)
     },
     updateUserGroup: (state, action) => {
-      const index = state.userGroup.findIndex((user) => user.id === action.payload.id)
+      const index = state.userGroup.findIndex((group) => group.id === action.payload.id)
       if (index >= 0) {
         state.userGroup[index] = action.payload
       }
-    }
+    },
+    deleteUserGroup: (state, action) => {
+      state.userGroup = state.userGroup.filter((group) => group.id !== action.payload.id)
+    },
   },
 })
 
-export const { replaceUserList, appendUserList, updateUser, replaceUserGroupList, appendUserGroupList, updateUserGroup } = adminSlice.actions
+export const { replaceUserList, appendUserList, updateUser, deleteUser, replaceUserGroupList, appendUserGroupList, updateUserGroup, deleteUserGroup } = adminSlice.actions
 export default adminSlice.reducer

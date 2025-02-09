@@ -15,8 +15,8 @@ import { showToast } from "../../utils/Toast";
 import Select from "../common/utils/Select";
 
 interface UserList {
-  id: any,
-  code: any
+  id: any;
+  code: any;
 }
 
 interface Props {
@@ -77,9 +77,7 @@ export default function UserForm({ close, defaultValue, userList }: Props) {
       dispatch(updateUser(data));
     }
     showToast.success(
-      !defaultValue
-        ? "User Group Succesfully Added"
-        : "User Group Succesfully Updated"
+      !defaultValue ? "User Succesfully Added" : "User Succesfully Updated"
     );
     close();
   };
@@ -105,18 +103,14 @@ export default function UserForm({ close, defaultValue, userList }: Props) {
   });
 
   const onSubmit = async (data: FormFields) => {
-    try {
-      const user: User = {
-        ...data,
-        status: "ACTIVE",
-      };
-      if (!defaultValue) {
-        await addUser(user);
-      } else {
-        await updateUserMutate(user);
-      }
-    } catch (error) {
-      throw new Error(!defaultValue ? "user added" : "user not updated");
+    const user: User = {
+      ...data,
+      status: "ACTIVE",
+    };
+    if (!defaultValue) {
+      await addUser(user);
+    } else {
+      await updateUserMutate({ id: defaultValue.id!, user });
     }
     reset();
   };
@@ -127,8 +121,8 @@ export default function UserForm({ close, defaultValue, userList }: Props) {
   };
 
   let groupList = userList?.map((item) => ({
-      value: item.id,
-      label: item.code,
+    value: item.id,
+    label: item.code,
   }));
 
   return (

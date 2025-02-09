@@ -6,6 +6,7 @@ import {
   CREATE_USER_GROUP,
   DELETE_USER_GROUP,
   UPDATE_USER_GROUP,
+  UPDATE_USER,
 } from "../urls/adminUrls"
 import { User, UserGroup } from "../../type/userType"
 
@@ -21,15 +22,15 @@ export const getUserList = async () => {
   return response.data
 }
 
-export const updateUser = async (user: User) => {
-  const response = await apiClient.put(CREATE_USER, user)
+export const updateUser = async ({id, user} : {id: string, user:User}) => {
+  const response = await apiClient.put(UPDATE_USER(id), user)
 
   return response.data
 }
 
 export const deleteUser = async (user: User) => {
   let data = { ...user, status: "INACTIVE" }
-  const response = await apiClient.put(CREATE_USER, data)
+  const response = await apiClient.put(UPDATE_USER(data.id!), data)
 
   return response.data
 }
@@ -63,6 +64,5 @@ export const deleteUserGroup = async (userGroup: UserGroup) => {
   }
   let data = { ...userGroup, status: "INACTIVE" }
   const response = await apiClient.put(DELETE_USER_GROUP(userGroup.id), data)
-  console.log(response.data)
   return response.data
 }

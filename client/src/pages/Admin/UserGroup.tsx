@@ -6,7 +6,7 @@ import { deleteUserGroup, getUserGroupList } from "../../api/services/admin";
 import Spinner from "../../components/common/utils/Spinner";
 import {
   replaceUserGroupList,
-  updateUserGroup,
+  deleteUserGroup as deleteUserGroupDispatch,
 } from "../../store/slices/admin";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store/index";
@@ -35,7 +35,7 @@ export default function UserGroups() {
   const dispatch = useDispatch<AppDispatch>();
 
   const success = (data: any) => {
-    dispatch(updateUserGroup(data));
+    dispatch(deleteUserGroupDispatch(data));
     setIsDeleteUser(false);
     showToast.success("User Group deleted successfully");
   };
@@ -70,7 +70,6 @@ export default function UserGroups() {
   };
 
   const onDelete = async () => {
-    console.log(defaultValues);
     await deleteGroup(defaultValues);
   };
 
@@ -97,8 +96,6 @@ export default function UserGroups() {
 
   return (
     <div className="flex flex-col max-w-full mx-auto h-dynamic-sm lg:h-dynamic-lg px-4 lg:px-8 py-4">
-      <h1 className="text-3xl text-center font-bold mb-2">Admin Settings</h1>
-      <h2 className="text-2xl lg:hidden">Users</h2>
 
       {isLoading ? (
         <Spinner />
