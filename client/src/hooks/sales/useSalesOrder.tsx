@@ -1,5 +1,9 @@
 import { SalesOrderType } from "../../type/salesType"
-import { getSalesOrderList, createSalesOrder } from "../../api/services/sales"
+import {
+  getSalesOrderList,
+  createSalesOrder,
+  updateSalesOrder,
+} from "../../api/services/sales"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { showToast } from "../../utils/Toast"
 
@@ -24,12 +28,28 @@ const useSalesOrder = () => {
     },
   })
 
+  const updateSalesOrderMutation = useMutation({
+    mutationFn: updateSalesOrder,
+    onSuccess: () => {
+      // Refetch the list of items
+      queryClient.invalidateQueries({ queryKey: ["salesOrder"] })
+      showToast.success("Successfully updated new order")
+    },
+    onError: () => {
+      let message = "Error updating order"
+
+      showToast.error(message)
+    },
+  })
+
   return {
     data,
     isLoading,
     isError,
     createSalesOrder: createSalesOrderMutation.mutate,
     isPending: createSalesOrderMutation.isPending,
+    updateSalesOrder: updateSalesOrderMutation.mutate,
+    isUpdatePending: updateSalesOrderMutation.isPending,
   }
 }
 

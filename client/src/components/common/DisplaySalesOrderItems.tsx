@@ -50,7 +50,8 @@ const ProductItem = ({
         }
 
         const handleBlur = () => {
-          const value = priceRefs.current[productCode] || ""
+          const value =
+            priceRefs.current[productCode] || row.original.orderQuantity
           onQuantityChange(productCode, value)
         }
 
@@ -81,7 +82,8 @@ const ProductItem = ({
         }
 
         const handleBlur = () => {
-          const value = quantityRefs.current[productCode] || ""
+          const value =
+            quantityRefs.current[productCode] || row.original.itemPrice
           onPriceChange(productCode, value)
         }
 

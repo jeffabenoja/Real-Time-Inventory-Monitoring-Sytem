@@ -9,6 +9,8 @@ import Spinner from "../components/common/utils/Spinner"
 import Table from "../components/common/table/Table"
 import CustomModal from "../components/common/utils/CustomModal"
 import SalesOrderComponent from "../components/common/SalesOrderComponent"
+import ViewSalesOrder from "../components/modal/ViewSalesOrder"
+import UpdateSalesOrder from "../components/modal/UpdateSalesOrder"
 
 const fields = [
   { key: "salesorderNo", label: "Order Number", classes: "uppercase" },
@@ -92,6 +94,7 @@ const SalesPage = () => {
   const [openModal, setOpenModal] = useState<boolean>()
   const [openSalesOrderModal, setOpenSalesOrderModal] = useState<boolean>()
   const [openViewSalesOrder, setOpenViewOrderModal] = useState<boolean>()
+  const [salesOrderDetails, setSalesOrderDetails] = useState<SalesOrderType>()
 
   const handleSalesOrderModalToggle = () => {
     setOpenSalesOrderModal((prev) => !prev)
@@ -107,12 +110,12 @@ const SalesPage = () => {
 
   const handleUpdate = (row: SalesOrderType) => {
     handleOpenModalToggle()
-    console.log(row)
+    setSalesOrderDetails(row)
   }
 
   const handleViewSalesOrder = (row: SalesOrderType) => {
     handleViewSalesOrderToggle()
-    console.log(row)
+    setSalesOrderDetails(row)
   }
 
   const columns = Columns({
@@ -165,21 +168,24 @@ const SalesPage = () => {
         </CustomModal>
       )}
 
-      {openModal && (
+      {openModal && salesOrderDetails && (
         <CustomModal
           toggleModal={handleOpenModalToggle}
-          classes='h-[480px] md:p-8 w-[343px] md:w-[970px]'
+          classes='h-[480px] md:p-8 w-[343px] md:w-[1020px]'
         >
-          <h1>Update Sales Order</h1>
+          <UpdateSalesOrder
+            row={salesOrderDetails}
+            close={handleOpenModalToggle}
+          />
         </CustomModal>
       )}
 
-      {openViewSalesOrder && (
+      {openViewSalesOrder && salesOrderDetails && (
         <CustomModal
           toggleModal={handleViewSalesOrderToggle}
-          classes='h-[480px] md:p-8 w-[343px] md:w-[970px]'
+          classes='h-[480px] md:p-8 w-[343px] md:w-[1020px]'
         >
-          <h1>View Sales Order</h1>
+          <ViewSalesOrder row={salesOrderDetails} />
         </CustomModal>
       )}
     </div>

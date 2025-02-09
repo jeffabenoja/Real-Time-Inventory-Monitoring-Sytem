@@ -11,9 +11,11 @@ import DisplaySalesOrderItems from "./DisplaySalesOrderItems"
 import useSalesOrder from "../../hooks/sales/useSalesOrder"
 
 export interface DetailsProduct {
+  id?: string
   item: ItemType
   orderQuantity: string
-  itemPrice: string
+  itemPrice: any
+  amount?: any
 }
 
 interface SalesOrderProps {
@@ -69,7 +71,7 @@ const SalesOrderComponent: React.FC<SalesOrderProps> = ({ close }) => {
           .map((product) => ({
             item: { ...product.item },
             orderQuantity: "1",
-            itemPrice: "1",
+            itemPrice: product.item.price,
           })),
       ]
       return updatedProductItems
@@ -263,7 +265,7 @@ const SalesOrderComponent: React.FC<SalesOrderProps> = ({ close }) => {
                 <input
                   id='remarks'
                   type='text'
-                  name='remarks'
+                  name='description'
                   value={description}
                   onChange={handleChange}
                   autoComplete='off'

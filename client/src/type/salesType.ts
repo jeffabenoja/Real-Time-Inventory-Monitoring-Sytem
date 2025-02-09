@@ -10,7 +10,7 @@ export interface itemDetailType {
 
 export interface DetailsType {
   id: number
-  item: itemDetailType
+  item: ItemType
   orderQuantity: number
   itemPrice: number
   amount: number
@@ -36,14 +36,17 @@ export interface SalesOrderType {
 }
 
 export interface SalesOrderCreateType {
+  salesorderNo?: string
   orderDate: string
   remarks: string
   customer: {
     id: string
   }
+  status?: string
   details: {
+    id?: string
     item: {
-      id: string
+      id?: string
       code: string
     }
     orderQuantity: string

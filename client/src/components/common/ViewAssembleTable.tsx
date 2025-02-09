@@ -29,9 +29,10 @@ const Columns = ({
   return [
     ...fields.map((field) =>
       columnHelper.accessor(field.key, {
-        cell: (info) => (
-          <span className={`${field.classes}`}>{info.getValue()}</span>
-        ),
+        cell: (info) => {
+          const value = info.getValue()
+          return <span className={`${field.classes}`}>{value ?? "-"}</span>
+        },
         header: () => <span className='truncate'>{field.label}</span>,
       })
     ),
