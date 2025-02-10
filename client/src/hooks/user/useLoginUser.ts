@@ -11,19 +11,16 @@ export const useLoginUser = () => {
 
   return useMutation({
     mutationFn: loginUser,
-    onSuccess: (data) => {
+    onSuccess: (data, variables) => {
       navigate("/dashboard/overview")
-      // showToast.success("Login Successful")
 
       const user = {
         ...data["userDetails:  "],
+        password: variables.password,
         loggedInAt: data["loggedInAt:   "],
       }
 
       dispatch(login(user))
-    },
-    onError: () => {
-      // showToast.error("Unauthorized Access")
     },
   })
 }

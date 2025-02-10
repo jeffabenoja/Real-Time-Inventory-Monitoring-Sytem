@@ -92,7 +92,7 @@ export default function Users() {
 
   const { data, isLoading } = useQuery({
     queryFn: getUserList,
-    queryKey: ["admin", "getUsers"],
+    queryKey: ["admin", "getUsers"],              
   });
 
   let tableData = useSelector((state: RootState) => {

@@ -52,12 +52,7 @@ export default function UserForm({ close, defaultValue, userList }: Props) {
       id: defaultValue?.userGroup?.id?.toString(),
     },
   };
-
-  // const { data, isLoading } = useQuery({
-  //   queryFn: getUserGroupList,
-  //   queryKey: ["admin", "getUserGroups"],
-  // });
-
+  
   const {
     handleSubmit,
     register,
@@ -107,6 +102,7 @@ export default function UserForm({ close, defaultValue, userList }: Props) {
       ...data,
       status: "ACTIVE",
     };
+    console.log(user)
     if (!defaultValue) {
       await addUser(user);
     } else {

@@ -4,17 +4,16 @@ import { FaCoins } from "react-icons/fa6";
 import { FaClipboardList } from "react-icons/fa";
 import { HiDocumentReport } from "react-icons/hi";
 import { TbLogout2 } from "react-icons/tb";
-import { CgProfile } from "react-icons/cg";
 import { FaUserCog } from "react-icons/fa";
 import { FaUsers } from "react-icons/fa6";
-import { IoIosNotifications } from "react-icons/io";
+
 
 
 
 
 import NavItem from "./NavItem";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../../store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../store";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../../store/slices/auth";
 
@@ -30,10 +29,10 @@ const NAVIGATION_ITEMS = [
   { name: "Reports", to: "/dashboard/reports", icon: HiDocumentReport },
 ];
 
-const USER_ITEMS = [
-  { name: "Profile", to: "user/profile", icon: CgProfile },
-  { name: "Notifications", to: "user/notifications", icon: IoIosNotifications },
-]
+// const USER_ITEMS = [
+//   { name: "Profile", to: "user/profile", icon: CgProfile },
+//   { name: "Notifications", to: "user/notifications", icon: IoIosNotifications },
+// ]
 
 const ADMIN_ITEMS = [
   { name: "Users", to: "admin/users", icon: FaUserCog },
@@ -43,6 +42,7 @@ const ADMIN_ITEMS = [
 export default function Container() {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate()
+  const isAdmin = useSelector((state: RootState) => state.auth.user?.userGroup.isAdmin)
 
   const logoutHandler = () => {
     dispatch(logout());                 // ✅ Reset the state first
@@ -66,18 +66,18 @@ export default function Container() {
             <NavItem label={name} path={to} icon={icon} key={name} />
           ))}
         </div>
-        <div>
+        {/* <div>
           <p className="text-sm">User</p>
           {USER_ITEMS.map(({ name, to, icon }) => (
             <NavItem label={name} path={to} icon={icon} key={name} />
           ))}
-        </div>
-        <div>
+        </div> */}
+        {isAdmin && <div>
           <p className="text-sm">Admin</p>
           {ADMIN_ITEMS.map(({ name, to, icon }) => (
             <NavItem label={name} path={to} icon={icon} key={name} />
           ))}
-        </div>
+        </div>}
       </div>
       <div className="text-white absolute bottom-5 left-5 text-base font-primary flex gap-3 hover:text-primary cursor-pointer font-medium" onClick={logoutHandler}> <TbLogout2 size={20}/> Logout </div>
     </div>

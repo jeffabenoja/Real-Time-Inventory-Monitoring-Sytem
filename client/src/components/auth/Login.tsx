@@ -18,7 +18,7 @@ const Login = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
+    
     loginUser(login);
   };
 
@@ -37,13 +37,6 @@ const Login = () => {
           <h1 className="text-5xl">E&L</h1>
           <p className="text-2xl">Delicatessen</p>
         </div>
-      </div>
-      <div className="hidden lg:flex flex-col justify-between flex-1 bg-primary text-white p-10 rounded font-heading">
-        <h1 className="text-5xl">E&L Delicatessen</h1>
-        <h3 className="text-2xl">
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Magni,
-          distinctio?
-        </h3>
       </div>
       <div className="flex flex-col justify-center flex-1">
         <h2 className="text-2xl lg:text-4xl mb-10 text-center">
@@ -100,6 +93,13 @@ const Login = () => {
             )}
           </div>
         </form>
+      </div>
+      <div className="hidden lg:flex flex-col justify-between flex-1 bg-primary text-white p-10 rounded font-heading">
+        <h1 className="text-5xl">E&L Delicatessen</h1>
+        <h3 className="text-2xl">
+          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Magni,
+          distinctio?
+        </h3>
       </div>
     </div>
   );

@@ -12,7 +12,7 @@ export default {
       colors: {
         primary: "#3B82F6",
         secondary: "#3BA8F6",
-        white: "#FAF9F6",
+        custom: { white: "#FAF9F6" },
         sidebar: "#0D0E12",
         background: {
           dark: "#212121",
