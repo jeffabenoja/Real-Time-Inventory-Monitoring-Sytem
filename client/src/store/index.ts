@@ -3,6 +3,8 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit"
 import authReducer, {logout} from "./slices/auth"
 import adminReducer from "./slices/admin"
 import modeReducer from "./slices/mode"
+import notificationReducer from "./slices/notifications"
+
 import {
   persistStore,
   persistReducer,
@@ -18,7 +20,8 @@ import sessionStorage from "redux-persist/lib/storage/session"
 const appReducer = combineReducers({
   auth: authReducer,
   admin: adminReducer,
-  mode: modeReducer
+  mode: modeReducer,
+  notifcation: notificationReducer,
 })
 
 const rootReducer = (state: ReturnType<typeof appReducer> | undefined, action: any) => {

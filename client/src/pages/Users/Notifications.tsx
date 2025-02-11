@@ -1,25 +1,32 @@
-import { useEffect, useState } from "react";
-import PageTitle from "../../components/common/utils/PageTitle";
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../../store/index'; // Adjust the import path based on your project structure
+import { appendNotification, replaceNotifications } from '../../store/slices/notifications'; // Adjust the import path
+import { Notification } from '../../type/notifications';
 
-interface Notification {
-  id: number;
-  message: string;
-  timestamp: string;
-}
-
-export default function NotificationPage() {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+let isInitital = true
+const Notifications = () => {
+  const notifications = useSelector((state: RootState) => state.notifcation.notifications);
+  const dispatch = useDispatch();
+  let count = 0;
 
   useEffect(() => {
-    let count = 0;
+    if(isInitital){
+     dispatch(replaceNotifications([]))
+     isInitital = false
+    }
     const interval = setInterval(() => {
-      if (count < 3) {
+      if (count < 5) {
         const newNotification: Notification = {
-          id: count + 1,
-          message: `Prediction #${count + 1}`,
-          timestamp: new Date().toLocaleTimeString(),
+          id: `${Date.now()}-${count}`,
+          title: `Notification ${count + 1}`,
+          message: `This is message number ${count + 1}`,
+          timestamp: new Date().toISOString(),
+          isRead: false,
+          completed: false,
         };
-        setNotifications((prev) => [newNotification, ...prev]);
+
+        dispatch(appendNotification(newNotification));
         count++;
       } else {
         clearInterval(interval);
@@ -27,26 +34,22 @@ export default function NotificationPage() {
     }, 3000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [dispatch]);
 
   return (
-    <div className="flex flex-col max-w-full mx-auto h-dynamic-sm lg:h-dynamic-lg px-4 lg:px-8 py-4 gap-4">
-      <PageTitle>Notifications</PageTitle>
-      <div className="flex flex-col gap-4">
-        {notifications.length === 0 ? (
-          <p className="text-gray-500">No notifications yet.</p>
-        ) : (
-          notifications.map((notif) => (
-            <div
-              key={notif.id}
-              className="p-4 bg-blue-100 border border-blue-300 rounded-lg shadow-md"
-            >
-              <h3 className="font-semibold text-blue-700">{notif.message}</h3>
-              <p className="text-sm text-gray-600">{notif.timestamp}</p>
-            </div>
-          ))
-        )}
-      </div>
+    <div className="p-4">
+      <h2 className="text-xl font-bold mb-4">Notifications</h2>
+      <ul>
+        {notifications.map((notif) => (
+          <li key={notif.id} className="border p-2 rounded mb-2 shadow">
+            <h3 className="font-semibold">{notif.title}</h3>
+            <p>{notif.message}</p>
+            <small>{new Date(notif.timestamp).toLocaleString()}</small>
+          </li>
+        ))}
+      </ul>
     </div>
   );
-}
+};
+
+export default Notifications;

@@ -8,7 +8,6 @@ import { CgProfile } from "react-icons/cg";
 
 export default function Header() {
   const [sidebar, setSidebar] = useState(false);
-  const [notification, setNotification] = useState(false);
   const location = useLocation();
 
   const lastSegment = location.pathname.split("/").at(-1)!;
@@ -33,9 +32,11 @@ export default function Header() {
         <div className="flex gap-2 items-center">
           <MdLightMode size={30} />
           <NavLink to="user/profile">
-          <CgProfile size={30} />
+            <CgProfile size={30} />
           </NavLink>
-          <IoIosNotifications size={30} />
+          <NavLink to="user/notifications">
+            <IoIosNotifications size={30} />
+          </NavLink>
           <div className="lg:hidden">
             <HiOutlineMenu size={30} onClick={menuToggle} />
           </div>
