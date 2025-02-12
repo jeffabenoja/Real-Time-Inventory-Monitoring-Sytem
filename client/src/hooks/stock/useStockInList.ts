@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { getStockListPerItem, updateStock } from "../../api/services/stock"
-import { StockListType } from "../../type/StockType"
+import { StockListType } from "../../type/stockType"
 import { showToast } from "../../utils/Toast"
 
 export const useStockInList = (id: string) => {

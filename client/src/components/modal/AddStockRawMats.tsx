@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { showToast } from "../../utils/Toast"
-import { StockInType } from "../../type/StockType"
+import { StockInType } from "../../type/stockType"
 import { useAddStock } from "../../hooks/stock/useAddStock"
 
 interface AddStockProps {

@@ -1,6 +1,6 @@
 import Table from "./table/Table"
 import { createColumnHelper } from "@tanstack/react-table"
-import { InventoryPerCategory } from "../../type/StockType"
+import { InventoryPerCategory } from "../../type/stockType"
 import { getInventoryByCategory } from "../../api/services/inventory"
 import { useQuery } from "@tanstack/react-query"
 import Spinner from "./utils/Spinner"

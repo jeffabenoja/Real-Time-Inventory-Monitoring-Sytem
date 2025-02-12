@@ -1,6 +1,6 @@
 import { ItemType } from "../../type/itemType"
 import { getInventoryPerItem } from "../../api/services/inventory"
-import { InventoryPerItemType } from "../../type/StockType"
+import { InventoryPerItemType } from "../../type/stockType"
 import { useQuery } from "@tanstack/react-query"
 import Spinner from "../common/utils/Spinner"
 import { FaExclamationTriangle } from "react-icons/fa"

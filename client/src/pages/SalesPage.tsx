@@ -53,10 +53,14 @@ const Columns = ({
         const details: DetailsType[] = info.getValue()
 
         const totalAmount = details
-          .map((detail) => detail.amount)
-          .reduce((acc, amount) => acc + amount, 0)
+          .map((detail) => {
+            const amount = detail.amount
 
-        return <span>{totalAmount}</span>
+            return amount % 1 === 0 ? `${amount}.00` : amount.toFixed(2)
+          })
+          .reduce((acc, amount) => acc + parseFloat(amount), 0)
+
+        return <span>{totalAmount.toFixed(2)}</span>
       },
       header: () => <span className='truncate'>Total Amount</span>,
     }),

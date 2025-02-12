@@ -4,7 +4,7 @@ import { createColumnHelper } from "@tanstack/react-table"
 import { FaExclamationTriangle } from "react-icons/fa"
 import { useQuery } from "@tanstack/react-query"
 import { getInventoryByCategory } from "../../api/services/inventory"
-import { InventoryPerCategory } from "../../type/StockType"
+import { InventoryPerCategory } from "../../type/stockType"
 
 const fields = [
   { key: "item.code", label: "Product Code", classes: "uppercase" },

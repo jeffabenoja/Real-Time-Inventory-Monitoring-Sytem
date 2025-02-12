@@ -4,7 +4,7 @@ import Spinner from "./utils/Spinner"
 import { useStockInList } from "../../hooks/stock/useStockInList"
 import { createColumnHelper } from "@tanstack/react-table"
 import { FaExclamationTriangle } from "react-icons/fa"
-import { StockListType } from "../../type/StockType"
+import { StockListType } from "../../type/stockType"
 import CustomModal from "./utils/CustomModal"
 import UpdateStockRawMats from "../modal/UpdateStockRawMats"
 const fields = [

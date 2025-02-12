@@ -2,7 +2,7 @@ import apiClient from "../../utils/apiClient"
 import {
   InventoryPerItemType,
   InventoryPerCategory,
-} from "../../type/StockType"
+} from "../../type/stockType"
 import {
   GET_INVENTORY_PER_ITEM,
   GET_INVENTORY_LIST_BY_CATEGORY,

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { getAssemblePerItem } from "../../api/services/stock"
-import { AssembleStock } from "../../type/StockType"
+import { AssembleStock } from "../../type/stockType"
 
 export const useAssembleList = (id: string) => {
   // Fetch Finished Goods

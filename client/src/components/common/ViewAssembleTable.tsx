@@ -3,6 +3,9 @@ import { FaExclamationTriangle } from "react-icons/fa"
 import Table from "./table/Table"
 import Spinner from "./utils/Spinner"
 import { useAssembleList } from "../../hooks/stock/useAssembleList"
+import { useState } from "react"
+import CustomModal from "./utils/CustomModal"
+import { AssembleTransaction } from "../../type/stockType"
 
 const fields = [
   { key: "transactionNo", label: "Transaction Number", classes: "uppercase" },
@@ -45,10 +48,24 @@ const ViewAssembleTable = ({ itemId }: AssembleTableProps) => {
     isLoading,
     isError,
   } = useAssembleList(itemId)
+  const [openModal, setOpenModal] = useState<boolean>()
+  const [assembleDataUpdate, setAssembleDataUpdate] =
+    useState<AssembleTransaction>()
 
   const columns = Columns({
     fields,
   })
+
+  const handleModalUpdate = () => {
+    setOpenModal((prev) => !prev)
+  }
+
+  const handleUpdate = (row: AssembleTransaction) => {
+    handleModalUpdate()
+    setAssembleDataUpdate(row)
+  }
+
+  console.log(assembleDataUpdate)
 
   if (isError) {
     return (
@@ -93,8 +110,17 @@ const ViewAssembleTable = ({ itemId }: AssembleTableProps) => {
             withCancel={false}
             add={false}
             view={false}
+            handleUpdate={handleUpdate}
           />
         </>
+      )}
+      {openModal && (
+        <CustomModal
+          classes='h-[420px] md:p-8 w-[343px] md:w-[860px]'
+          toggleModal={handleModalUpdate}
+        >
+          <h1>Update Modal</h1>
+        </CustomModal>
       )}
     </>
   )

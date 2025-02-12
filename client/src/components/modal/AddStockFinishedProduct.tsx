@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { showToast } from "../../utils/Toast"
 import { useAddStock } from "../../hooks/stock/useAddStock"
 import { ItemType } from "../../type/itemType"
-import { AssembleStock } from "../../type/StockType"
+import { AssembleStock } from "../../type/stockType"
 
 interface AddStockProps {
   product: ItemType | null
@@ -72,7 +72,7 @@ const AddStocksFinishedProduct: React.FC<AddStockProps> = ({
       // Regex pattern to match yyyy-mm-dd format
       const datePattern = /^\d{4}-\d{2}-\d{2}$/
 
-      if (!datePattern.test(stock.transactionDate)) {
+      if (stock.transactionDate && !datePattern.test(stock.transactionDate)) {
         setInvalidFields((prev) => [...prev, "transactionDate"])
         showToast.error("Invalid date format")
         return

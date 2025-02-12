@@ -1,6 +1,6 @@
 import { useState } from "react"
 import CustomModal from "./utils/CustomModal"
-import { InventoryPerCategory } from "../../type/StockType"
+import { InventoryPerCategory } from "../../type/stockType"
 import { ItemType } from "../../type/itemType"
 import SalesOrderCustomer from "../modal/SalesOrderCustomer"
 import { TbZoomScan } from "react-icons/tb"
@@ -265,7 +265,7 @@ const SalesOrderComponent: React.FC<SalesOrderProps> = ({ close }) => {
                 <input
                   id='remarks'
                   type='text'
-                  name='description'
+                  name='remarks'
                   value={description}
                   onChange={handleChange}
                   autoComplete='off'

@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { showToast } from "../../utils/Toast"
-import { StockInType, UpdateStockType } from "../../type/StockType"
+import { StockInType, UpdateStockType } from "../../type/stockType"
 
 interface UpdateStockProps {
   product: StockInType | null
@@ -19,12 +19,15 @@ const UpdateStockRawMats: React.FC<UpdateStockProps> = ({
     remarks: product?.remarks || "",
     quantity: product?.quantity || 0,
     batchNo: product?.batchNo || "",
+    status: product?.status || "",
   })
 
   const [invalidFields, setInvalidFields] = useState<string[]>([])
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target
     setUpdateStock((prevProduct) => ({
@@ -50,16 +53,15 @@ const UpdateStockRawMats: React.FC<UpdateStockProps> = ({
       return
     }
 
-    
     if (product?.transactionNo) {
       const stockToUpdate = {
         ...updateStock,
-        transactionNo: product.transactionNo, 
+        transactionNo: product.transactionNo,
       }
 
-      onSubmit(stockToUpdate) 
+      onSubmit(stockToUpdate)
     }
-    
+
     toggleModal()
   }
 
@@ -72,6 +74,28 @@ const UpdateStockRawMats: React.FC<UpdateStockProps> = ({
         className='flex flex-col gap-4 text-secondary-200'
         onSubmit={handleSubmit}
       >
+        <div className='flex flex-col gap-2 '>
+          <label htmlFor='status' className='text-sm '>
+            Status
+          </label>
+          <div className='flex-1'>
+            <select
+              id='status'
+              name='status'
+              value={updateStock.status}
+              onChange={handleChange}
+              className={`${
+                invalidFields.includes("status") && "border-red-900"
+              } w-full p-2 rounded-md border cursor-pointer outline-transparent bg-transparent text-xs
+        focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
+            >
+              <option value='DRAFT'>DRAFT</option>
+              <option value='COMPLETED'>COMPLETED</option>
+              <option value='CANCEL'>CANCEL</option>
+            </select>
+          </div>
+        </div>
+
         <div className='flex flex-col gap-2'>
           <label htmlFor='remarks' className='body-l'>
             Remarks

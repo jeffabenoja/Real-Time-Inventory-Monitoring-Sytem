@@ -267,7 +267,7 @@ const UpdateSalesOrder: React.FC<UpdateSalesOrderProps> = ({ row, close }) => {
     }
 
     updateSalesOrder(updatedOrder)
-    console.log(JSON.stringify(updatedOrder, null, 2)); 
+    console.log(JSON.stringify(updatedOrder, null, 2))
 
     close()
   }
@@ -452,7 +452,7 @@ const UpdateSalesOrder: React.FC<UpdateSalesOrderProps> = ({ row, close }) => {
             {isUpdatePending ? (
               <div className='w-5 h-5 border-2 border-t-2 border-[#0A140A] border-t-white rounded-full animate-spin'></div>
             ) : (
-              <p className='text-white font-bold text-xs'>Submit</p>
+              <p className='text-white font-bold text-xs'>Update</p>
             )}
           </button>
         </div>

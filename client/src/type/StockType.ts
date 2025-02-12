@@ -17,15 +17,27 @@ export interface UpdateStockType {
   remarks: string
   quantity: number
   batchNo: string
+  status?: string
 }
 
 export interface AssembleStock {
-  transactionDate: string
+  transactionDate?: string
   remarks: string
   finishProduct: ItemType
   quantity: number
   batchNo: string
   status?: string
+}
+
+export interface AssembleTransaction {
+  transactionNo: string
+  transactionDate: string
+  remarks: string
+  finishProduct: ItemType
+  assemble_quantity: number
+  batchNo: string
+  status: string
+  createdDateTime: string
 }
 
 export interface StockListType {
