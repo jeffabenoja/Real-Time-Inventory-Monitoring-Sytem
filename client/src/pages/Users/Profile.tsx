@@ -15,6 +15,7 @@ import { useForm, UseFormRegister } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { showToast } from "../../utils/Toast";
 import { updateCurrentUser } from "../../store/slices/auth";
+import { FaEye, FaEyeSlash } from "react-icons/fa6";
 
 const schema = z.object({
   first_name: z.string().min(1, "Required Field"),
@@ -35,7 +36,7 @@ export default function Profile() {
   const dispatch = useDispatch<AppDispatch>();
 
   const [userId, setUserId] = useState("");
-  
+
   const currentUser = useSelector((state: RootState) => state.auth.user);
 
   const { data: userList, isLoading: userListLoading } = useQuery({
@@ -47,7 +48,6 @@ export default function Profile() {
     queryFn: getUserGroupList,
     queryKey: ["profile", "getGroups"],
   });
-
 
   useEffect(() => {
     if (userList && currentUser) {
@@ -130,11 +130,11 @@ export default function Profile() {
     <>
       <PageTitle>Profile</PageTitle>
       <form
-        className="flex flex-col max-w-full mx-auto h-dynamic-sm lg:h-dynamic-lg px-4 lg:px-8 py-4 gap-10"
+        className="flex flex-col py-4 gap-10"
         onSubmit={handleSubmit(onSubmit)}
       >
         <Container title="Personal Information">
-          <div className="flex flex-col md:justify-around md:flex-row">
+          <div className="flex flex-col md:justify-around md:flex-row gap-2">
             <div className="flex-1">
               <Input id="first_name" label="First Name" register={register} />
             </div>
@@ -144,7 +144,7 @@ export default function Profile() {
           </div>
         </Container>
         <Container title="Identification">
-          <div className="flex flex-col md:justify-around md:flex-row">
+          <div className="flex flex-col md:justify-around md:flex-row  gap-2">
             <div className="flex-1">
               <Input id="usercode" label="User Code" register={register} />
             </div>
@@ -154,11 +154,11 @@ export default function Profile() {
           </div>
         </Container>
         <Container title="Account Details">
-          <div className="flex flex-col md:justify-around md:flex-row">
+          <div className="flex flex-col md:justify-around md:flex-row  gap-2">
             <div className="flex-1 flex flex-col">
               <label className="text-lg">Role</label>
               <select
-                className="w-4/6 p-1"
+                className="md:w-4/6 p-1 bg-white border-b border-b-gray-500 focus-visible:outline-none outline-none"
                 id="role"
                 {...register("userGroup.id")}
                 disabled={
@@ -173,7 +173,12 @@ export default function Profile() {
               </select>
             </div>
             <div className="flex-1">
-              <Input id="password" label="Password" register={register} />
+              <Input
+                id="password"
+                label="Password"
+                attributes={{ type: "password" }}
+                register={register}
+              />
             </div>
           </div>
         </Container>
@@ -224,17 +229,32 @@ function Input({
   label: string;
   attributes?: Partial<JSX.IntrinsicElements["input"]>;
 }) {
+  const [showPassword, setShowPassword] = useState(false);
+  const isPasswordType = attributes?.type === "password";
   return (
     <div className="flex flex-col">
       <label htmlFor={id} className="text-lg">
         {label}
       </label>
-      <input
-        className="text-base p-1 border-b border-b-gray-500 focus:border-b-sky-500 focus-visible:outline-none md:w-4/6"
-        {...register(id)}
-        {...attributes}
-        id={id}
-      />
+      <div className="relative md:w-4/6">
+        <input
+          className="w-full text-base p-1 pr-10 border-b border-b-gray-500 focus:border-b-sky-500 focus-visible:outline-none"
+          {...register(id)}
+          {...attributes}
+          type={isPasswordType && showPassword ? "text" : attributes?.type}
+          id={id}
+        />
+
+        {isPasswordType && (
+          <button
+            type="button"
+            onClick={() => setShowPassword((prev) => !prev)}
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 text-primary focus:outline-none"
+          >
+            {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+          </button>
+        )}
+      </div>
     </div>
   );
 }

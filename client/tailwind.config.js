@@ -23,8 +23,8 @@ export default {
         login: "25px 30px 55px rgba(85, 87, 115, 0.5)", // Custom box shadow
       },
       height: {
-        "dynamic-sm": "calc(100vh - 52px)",
-        "dynamic-lg": "calc(100vh - 77px)",
+        "dynamic-sm": "calc(100vh - 62px)",
+        "dynamic-lg": "calc(100vh - 62px)",
       },
       animation: {
         spin: "spin 1s linear infinite", // Define the spinning animation

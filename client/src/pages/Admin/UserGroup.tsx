@@ -95,8 +95,7 @@ export default function UserGroups() {
   }, [data, dispatch]);
 
   return (
-    <div className="flex flex-col max-w-full mx-auto h-dynamic-sm lg:h-dynamic-lg px-4 lg:px-8 py-4">
-
+    <>
       {isLoading ? (
         <Spinner />
       ) : (
@@ -142,6 +141,6 @@ export default function UserGroups() {
           </div>
         </CustomModal>
       )}
-    </div>
+    </>
   );
 }

@@ -101,7 +101,7 @@ const ProductsPage = () => {
   }
 
   return (
-    <div className='flex flex-col max-w-full mx-auto h-dynamic-sm lg:h-dynamic-lg px-4 lg:px-8 py-4'>
+    <>
       <PageTitle>Products Page</PageTitle>
       {isLoading ? (
         <Spinner />
@@ -166,7 +166,7 @@ const ProductsPage = () => {
           <InventoryTable category='Finished Goods' />
         </CustomModal>
       )}
-    </div>
+    </>
   )
 }
 

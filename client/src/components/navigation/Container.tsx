@@ -13,9 +13,9 @@ import { FaUsers } from "react-icons/fa6";
 
 import NavItem from "./NavItem";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../../store";
+import { AppDispatch, RootState } from "../../store";
 import { useNavigate } from "react-router-dom";
-import { logout } from "../../../store/slices/auth";
+import { logout } from "../../store/slices/auth";
 
 const NAVIGATION_ITEMS = [
   { name: "Overview", to: "/dashboard/overview", icon: HiDocumentSearch },
@@ -29,23 +29,18 @@ const NAVIGATION_ITEMS = [
   { name: "Reports", to: "/dashboard/reports", icon: HiDocumentReport },
 ];
 
-// const USER_ITEMS = [
-//   { name: "Profile", to: "user/profile", icon: CgProfile },
-//   { name: "Notifications", to: "user/notifications", icon: IoIosNotifications },
-// ]
-
 const ADMIN_ITEMS = [
-  { name: "Users", to: "admin/users", icon: FaUserCog },
-  { name: "User Groups", to: "admin/groups", icon: FaUsers },
+  { name: "User Settings", to: "admin/users", icon: FaUserCog },
+  { name: "Group Settings", to: "admin/groups", icon: FaUsers },
 ];
 
 export default function Container() {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate()
-  const isAdmin = useSelector((state: RootState) => state.auth.user?.userGroup.isAdmin)
+  const user = useSelector((state: RootState) => state.auth.user)
 
   const logoutHandler = () => {
-    dispatch(logout());                 // ✅ Reset the state first
+    dispatch(logout()); 
     navigate("/login", { replace: true });
   }
 
@@ -57,8 +52,8 @@ export default function Container() {
       </div>
       <div className="h-fit text-white px-5 flex flex-col gap-5 py-5">
         <div>
-          <p className="text-base">Name</p>
-          <p className="text-xs">Role</p>
+          <p className="text-base">{user?.first_name + " " + user?.last_name} </p>
+          <p className="text-xs">{user?.userGroup.code}</p>
         </div>
         <div>
           <p className="text-sm">Dashboard</p>
@@ -66,13 +61,7 @@ export default function Container() {
             <NavItem label={name} path={to} icon={icon} key={name} />
           ))}
         </div>
-        {/* <div>
-          <p className="text-sm">User</p>
-          {USER_ITEMS.map(({ name, to, icon }) => (
-            <NavItem label={name} path={to} icon={icon} key={name} />
-          ))}
-        </div> */}
-        {isAdmin && <div>
+        {user?.userGroup.isAdmin && <div>
           <p className="text-sm">Admin</p>
           {ADMIN_ITEMS.map(({ name, to, icon }) => (
             <NavItem label={name} path={to} icon={icon} key={name} />

@@ -119,7 +119,7 @@ const Table: React.FC<TableProps> = ({
       <div className='flex items-center justify-between py-2'>
         <div className='flex items-center justify-center'>
           {search && (
-            <div className=' relative'>
+            <div className='relative'>
               <Search
                 columnFilter={globalFilter}
                 setColumnFilter={setGlobalFilter}
