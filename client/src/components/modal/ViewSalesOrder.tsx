@@ -44,7 +44,15 @@ const ViewSalesOrder: React.FC<ViewSalesOrderProps> = ({ row }) => {
 
   return (
     <div className='max-w-full mx-auto'>
-      <h1 className='mb-2 font-bold'>Order Number: {row?.salesorderNo}</h1>
+      <div className='flex justify-between items-center'>
+        <h1 className='mb-2 font-bold'>Order Number: {row?.salesorderNo}</h1>
+        <p className='text-xs'>
+          Created Date:{" "}
+          {row?.createdDateTime
+            ? new Date(row.createdDateTime).toLocaleDateString("en-US")
+            : "N/A"}
+        </p>
+      </div>
       <div className='pt-4 px-2 border-t border-[#14aff1] flex flex-col gap-5'>
         <div className='flex gap-5 items-center justify-between'>
           <div className='flex items-center gap-2 w-[300px]'>
@@ -121,28 +129,6 @@ const ViewSalesOrder: React.FC<ViewSalesOrderProps> = ({ row }) => {
                 type='text'
                 name='orderDate'
                 value={row?.orderDate}
-                readOnly
-                autoComplete='off'
-                className={`w-full p-2 rounded-md border outline-transparent bg-transparent text-xs
-                    focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
-              />
-            </div>
-          </div>
-
-          <div className='flex items-center gap-2 '>
-            <label htmlFor='orderDate' className='text-sm '>
-              Created Date:
-            </label>
-            <div className='flex-1'>
-              <input
-                id='orderDate'
-                type='text'
-                name='orderDate'
-                value={
-                  row?.createdDateTime
-                    ? new Date(row.createdDateTime).toISOString().split("T")[0]
-                    : ""
-                }
                 readOnly
                 autoComplete='off'
                 className={`w-full p-2 rounded-md border outline-transparent bg-transparent text-xs

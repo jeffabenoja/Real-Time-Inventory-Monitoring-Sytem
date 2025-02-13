@@ -274,7 +274,15 @@ const UpdateSalesOrder: React.FC<UpdateSalesOrderProps> = ({ row, close }) => {
 
   return (
     <div className='max-w-full mx-auto'>
-      <h1 className='mb-2 font-bold'>Order Number: {row?.salesorderNo}</h1>
+      <div className='flex justify-between items-center'>
+        <h1 className='mb-2 font-bold'>Order Number: {row?.salesorderNo}</h1>
+        <p className='text-xs'>
+          Created Date:{" "}
+          {row?.createdDateTime
+            ? new Date(row.createdDateTime).toLocaleDateString("en-US")
+            : "N/A"}
+        </p>
+      </div>
       <form onSubmit={handleOnSubmit}>
         <div className='pt-4 px-2 border-t border-[#14aff1] flex flex-col gap-5'>
           <div className='flex gap-5 items-center justify-between'>

@@ -151,6 +151,21 @@ const UpdateStockRawMats: React.FC<UpdateStockProps> = ({
           </div>
         </div>
 
+        <div className='flex justify-between items-center'>
+          <p className='text-xs'>
+            Created Date:{" "}
+            <span>
+              {product?.createdDateTime
+                ? new Date(product.createdDateTime).toLocaleDateString("en-US")
+                : "N/A"}
+            </span>
+          </p>
+
+          <p className='text-xs'>
+            Created By: <span>{product?.createdBy}</span>
+          </p>
+        </div>
+
         <div className='flex items-center justify-between gap-2'>
           <button
             className='w-full rounded-xl border-0 outline-transparent p-2 font-medium mt-5 cursor-pointer text-white bg-gray-700'

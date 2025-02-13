@@ -10,6 +10,8 @@ export interface StockInType {
   quantity: number
   batchNo: string
   status?: string
+  createdDateTime?: string,
+  createdBy?: string
 }
 
 export interface UpdateStockType {
