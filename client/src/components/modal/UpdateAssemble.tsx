@@ -37,16 +37,10 @@ const UpdateAssemble: React.FC<UpdateAssembleProps> = ({ row, close }) => {
     e.preventDefault()
 
     const requiredFields: string[] = ["remarks", "assemble_quantity", "batchNo"]
-
-    // Log to see if all required fields are present
-    console.log("assembleUpdate:", assembleUpdate)
-
+   
     const emptyFields = requiredFields.filter(
       (field) => !assembleUpdate[field as keyof AssembleUpdateStock]
     )
-
-    // Log the emptyFields to see if any are incorrectly flagged as missing
-    console.log("emptyFields:", emptyFields)
 
     if (emptyFields.length > 0) {
       setInvalidFields(emptyFields)
@@ -55,7 +49,6 @@ const UpdateAssemble: React.FC<UpdateAssembleProps> = ({ row, close }) => {
       return
     }
 
-    // Proceed with your logic
     updateAssembleStock(assembleUpdate)
 
     close()
