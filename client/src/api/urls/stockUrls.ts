@@ -5,3 +5,5 @@ export const GET_ASSEMBLE_LIST_PER_ITEM = (id: String) =>
 export const UPDATE_STOCK = (transactionNumber: String) =>
   `/v1//stockIn/${transactionNumber}`
 export const ADD_STOCK_FOR_FINISHED_GOODS = `/v1/assemble`
+export const UPDATE_ASSEMBLE_STOCK = (transactionNumber: String) =>
+  `/v1//assemble/${transactionNumber}`

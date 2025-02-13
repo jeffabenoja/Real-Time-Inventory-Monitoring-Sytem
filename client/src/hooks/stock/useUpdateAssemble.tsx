@@ -1,19 +1,9 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-import { getAssemblePerItem } from "../../api/services/stock"
-import { AssembleStock } from "../../type/stockType"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { updateStockAssemble } from "../../api/services/stock"
 import { showToast } from "../../utils/Toast"
 
-
-export const useAssembleList = (id: string) => {
+export const useUpdateAssemble = () => {
   const queryClient = useQueryClient()
-
-  const { data, isLoading, isError } = useQuery<AssembleStock[]>({
-    queryKey: ["Stock", "Assemble"],
-    queryFn: () => getAssemblePerItem(id),
-    retry: 0,
-    enabled: !!id,
-  })
 
   const updateStockMutation = useMutation({
     mutationFn: updateStockAssemble,
@@ -30,9 +20,6 @@ export const useAssembleList = (id: string) => {
   })
 
   return {
-    data,
-    isLoading,
-    isError,
     updateAssembleStock: updateStockMutation.mutate,
     isPending: updateStockMutation.isPending,
   }

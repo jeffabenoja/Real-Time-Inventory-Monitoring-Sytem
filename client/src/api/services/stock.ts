@@ -5,22 +5,29 @@ import {
   UPDATE_STOCK,
   ADD_STOCK_FOR_FINISHED_GOODS,
   GET_ASSEMBLE_LIST_PER_ITEM,
+  UPDATE_ASSEMBLE_STOCK,
 } from "../urls/stockUrls"
 import {
   StockInType,
   StockListType,
   AssembleStock,
   UpdateStockType,
+  AssembleUpdateStock,
 } from "../../type/stockType"
 
 interface AddStockType {
-  stock: StockInType,
-  usercode: string,
+  stock: StockInType
+  usercode: string
   token: string
 }
 
+interface AddAssembleStockType {
+  assembleStock: AssembleStock
+  usercode: string
+  token: string
+}
 
-export const addStock = async ({stock, usercode, token}: AddStockType) => {
+export const addStock = async ({ stock, usercode, token }: AddStockType) => {
   const response = await apiClient.post(ADD_STOCK, stock, {
     headers: {
       usercode: usercode,
@@ -32,8 +39,22 @@ export const addStock = async ({stock, usercode, token}: AddStockType) => {
   return response.data
 }
 
-export const addStockForFinishedGoods = async (stock: AssembleStock) => {
-  const response = await apiClient.post(ADD_STOCK_FOR_FINISHED_GOODS, stock)
+export const addStockForFinishedGoods = async ({
+  assembleStock,
+  usercode,
+  token,
+}: AddAssembleStockType) => {
+  const response = await apiClient.post(
+    ADD_STOCK_FOR_FINISHED_GOODS,
+    assembleStock,
+    {
+      headers: {
+        usercode: usercode,
+        token: token,
+        "Content-Type": "application/json",
+      },
+    }
+  )
 
   return response.data
 }
@@ -60,6 +81,19 @@ export const updateStock = async (item: UpdateStockType) => {
   }
 
   const response = await apiClient.put(UPDATE_STOCK(item.transactionNo), item)
+
+  return response.data
+}
+
+export const updateStockAssemble = async (stock: AssembleUpdateStock) => {
+  if (!stock.transactionNo) {
+    throw new Error("Transaction number is required")
+  }
+
+  const response = await apiClient.put(
+    UPDATE_ASSEMBLE_STOCK(stock.transactionNo),
+    stock
+  )
 
   return response.data
 }

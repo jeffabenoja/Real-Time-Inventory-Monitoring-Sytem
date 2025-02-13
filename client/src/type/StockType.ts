@@ -10,7 +10,7 @@ export interface StockInType {
   quantity: number
   batchNo: string
   status?: string
-  createdDateTime?: string,
+  createdDateTime?: string
   createdBy?: string
 }
 
@@ -23,10 +23,21 @@ export interface UpdateStockType {
 }
 
 export interface AssembleStock {
+  transactionNo?: string
   transactionDate?: string
   remarks: string
   finishProduct: ItemType
   quantity: number
+  batchNo: string
+  status?: string
+}
+
+export interface AssembleUpdateStock {
+  transactionNo?: string
+  transactionDate?: string
+  remarks: string
+  finishProduct: ItemType
+  assemble_quantity: number
   batchNo: string
   status?: string
 }

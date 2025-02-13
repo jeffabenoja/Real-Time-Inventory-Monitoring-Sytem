@@ -34,7 +34,6 @@ const AddStocksRawMats: React.FC<AddStockProps> = ({
 
   const { user } = useSelector((state: UserAuthenticationType) => state.auth)
 
-  console.log(user.usercode, user.password)
 
   const { addStock, isPending } = useAddStock()
 

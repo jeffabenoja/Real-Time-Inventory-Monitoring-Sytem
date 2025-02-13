@@ -6,6 +6,7 @@ import { useAssembleList } from "../../hooks/stock/useAssembleList"
 import { useState } from "react"
 import CustomModal from "./utils/CustomModal"
 import { AssembleTransaction } from "../../type/stockType"
+import UpdateAssemble from "../modal/UpdateAssemble"
 
 const fields = [
   { key: "transactionNo", label: "Transaction Number", classes: "uppercase" },
@@ -50,7 +51,7 @@ const ViewAssembleTable = ({ itemId }: AssembleTableProps) => {
   } = useAssembleList(itemId)
   const [openModal, setOpenModal] = useState<boolean>()
   const [assembleDataUpdate, setAssembleDataUpdate] =
-    useState<AssembleTransaction>()
+    useState<AssembleTransaction | null>(null)
 
   const columns = Columns({
     fields,
@@ -64,8 +65,6 @@ const ViewAssembleTable = ({ itemId }: AssembleTableProps) => {
     handleModalUpdate()
     setAssembleDataUpdate(row)
   }
-
-  console.log(assembleDataUpdate)
 
   if (isError) {
     return (
@@ -119,7 +118,7 @@ const ViewAssembleTable = ({ itemId }: AssembleTableProps) => {
           classes='h-[420px] md:p-8 w-[343px] md:w-[860px]'
           toggleModal={handleModalUpdate}
         >
-          <h1>Update Modal</h1>
+          <UpdateAssemble row={assembleDataUpdate} close={handleModalUpdate} />
         </CustomModal>
       )}
     </>

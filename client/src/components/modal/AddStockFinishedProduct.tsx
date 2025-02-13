@@ -3,10 +3,18 @@ import { showToast } from "../../utils/Toast"
 import { useAddStock } from "../../hooks/stock/useAddStock"
 import { ItemType } from "../../type/itemType"
 import { AssembleStock } from "../../type/stockType"
+import { useSelector } from "react-redux"
+import { User } from "../../type/userType"
 
 interface AddStockProps {
   product: ItemType | null
   toggleModal: () => void
+}
+
+interface UserAuthenticationType {
+  auth: {
+    user: User
+  }
 }
 
 const AddStocksFinishedProduct: React.FC<AddStockProps> = ({
@@ -31,6 +39,8 @@ const AddStocksFinishedProduct: React.FC<AddStockProps> = ({
     quantity: 0,
     batchNo: "",
   })
+
+  const { user } = useSelector((state: UserAuthenticationType) => state.auth)
 
   const { addStockFinishGoods, isPendingFinishedGoods } = useAddStock()
 
@@ -82,7 +92,7 @@ const AddStocksFinishedProduct: React.FC<AddStockProps> = ({
 
     const finalProduct = finishProduct
 
-    const updatedStock = {
+    const assembleStock = {
       ...stockWithoutItem,
       assemble_quantity: stock.quantity,
       finishProduct: {
@@ -90,14 +100,17 @@ const AddStocksFinishedProduct: React.FC<AddStockProps> = ({
       },
     }
 
-    addStockFinishGoods(updatedStock)
+    const usercode = user.usercode
+    const token = user.password
+
+    addStockFinishGoods({ assembleStock, usercode, token })
 
     toggleModal()
   }
 
   return (
     <div className='flex flex-col gap-6'>
-      <h3 className='border-b border-[#14aff1] pb-1 font-bold uppercase'>
+      <h3 className='border-b border-[#14aff1]  pb-1 font-bold uppercase'>
         {product?.code}
       </h3>
       <div className='flex flex-col gap-2'>

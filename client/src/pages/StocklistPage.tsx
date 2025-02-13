@@ -136,7 +136,7 @@ const StocklistPage = () => {
       {isOpenAdd && (
         <CustomModal toggleModal={handleModalAdd}>
           <AddItems
-            title={"Materials"}
+            title={"Create Materials"}
             isStocklist={true}
             isOnSubmit={createItem}
             isLoading={isPending}
