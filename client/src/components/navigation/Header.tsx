@@ -13,7 +13,7 @@ export default function Header({ toggleNotif, iconRef, handleSidebar }: Props) {
 
   return (
     <>
-      <header className="flex justify-between items-center shadow-md border-gray-200 w-full p-4 sticky top-0 z-50 bg-white">
+      <header className="flex justify-between items-center shadow-md border-gray-200 w-full p-4 sticky top-0 z-40 bg-white">
         <div className="flex flex-1 font-heading items-center justify-between lg:justify-end">
           <div className="font-heading lg:hidden">E&L Delicatessen</div>
           <div className="flex gap-2 items-center">
