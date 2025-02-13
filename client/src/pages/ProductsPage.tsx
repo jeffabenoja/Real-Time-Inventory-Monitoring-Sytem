@@ -4,7 +4,7 @@ import PageTitle from "../components/common/utils/PageTitle"
 import { useState } from "react"
 import CustomModal from "../components/common/utils/CustomModal"
 import AddItems from "../components/modal/AddItems"
-import Columns from "../components/common/table/Columns"
+import ProductColumns from "../components/common/table/ProductColumns"
 import { useItemComponents } from "../hooks/items/useItemComponents"
 import { FaExclamationTriangle } from "react-icons/fa"
 import { ItemType } from "../type/itemType"
@@ -21,7 +21,6 @@ const fields = [
   { key: "brand", label: "Brand", classes: "uppercase" },
   { key: "unit", label: "Unit", classes: "lowercase" },
   { key: "reorderPoint", label: "Stock Level" },
-  { key: "price", label: "Price" },
   { key: "status", label: "Status", classes: "lowercase" },
 ]
 
@@ -81,7 +80,7 @@ const ProductsPage = () => {
     setIsOpenInventory((prev) => !prev)
   }
 
-  const columns = Columns({
+  const columns = ProductColumns({
     fields,
     onUpdate: handleUpdateStock,
     onAdd: handleAddStock,

@@ -5,7 +5,7 @@ import { HiOutlineViewfinderCircle } from "react-icons/hi2"
 import { ItemType } from "../../../type/itemType"
 
 // Define a reusable function to generate columns
-const Columns = ({
+const ProductColumns = ({
   fields,
   onUpdate,
   onAdd,
@@ -28,6 +28,17 @@ const Columns = ({
         header: () => <span className='truncate'>{field.label}</span>,
       })
     ),
+    columnHelper.accessor("price", {
+      id: "productPrice",
+      cell: (info) => {
+        const price = info.getValue()
+        const formattedPrice =
+          price % 1 === 0 ? `${price}.00` : price.toFixed(2)
+
+        return <span>{formattedPrice}</span>
+      },
+      header: () => <span className='truncate'>Total Amount</span>,
+    }),
     // Add the actions column
     columnHelper.accessor("actions", {
       id: "actions",
@@ -72,4 +83,4 @@ const Columns = ({
   ]
 }
 
-export default Columns
+export default ProductColumns

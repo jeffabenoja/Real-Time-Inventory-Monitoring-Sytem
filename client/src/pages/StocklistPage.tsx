@@ -1,5 +1,5 @@
 import Table from "../components/common/table/Table"
-import Columns from "../components/common/table/Columns"
+import StockListColumns from "../components/common/table/StockListColumns"
 import Spinner from "../components/common/utils/Spinner"
 import PageTitle from "../components/common/utils/PageTitle"
 import { ItemType } from "../type/itemType"
@@ -21,7 +21,6 @@ const fields = [
   { key: "brand", label: "Brand", classes: "uppercase" },
   { key: "unit", label: "Unit", classes: "lowercase" },
   { key: "reorderPoint", label: "Stock Level" },
-  { key: "cost", label: "Cost" },
   { key: "status", label: "Status", classes: "lowercase" },
 ]
 
@@ -95,7 +94,7 @@ const StocklistPage = () => {
     setIsOpenInventory((prev) => !prev)
   }
 
-  const columns = Columns({
+  const columns = StockListColumns({
     fields,
     onUpdate: handleUpdateStock,
     onAdd: handleAddStock,
