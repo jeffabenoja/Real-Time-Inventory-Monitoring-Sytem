@@ -13,11 +13,18 @@ import {
   UpdateStockType,
 } from "../../type/stockType"
 
-export const addStock = async (stock: StockInType) => {
+interface AddStockType {
+  stock: StockInType,
+  usercode: string,
+  token: string
+}
+
+
+export const addStock = async ({stock, usercode, token}: AddStockType) => {
   const response = await apiClient.post(ADD_STOCK, stock, {
     headers: {
-      usercode: "alonica",
-      token: "aab4decf189d4db3cb6b74471afd5b7e",
+      usercode: usercode,
+      token: token,
       "Content-Type": "application/json",
     },
   })

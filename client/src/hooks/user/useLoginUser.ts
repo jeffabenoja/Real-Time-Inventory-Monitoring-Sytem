@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
 import { login } from "../../store/slices/auth"
 import { AppDispatch } from "../../store"
+import md5 from "md5"
 
 export const useLoginUser = () => {
   const navigate = useNavigate()
@@ -14,9 +15,11 @@ export const useLoginUser = () => {
     onSuccess: (data, variables) => {
       navigate("/dashboard/overview")
 
+      const hashPassword = md5(variables.password)
+      
       const user = {
         ...data["userDetails:  "],
-        password: variables.password,
+        password: hashPassword,
         loggedInAt: data["loggedInAt:   "],
       }
 

@@ -2,11 +2,19 @@ import React, { useState } from "react"
 import { showToast } from "../../utils/Toast"
 import { StockInType } from "../../type/stockType"
 import { useAddStock } from "../../hooks/stock/useAddStock"
+import { useSelector } from "react-redux"
+import { User } from "../../type/userType"
 
 interface AddStockProps {
   productCode?: string
   productName?: string
   toggleModal: () => void
+}
+
+interface UserAuthenticationType {
+  auth: {
+    user: User
+  }
 }
 
 const AddStocksRawMats: React.FC<AddStockProps> = ({
@@ -23,6 +31,10 @@ const AddStocksRawMats: React.FC<AddStockProps> = ({
     quantity: 0,
     batchNo: "",
   })
+
+  const { user } = useSelector((state: UserAuthenticationType) => state.auth)
+
+  console.log(user.usercode, user.password)
 
   const { addStock, isPending } = useAddStock()
 
@@ -71,7 +83,10 @@ const AddStocksRawMats: React.FC<AddStockProps> = ({
       }
     }
 
-    addStock(stock)
+    const usercode = user.usercode
+    const token = user.password
+
+    addStock({ stock, usercode, token })
 
     toggleModal()
   }
