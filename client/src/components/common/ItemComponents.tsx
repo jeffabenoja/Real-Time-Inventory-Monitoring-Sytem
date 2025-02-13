@@ -17,7 +17,7 @@ const fields = [
   { key: "brand", label: "Brand", classes: "uppercase" },
   { key: "unit", label: "Unit", classes: "lowercase" },
   { key: "reorderPoint", label: "Stock Level" },
-  { key: "price", label: "Price" },
+  { key: "cost", label: "Cost" },
   { key: "status", label: "Status", classes: "lowercase" },
 ]
 
@@ -133,7 +133,7 @@ const ItemComponents = () => {
     description: "",
     category: "Finished Goods",
     brand: "N/A",
-    unit: "",
+    unit: "pcs",
     reorderPoint: 0,
     price: 0,
     cost: 0,
@@ -190,7 +190,9 @@ const ItemComponents = () => {
   }
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target
     setProductData((prevProduct) => ({
@@ -354,19 +356,19 @@ const ItemComponents = () => {
                   />
                 </td>
                 <td className='hover:bg-gray-50 p-2 whitespace-nowrap text-sm text-gray-900 cursor-pointer text-center'>
-                  <input
+                  <select
                     id='unit'
-                    type='text'
                     name='unit'
                     value={productData.unit}
                     onChange={handleChange}
-                    placeholder='e.g kg | pcs'
-                    autoComplete='off'
                     className={`${
-                      invalidFields.includes("unit") && "border-primary"
-                    } w-full text-center py-2 px-4 border uppercase border-gray-900 outline-transparent bg-transparent placeholder:text-sm
+                      invalidFields.includes("unit") && "border-red-900"
+                    } w-[100px] py-2 cursor-pointer px-4 border uppercase border-gray-900 outline-transparent bg-transparent placeholder:text-sm
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
-                  />
+                  >
+                    <option value='kg'>KG</option>
+                    <option value='pcs'>PCS</option>
+                  </select>
                 </td>
                 <td className='hover:bg-gray-50 p-2 whitespace-nowrap text-sm text-gray-900 cursor-pointer text-center'>
                   <input

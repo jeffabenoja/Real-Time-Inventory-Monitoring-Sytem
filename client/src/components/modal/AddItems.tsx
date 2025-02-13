@@ -26,7 +26,7 @@ const AddItems: React.FC<AddItemsProps> = ({
     description: "",
     category: "",
     brand: "",
-    unit: "",
+    unit: "pcs",
     reorderPoint: 0,
     price: 0,
     cost: 0,
@@ -52,7 +52,9 @@ const AddItems: React.FC<AddItemsProps> = ({
   const [invalidFields, setInvalidFields] = useState<string[]>([])
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target
     setProduct((prevProduct) => ({
@@ -214,21 +216,28 @@ const AddItems: React.FC<AddItemsProps> = ({
 
         <div className='w-full flex justify-between'>
           <div className='flex flex-col gap-2'>
-            <label htmlFor='unit' className='text-sm'>
+            <label htmlFor='unit' className='text-sm '>
               Unit
             </label>
-            <input
-              type='text'
-              id='unit'
-              name='unit'
-              autoComplete='off'
-              value={product.unit}
-              onChange={handleChange}
-              className={`${
-                invalidFields.includes("unit") && "border-primary"
-              } w-[120px] py-1 lowercase px-4 border  border-opacity-25 rounded-md outline-transparent bg-transparent
-              focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
-            />
+            <div className='flex-1'>
+              <select
+                id='unit'
+                name='unit'
+                value={product.unit}
+                onChange={handleChange}
+                className={`${
+                  invalidFields.includes("unit") && "border-primary"
+                } w-[120px] py-1 lowercase px-4 border  border-opacity-25 rounded-md outline-transparent bg-transparent
+                  focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
+              >
+                <option value='kg' className='hover:bg-primary'>
+                  kg
+                </option>
+                <option value='pcs' className='hover:bg-primary'>
+                  pcs
+                </option>
+              </select>
+            </div>
           </div>
 
           <div className='flex flex-col gap-2'>
