@@ -35,7 +35,9 @@ const SalesOrderComponent: React.FC<SalesOrderProps> = ({ close }) => {
     status: "",
   })
   const [description, setDescription] = useState<string>("")
-  const [orderDate, setOrderDate] = useState<string>("")
+  const [orderDate, setOrderDate] = useState<string>(
+    `${new Date().toISOString().split("T")[0]}`
+  )
   const { createSalesOrder, isPending } = useSalesOrder()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -244,12 +246,12 @@ const SalesOrderComponent: React.FC<SalesOrderProps> = ({ close }) => {
               <div className='flex-1'>
                 <input
                   id='orderDate'
-                  type='text'
+                  type='date'
                   name='orderDate'
-                  placeholder='yyyy-mm-dd'
-                  value={orderDate}
                   onChange={handleChange}
+                  value={orderDate}
                   autoComplete='off'
+                  max={new Date().toISOString().split("T")[0]}
                   className={`${
                     invalidFields.includes("orderDate") && "border-red-900"
                   } w-full p-2 rounded-md border outline-transparent bg-transparent text-xs
