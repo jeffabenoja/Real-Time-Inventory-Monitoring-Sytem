@@ -134,7 +134,7 @@ const UpdateStockRawMats: React.FC<UpdateStockProps> = ({
           </div>
 
           <div className='flex flex-col gap-2'>
-            <label htmlFor='batchNumber' className='text-sm font-bold'>
+            <label htmlFor='batchNumber' className='text-sm'>
               Batch Number
             </label>
             <input

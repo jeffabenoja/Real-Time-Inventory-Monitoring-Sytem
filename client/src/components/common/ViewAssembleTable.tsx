@@ -96,7 +96,10 @@ const ViewAssembleTable = ({ itemId }: AssembleTableProps) => {
       ) : (
         <>
           <h1 className='font-bold text-xl pb-2 border-b border-[#14aff1]'>
-            Transaction Stock for {assembleData[0]?.finishProduct?.code}
+            Transaction Stock for{" "}
+            <span className='uppercase text-[#14aff1]'>
+              {assembleData[0]?.finishProduct?.code}
+            </span>
           </h1>
           <Table
             data={assembleData}
@@ -115,7 +118,7 @@ const ViewAssembleTable = ({ itemId }: AssembleTableProps) => {
       )}
       {openModal && (
         <CustomModal
-          classes='h-[420px] md:p-8 w-[343px] md:w-[860px]'
+          classes='h-[420px] lg:h-[520px] md:p-8 w-[343px] md:w-[860px]'
           toggleModal={handleModalUpdate}
         >
           <UpdateAssemble row={assembleDataUpdate} close={handleModalUpdate} />

@@ -23,7 +23,7 @@ const AddStocksRawMats: React.FC<AddStockProps> = ({
   toggleModal,
 }) => {
   const [stock, setStock] = useState<StockInType>({
-    transactionDate: "",
+    transactionDate: `${new Date().toISOString().split("T")[0]}`,
     remarks: "",
     item: {
       code: productCode || "",
@@ -33,7 +33,6 @@ const AddStocksRawMats: React.FC<AddStockProps> = ({
   })
 
   const { user } = useSelector((state: UserAuthenticationType) => state.auth)
-
 
   const { addStock, isPending } = useAddStock()
 
@@ -71,15 +70,6 @@ const AddStocksRawMats: React.FC<AddStockProps> = ({
       showToast.error("Please fill out all required fields.")
 
       return
-    } else {
-      // Regex pattern to match yyyy-mm-dd format
-      const datePattern = /^\d{4}-\d{2}-\d{2}$/
-
-      if (!datePattern.test(stock.transactionDate)) {
-        setInvalidFields((prev) => [...prev, "transactionDate"])
-        showToast.error("Invalid date format")
-        return
-      }
     }
 
     const usercode = user.usercode
@@ -120,15 +110,15 @@ const AddStocksRawMats: React.FC<AddStockProps> = ({
           </label>
           <input
             id='transactionDate'
-            type='text'
+            type='date'
             name='transactionDate'
-            value={stock.transactionDate}
             onChange={handleChange}
-            placeholder='yyyy-mm-dd'
+            value={stock.transactionDate}
             autoComplete='off'
+            max={new Date().toISOString().split("T")[0]}
             className={`${
               invalidFields.includes("transactionDate") && "border-primary"
-            } py-2 px-4 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent placeholder:text-sm
+            } cursor-pointer py-2 px-4 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent placeholder:text-sm
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
           />
         </div>

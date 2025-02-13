@@ -13,6 +13,7 @@ const fields = [
   { key: "item.code", label: "Product Code", classes: "uppercase" },
   { key: "item.description", label: "Product Name", classes: "uppercase" },
   { key: "quantity", label: "Quantity" },
+  { key: "status", label: "Status", classes: "uppercase" },
 ]
 type UpdateStockTableProps = {
   itemId: string
@@ -92,7 +93,10 @@ const UpdateStockTable = ({ itemId }: UpdateStockTableProps) => {
       ) : (
         <>
           <h1 className='font-bold text-xl pb-2 border-b border-[#14aff1] '>
-            Transaction Stock for {stockData[0]?.item?.code}
+            Transaction Stock for{" "}
+            <span className='uppercase text-[#14aff1]'>
+              {stockData[0]?.item?.code}
+            </span>
           </h1>
           <Table
             data={stockData}

@@ -33,7 +33,7 @@ const AddStocksFinishedProduct: React.FC<AddStockProps> = ({
     cost: 0,
   }
   const [stock, setStock] = useState<AssembleStock>({
-    transactionDate: "",
+    transactionDate: `${new Date().toISOString().split("T")[0]}`,
     remarks: "",
     finishProduct: product || defaultItem,
     quantity: 0,
@@ -138,15 +138,15 @@ const AddStocksFinishedProduct: React.FC<AddStockProps> = ({
           </label>
           <input
             id='transactionDate'
-            type='text'
+            type='date'
             name='transactionDate'
-            value={stock.transactionDate}
             onChange={handleChange}
-            placeholder='yyyy-mm-dd'
+            value={stock.transactionDate}
             autoComplete='off'
+            max={new Date().toISOString().split("T")[0]}
             className={`${
               invalidFields.includes("transactionDate") && "border-primary"
-            } py-2 px-4 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent placeholder:text-sm
+            } cursor-pointer py-2 px-4 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent placeholder:text-sm
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
           />
         </div>
