@@ -36,7 +36,6 @@ export const useItemComponents = () => {
     onSuccess: () => {
       // Refetch the list of items
       queryClient.invalidateQueries({ queryKey: ["Item", "Finished Goods"] })
-      showToast.success("Successfully added new item")
       showToast.success("Updated item successfully")
     },
     onError: (error) => {

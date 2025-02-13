@@ -52,7 +52,6 @@ export const useItemMaterials = () => {
     onSuccess: () => {
       // Refetch the list of items
       queryClient.invalidateQueries({ queryKey: ["Item", "Raw Mats"] })
-      showToast.success("Successfully added new item")
       showToast.success("Updated item successfully")
     },
     onError: (error) => {

@@ -167,8 +167,6 @@ const ItemComponents = () => {
   }
 
   const handleSubmit = (products: ItemType[]) => {
-    console.log(products)
-
     setRawMaterials((prevProduct) => {
       const updatedProductItems = [
         ...prevProduct,
@@ -232,9 +230,18 @@ const ItemComponents = () => {
       return
     }
 
+    const totalCost = rawMaterials.reduce((acc, material) => {
+      const cost = material?.rawMaterial?.cost ?? 0
+      const quantity = Number(material?.quantity) || 0
+      return acc + cost * quantity
+    }, 0)
+
+    const { cost, ...rest } = productData
+
     const updateProductComponent = {
       finishProduct: {
-        ...productData,
+        ...rest,
+        cost: totalCost,
       },
       components: rawMaterials.map((material) => ({
         rawMaterial: {
