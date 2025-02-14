@@ -37,7 +37,7 @@ const UpdateAssemble: React.FC<UpdateAssembleProps> = ({ row, close }) => {
     e.preventDefault()
 
     const requiredFields: string[] = ["remarks", "assemble_quantity", "batchNo"]
-   
+
     const emptyFields = requiredFields.filter(
       (field) => !assembleUpdate[field as keyof AssembleUpdateStock]
     )
@@ -286,7 +286,7 @@ const UpdateAssemble: React.FC<UpdateAssembleProps> = ({ row, close }) => {
                         focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
               />
             </div>
-            <div className='flex items-center gap-2 relative'>
+            <div className='flex items-center gap-2'>
               <label htmlFor='batchNo' className='text-sm w-[120px]'>
                 Batch:
               </label>
@@ -303,11 +303,10 @@ const UpdateAssemble: React.FC<UpdateAssembleProps> = ({ row, close }) => {
                       focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
               />
             </div>
-            <div className='flex items-center gap-2 '>
+            <div className='flex items-center gap-2 w-full '>
               <label htmlFor='status' className='text-sm w-[120px]'>
                 Status:
               </label>
-
               <select
                 id='status'
                 name='status'

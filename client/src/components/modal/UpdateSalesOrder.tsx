@@ -285,8 +285,8 @@ const UpdateSalesOrder: React.FC<UpdateSalesOrderProps> = ({ row, close }) => {
       </div>
       <form onSubmit={handleOnSubmit}>
         <div className='pt-4 px-2 border-t border-[#14aff1] flex flex-col gap-5'>
-          <div className='flex gap-5 items-center justify-between'>
-            <div className='flex items-center gap-2 w-[300px] relative'>
+          <div className='flex flex-col md:flex-row gap-5 md:items-center md:justify-between'>
+            <div className='flex items-center gap-2 md:w-[300px] relative'>
               <label htmlFor='customer' className='text-sm'>
                 Customer:
               </label>
@@ -309,38 +309,42 @@ const UpdateSalesOrder: React.FC<UpdateSalesOrderProps> = ({ row, close }) => {
               />
             </div>
             <div className='flex items-center gap-2 '>
-              <label htmlFor='contactPerson' className='text-sm '>
+              <label htmlFor='contactPerson' className='text-sm w-[125px]'>
                 Contact Person:
               </label>
-              <input
-                id='contactPerson'
-                type='text'
-                name='contactPerson'
-                value={customerDetails.contactPerson}
-                readOnly
-                autoComplete='off'
-                className={`p-2 rounded-md border outline-transparent bg-transparent text-xs
+              <div className='flex-1'>
+                <input
+                  id='contactPerson'
+                  type='text'
+                  name='contactPerson'
+                  value={customerDetails.contactPerson}
+                  readOnly
+                  autoComplete='off'
+                  className={`p-2 rounded-md border outline-transparent bg-transparent text-xs
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
-              />
+                />
+              </div>
             </div>
             <div className='flex items-center gap-2 '>
-              <label htmlFor='contactNumber' className='text-sm'>
+              <label htmlFor='contactNumber' className='text-sm w-[125px]'>
                 Contact Number:
               </label>
-              <input
-                id='contactNumber'
-                type='text'
-                name='contactNumber'
-                value={customerDetails.contactNumber}
-                readOnly
-                autoComplete='off'
-                className={`p-2 rounded-md border outline-transparent bg-transparent text-xs
+              <div className='flex-1'>
+                <input
+                  id='contactNumber'
+                  type='text'
+                  name='contactNumber'
+                  value={customerDetails.contactNumber}
+                  readOnly
+                  autoComplete='off'
+                  className={`p-2 rounded-md border outline-transparent bg-transparent text-xs
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
-              />
+                />
+              </div>
             </div>
           </div>
           <div className='flex items-center gap-2 '>
-            <label htmlFor='contactAddress' className='text-sm '>
+            <label htmlFor='contactAddress' className='text-sm w-[125px]'>
               Customer Address:
             </label>
             <div className='flex-1'>

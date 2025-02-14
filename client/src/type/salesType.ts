@@ -25,6 +25,14 @@ export interface CustomerType {
   status: string
 }
 
+export interface NewCustomerType {
+  name: string
+  address: string
+  contactPerson: string
+  contactNumber: string
+  status: string
+}
+
 export interface SalesOrderType {
   salesorderNo: string
   orderDate: string

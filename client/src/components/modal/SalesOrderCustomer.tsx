@@ -4,12 +4,15 @@ import { CustomerType } from "../../type/salesType"
 import useCustomerHook from "../../hooks/customer/useCustomerHook"
 import { FaExclamationTriangle } from "react-icons/fa"
 import Spinner from "../common/utils/Spinner"
+import { useState } from "react"
+import CustomModal from "../common/utils/CustomModal"
+import CreateNewCustomer from "./CreateNewCustomer"
 const customerFields = [
   { key: "name", label: "Customer Name", classes: "capitalize" },
   { key: "address", label: "Address", classes: "capitalize" },
   { key: "contactPerson", label: "Contact Person", classes: "capitalize" },
   { key: "contactNumber", label: "Telephone Number" },
-  { key: "status", label: "Unit", classes: "capitalize" },
+  { key: "status", label: "Status", classes: "capitalize" },
 ]
 const CustomerColumns = ({
   customerFields,
@@ -55,6 +58,11 @@ const SalesOrderCustomer: React.FC<CustomerSalesProps> = ({
   const customerColumn = CustomerColumns({
     customerFields,
   })
+  const [openModal, setOpenModal] = useState<boolean>()
+
+  const handleToggleAdd = () => {
+    setOpenModal((prev) => !prev)
+  }
 
   if (isError) {
     return (
@@ -80,16 +88,22 @@ const SalesOrderCustomer: React.FC<CustomerSalesProps> = ({
             columns={customerColumn}
             search={true}
             withImport={false}
-            withExport={false}
+            withExport={true}
             withSubmit={true}
             withCancel={true}
-            add={false}
+            add={true}
             view={false}
             handleSubmit={onSubmit}
+            handleAdd={handleToggleAdd}
             toggleModal={toggleModal}
           />
         )}
       </div>
+      {openModal && (
+        <CustomModal toggleModal={handleToggleAdd} classes='h-[360px]'>
+          <CreateNewCustomer close={handleToggleAdd} />
+        </CustomModal>
+      )}
     </>
   )
 }
