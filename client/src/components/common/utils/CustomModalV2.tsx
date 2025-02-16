@@ -1,5 +1,6 @@
-import React, { ReactNode, MouseEvent } from "react";
+import { ReactNode, MouseEvent } from "react";
 import { createPortal } from "react-dom";
+import { IoClose } from "react-icons/io5";
 
 interface CustomModalProps {
   classes?: string;
@@ -7,11 +8,11 @@ interface CustomModalProps {
   children: ReactNode;
 }
 
-const CustomModal: React.FC<CustomModalProps> = ({
+export default function CustomModalV2({
   classes,
   toggleModal,
   children,
-}) => {
+}: CustomModalProps) {
   const overlayRoot = document.getElementById("overlay");
 
   if (!overlayRoot) return null;
@@ -24,15 +25,13 @@ const CustomModal: React.FC<CustomModalProps> = ({
       <div
         onClick={(e: MouseEvent<HTMLDivElement>) => e.stopPropagation()}
         className={`${
-          classes ? classes : "md:p-8 w-[343px] md:w-[480px]"
-        } p-6 bg-white dark:bg-secondary-600 rounded-md overflow-hidden overflow-y-auto  scrollbar`}
-      >
-        {/* Content */}
+          classes ? classes : "md:p-8 md:w-[480px]"
+        } h-screen w-screen md:h-auto px-6 bg-white dark:bg-secondary-600 rounded-md overflow-hidden overflow-y-auto scrollbar flex flex-col justify-center md:block`}
+      > 
+        <IoClose className="absolute top-4 right-4 cursor-pointer md:hidden" size={24} onClick={toggleModal} />
         {children}
       </div>
     </div>,
     overlayRoot
   );
-};
-
-export default CustomModal;
+}

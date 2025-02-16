@@ -13,11 +13,7 @@ export default {
         primary: "#3B82F6",
         secondary: "#3BA8F6",
         custom: { white: "#FAF9F6" },
-        sidebar: "#0D0E12",
-        background: {
-          dark: "#212121",
-          light: "#EBEBEB",
-        },
+        background: "#1E3A8A"
       },
       boxShadow: {
         login: "25px 30px 55px rgba(85, 87, 115, 0.5)", // Custom box shadow

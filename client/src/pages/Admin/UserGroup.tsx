@@ -10,7 +10,7 @@ import {
 } from "../../store/slices/admin";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store/index";
-import CustomModal from "../../components/common/utils/CustomModal";
+import CustomModal from "../../components/common/utils/CustomModalV2";
 import UserGroup from "../../components/admin/UserGroup";
 import { Delete } from "../../components/common/utils/Delete";
 import { showToast } from "../../utils/Toast";

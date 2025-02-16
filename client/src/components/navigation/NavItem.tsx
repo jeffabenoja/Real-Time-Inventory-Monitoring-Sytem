@@ -5,15 +5,17 @@ interface Props {
   label: string;
   path: string;
   icon: IconType;
+  clicked: () => void
 }
 
-export default function NavItem({ label, path, icon: Icon }: Props) {
+export default function NavItem({ label, path, icon: Icon, clicked }: Props) {
   return (
     <NavLink
       to={path}
+      onClick={clicked}
       className={({ isActive }) =>
-        `flex items-center gap-3 font-heading py-2 ${
-          isActive ? "text-primary font-bold" : "text-white hover:text-primary"
+        `flex items-center gap-3 font-heading py-2 hover:font-semibold ${
+          isActive ? "font-semibold text-secondary" : ""  
         }`
       }
     >

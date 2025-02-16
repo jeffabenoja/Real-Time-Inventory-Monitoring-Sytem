@@ -12,7 +12,7 @@ import Spinner from "../../components/common/utils/Spinner";
 import { replaceUserList, deleteUser as deleteUserDispatch } from "../../store/slices/admin";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store/index";
-import CustomModal from "../../components/common/utils/CustomModal";
+import CustomModal from "../../components/common/utils/CustomModalV2";
 import { showToast } from "../../utils/Toast";
 import { Delete } from "../../components/common/utils/Delete";
 import User from "../../components/admin/User";

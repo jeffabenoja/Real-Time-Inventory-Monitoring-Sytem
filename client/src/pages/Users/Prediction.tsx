@@ -1,16 +1,16 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/index"; // Adjust the import path based on your project structure
-import Item from "../../components/notification/Item";
+import Item from "../../components/prediction/Item";
 import PageTitle from "../../components/common/utils/PageTitle";
 
-export default function Notifications() {
+export default function Prediction() {
   const notifications = useSelector(
     (state: RootState) => state.notifcation.notifications
   );
 
   return (
     <>
-      <PageTitle>Notifications</PageTitle>
+      <PageTitle>AI Predictions</PageTitle>
       <ul className="flex flex-col gap-2">
         {notifications.length <= 0 ? (
           <p className="text-center">No Notifications</p>

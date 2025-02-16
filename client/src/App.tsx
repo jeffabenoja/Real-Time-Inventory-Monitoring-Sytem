@@ -14,7 +14,7 @@ import ReportsPage from "./pages/ReportsPage"
 import Login from "./components/auth/Login"
 import NotFoundPage from "./pages/NotFoundPage"
 import ProfilePage from "./pages/Users/Profile"
-import NotificationsPage from "./pages/Users/Notifications"
+import PredictionPage from "./pages/Users/Prediction"
 import { Toaster } from "sonner"
 import User from "./pages/Admin/User"
 import UserGroup from "./pages/Admin/UserGroup"
@@ -67,7 +67,7 @@ const App = () => {
             <Route path='/user'>
               <Route index element={<Navigate to='profile' replace />} />
               <Route path='profile' element={<ProfilePage />} />
-              <Route path='notifications' element={<NotificationsPage />} />
+              <Route path='predictions' element={<PredictionPage />} />
             </Route>
           </Route>
         </Route>

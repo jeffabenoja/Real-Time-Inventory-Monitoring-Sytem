@@ -7,10 +7,6 @@ import { TbLogout2 } from "react-icons/tb";
 import { FaUserCog } from "react-icons/fa";
 import { FaUsers } from "react-icons/fa6";
 
-
-
-
-
 import NavItem from "./NavItem";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store";
@@ -34,41 +30,60 @@ const ADMIN_ITEMS = [
   { name: "Group Settings", to: "admin/groups", icon: FaUsers },
 ];
 
-export default function Container() {
+export default function Container({closeSidebar} : {closeSidebar: () => void}) {
   const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate()
-  const user = useSelector((state: RootState) => state.auth.user)
+  const navigate = useNavigate();
+  const user = useSelector((state: RootState) => state.auth.user);
 
   const logoutHandler = () => {
-    dispatch(logout()); 
+    dispatch(logout());
     navigate("/login", { replace: true });
+  };
+
+  const logoHandler = () => {
+    navigate("/dashboard/overview")
   }
+
+  
 
   return (
     <div className="font-primary h-screen">
-      <div className="hidden text-white lg:flex flex-col items-center py-[3px] border-b-[1px] border-white">
-        <h2 className="text-3xl">E&L</h2>
-        <span className="text-sm">Delicatessen</span>
+      <div className="hidden text-white lg:flex flex-col items-center py-[13px] border-b-[1px] border-white font-heading">
+        <h2 className="text-3xl flex items-center gap-2 cursor-pointer" onClick={logoHandler}>
+          E&L
+          <span className="text-sm bot border-y-2">
+            DELICATESSEN
+          </span>
+        </h2>
       </div>
       <div className="h-fit text-white px-5 flex flex-col gap-5 py-5">
         <div>
-          <p className="text-base">{user?.first_name + " " + user?.last_name} </p>
+          <p className="text-base">
+            {user?.first_name + " " + user?.last_name}{" "}
+          </p>
           <p className="text-xs">{user?.userGroup.code}</p>
         </div>
         <div>
           <p className="text-sm">Dashboard</p>
           {NAVIGATION_ITEMS.map(({ name, to, icon }) => (
-            <NavItem label={name} path={to} icon={icon} key={name} />
+            <NavItem label={name} path={to} icon={icon} key={name} clicked={closeSidebar}/>
           ))}
         </div>
-        {user?.userGroup.isAdmin && <div>
-          <p className="text-sm">Admin</p>
-          {ADMIN_ITEMS.map(({ name, to, icon }) => (
-            <NavItem label={name} path={to} icon={icon} key={name} />
-          ))}
-        </div>}
+        {user?.userGroup.isAdmin && (
+          <div>
+            <p className="text-sm">Admin</p>
+            {ADMIN_ITEMS.map(({ name, to, icon }) => (
+              <NavItem label={name} path={to} icon={icon} key={name} clicked={closeSidebar}/>
+            ))}
+          </div>
+        )}
       </div>
-      <div className="text-white absolute bottom-5 left-5 text-base font-primary flex gap-3 hover:text-primary cursor-pointer font-medium" onClick={logoutHandler}> <TbLogout2 size={20}/> Logout </div>
+      <div
+        className="text-white absolute bottom-5 left-5 text-base font-primary flex gap-3 hover:text-primary cursor-pointer font-medium"
+        onClick={logoutHandler}
+      >
+        <TbLogout2 size={20} /> Logout
+      </div>
     </div>
   );
 }

@@ -1,8 +1,8 @@
 import { Outlet } from "react-router-dom";
 import Header from "../components/navigation/Header";
-import NotificationModal from "../components/notification/Modal";
+import NotificationModal from "../components/prediction/Modal";
 import { useEffect, useRef, useState } from "react";
-import Item from "../components/notification/Item";
+import Item from "../components/prediction/Item";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import Sidebar from "../components/navigation/Sidebar";
