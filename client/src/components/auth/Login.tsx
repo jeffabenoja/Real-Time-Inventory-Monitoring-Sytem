@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { UserLogin } from "../../type/userType";
 import { useLoginUser } from "../../hooks/user/useLoginUser";
+import banner from "../../assets/banner.jpg";
 
 const Login = () => {
   const [login, setLogin] = useState<UserLogin>({
@@ -18,7 +19,7 @@ const Login = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     loginUser(login);
   };
 
@@ -29,16 +30,16 @@ const Login = () => {
       return "Something went wrong. Please try again";
     }
   };
-  
+
   return (
-    <div className="flex relative gap-10 p-10 md:p-10 h-screen w-screen justify-center ">
+    <div className="flex relative p-10 md:p-0 h-screen w-screen justify-center ">
       <div className="lg:hidden absolute top-10  left-1/2 transform -translate-x-1/2">
         <div className="text-center font-heading">
           <h1 className="text-5xl">E&L</h1>
           <p className="text-2xl">Delicatessen</p>
         </div>
       </div>
-      <div className="flex flex-col justify-center flex-1">
+      <div className="flex flex-col justify-center flex-1 lg:px-10">
         <h2 className="text-2xl lg:text-4xl mb-10 text-center">
           Welcome Back! Please Sign In
         </h2>
@@ -94,12 +95,15 @@ const Login = () => {
           </div>
         </form>
       </div>
-      <div className="hidden lg:flex flex-col justify-between flex-1 bg-primary text-white p-10 rounded font-heading">
-        <h1 className="text-5xl">E&L Delicatessen</h1>
-        <h3 className="text-2xl">
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Magni,
-          distinctio?
-        </h3>
+      <div className="hidden lg:block flex-1 relative">
+        <img src={banner} alt="Banner" className="w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/90 via-primary/60 to-primary/95 p-10 lg:flex flex-col justify-between text-white font-heading">
+          <h1 className="text-5xl flex items-center gap-2">E&L <span className="text-2xl bot border-y-2 border-white">DELICATESSEN</span></h1>
+          <h3 className="text-2xl">
+            Ensuring quality ingredients, seamless inventory, and strong
+            supplier partnerships with integrity and innovation.
+          </h3>
+        </div>
       </div>
     </div>
   );
