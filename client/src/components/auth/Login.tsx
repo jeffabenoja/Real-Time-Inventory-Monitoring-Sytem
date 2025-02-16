@@ -40,7 +40,7 @@ const Login = () => {
       </div>
       <div className="flex flex-col justify-center flex-1 lg:px-10">
         <h2 className="text-2xl lg:text-4xl mb-10 text-center">
-          Welcome Back! Please Sign In
+        Welcome! Let’s get you signed in.
         </h2>
         <form onSubmit={handleSubmit} className="flex justify-center">
           <div className="w-full md:w-3/5 lg:w-4/5 2xl:w-3/5">
@@ -96,7 +96,7 @@ const Login = () => {
       </div>
       <div className="hidden lg:block flex-1 relative">
         <img src={banner} alt="Banner" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/90 via-primary/60 to-primary/95 p-10 lg:flex flex-col justify-between text-white font-heading">
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/90 via-primary/60 to-primary/95 p-5 lg:flex flex-col justify-between text-white font-heading">
           <h1 className="text-5xl flex items-center gap-2">E&L <span className="text-2xl bot border-y-2 border-white">DELICATESSEN</span></h1>
           <h3 className="text-2xl">
             Ensuring quality ingredients, seamless inventory, and strong
