@@ -35,8 +35,7 @@ const Login = () => {
     <div className="flex relative p-10 md:p-0 h-screen w-screen justify-center ">
       <div className="lg:hidden absolute top-10  left-1/2 transform -translate-x-1/2">
         <div className="text-center font-heading">
-          <h1 className="text-5xl">E&L</h1>
-          <p className="text-2xl">Delicatessen</p>
+        <h1 className="text-5xl flex items-center gap-2 text-primary">E&L <span className="text-2xl bot border-y-2 border-primary">DELICATESSEN</span></h1>
         </div>
       </div>
       <div className="flex flex-col justify-center flex-1 lg:px-10">
