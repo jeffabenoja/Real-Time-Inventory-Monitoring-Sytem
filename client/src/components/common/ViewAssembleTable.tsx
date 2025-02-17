@@ -18,6 +18,7 @@ const fields = [
     classes: "uppercase",
   },
   { key: "assemble_quantity", label: "Quantity" },
+  { key: "status", label: "Status", classes: "uppercase" },
 ]
 type AssembleTableProps = {
   itemId: string
@@ -118,7 +119,7 @@ const ViewAssembleTable = ({ itemId }: AssembleTableProps) => {
       )}
       {openModal && (
         <CustomModal
-          classes='h-[420px] lg:h-[520px] md:p-8 w-[343px] md:w-[860px]'
+          classes='h-[420px] lg:h-[510px] md:p-8 w-[343px] md:w-[860px]'
           toggleModal={handleModalUpdate}
         >
           <UpdateAssemble row={assembleDataUpdate} close={handleModalUpdate} />

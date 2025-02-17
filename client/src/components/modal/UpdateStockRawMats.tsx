@@ -83,6 +83,12 @@ const UpdateStockRawMats: React.FC<UpdateStockProps> = ({
               id='status'
               name='status'
               value={updateStock.status}
+              disabled={
+                updateStock.status === "COMPLETED" ||
+                updateStock.status === "completed"
+                  ? true
+                  : false
+              }
               onChange={handleChange}
               className={`${
                 invalidFields.includes("status") && "border-red-900"

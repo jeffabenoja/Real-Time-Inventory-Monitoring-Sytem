@@ -410,9 +410,10 @@ const UpdateSalesOrder: React.FC<UpdateSalesOrderProps> = ({ row, close }) => {
                   name='status'
                   value={status}
                   onChange={handleChange}
+                  disabled={status === "COMPLETED" ? true : false}
                   className={`${
                     invalidFields.includes("status") && "border-red-900"
-                  } w-full p-2 rounded-md border cursor-pointer outline-transparent bg-transparent text-xs
+                  }  w-full p-2 rounded-md border cursor-pointer outline-transparent bg-transparent text-xs
         focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
                 >
                   <option value='DRAFT'>DRAFT</option>

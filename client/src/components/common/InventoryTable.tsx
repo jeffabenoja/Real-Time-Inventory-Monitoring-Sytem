@@ -10,7 +10,6 @@ const fields = [
   { key: "item.code", label: "Product Code", classes: "uppercase" },
   { key: "item.description", label: "Product Name", classes: "uppercase" },
   { key: "itemType", label: "Category", classes: "uppercase" },
-  { key: "inQuantity", label: "Current Stock" },
 ]
 
 const Columns = ({
@@ -31,6 +30,13 @@ const Columns = ({
         header: () => <span className='truncate'>{field.label}</span>,
       })
     ),
+
+    columnHelper.accessor("currentStock", {
+      cell: (info) => (
+        <span className={`${fieldsCategory.classes}`}>{info.getValue()}</span>
+      ),
+      header: () => <span className='truncate'>Current Stock</span>,
+    }),
 
     columnHelper.accessor(fieldsCategory.key, {
       cell: (info) => (
@@ -61,6 +67,11 @@ const InventoryTable = ({ category }: InventoryTableProps) => {
     category === "Finished Goods"
       ? { key: "outQuantity", label: "Sold Item" }
       : { key: "outQuantity", label: "Used Materials" }
+
+  const adjustedInventoryData = inventoryData.map((item) => ({
+    ...item,
+    currentStock: item.inQuantity - item.outQuantity,
+  }))
 
   const columns = Columns({
     fields,
@@ -96,7 +107,7 @@ const InventoryTable = ({ category }: InventoryTableProps) => {
           )}
 
           <Table
-            data={inventoryData}
+            data={adjustedInventoryData}
             columns={columns}
             search={true}
             withImport={false}

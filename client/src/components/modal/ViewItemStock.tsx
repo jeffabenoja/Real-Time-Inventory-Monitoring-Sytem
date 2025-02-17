@@ -68,7 +68,7 @@ const ViewItemStock: React.FC<AddStockProps> = ({ product }) => {
             type='text'
             name='onQuantity'
             readOnly
-            value={itemData?.inQuantity}
+            value={itemData?.inQuantity - itemData?.outQuantity}
             autoComplete='off'
             className='w-[120px] md:w-[150px] py-1 pl-4 pr-1 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary'
           />

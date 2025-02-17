@@ -311,6 +311,12 @@ const UpdateAssemble: React.FC<UpdateAssembleProps> = ({ row, close }) => {
                 id='status'
                 name='status'
                 value={assembleUpdate?.status}
+                disabled={
+                  assembleUpdate?.status === "COMPLETED" ||
+                  assembleUpdate?.status === "completed"
+                    ? true
+                    : false
+                }
                 onChange={handleChange}
                 className={`${
                   invalidFields.includes("batchNo") && "border-red-900"
