@@ -2,6 +2,7 @@ import apiClient from "../../utils/apiClient"
 import {
   ADD_STOCK,
   GET_STOCK_LIST,
+  GET_ALL_STOCK_LIST,
   UPDATE_STOCK,
   ADD_STOCK_FOR_FINISHED_GOODS,
   GET_ASSEMBLE_LIST_PER_ITEM,
@@ -55,6 +56,12 @@ export const addStockForFinishedGoods = async ({
       },
     }
   )
+
+  return response.data
+}
+
+export const getStockList = async (): Promise<StockListType[]> => {
+  const response = await apiClient.get(GET_ALL_STOCK_LIST)
 
   return response.data
 }

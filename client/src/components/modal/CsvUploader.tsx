@@ -130,6 +130,12 @@ const handleFileChange = (
             const data = result.data as Record<string, any>[]
 
             const colArr: string[] = Object.keys(data[0])
+            if (colArr.includes("price")) {
+              showToast.error('CSV file contains a "price" field')
+              reject(new Error('CSV file contains a "price" field.'))
+              return
+            }
+
             const valArr: any[] = data.map((dataRow) => Object.values(dataRow))
 
             const combinedData = valArr
