@@ -33,6 +33,10 @@ const schema = z.object({
 
 type FormFields = z.infer<typeof schema>;
 export default function Profile() {
+  useEffect(() => {
+    document.title = "User Profile | E&L Delicatessen";
+  }, [])
+
   const dispatch = useDispatch<AppDispatch>();
 
   const [userId, setUserId] = useState("");

@@ -33,6 +33,10 @@ const fields = [
 ];
 
 export default function Users() {
+  useEffect(() => {
+    document.title = "User Settings | E&L Delicatessen";
+  }, [])
+
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isUpdateUser, setIsUpdateUser] = useState<boolean>(false);
   const [isDeleteUser, setIsDeleteUser] = useState<boolean>(false);

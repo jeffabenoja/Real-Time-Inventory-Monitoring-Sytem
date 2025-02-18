@@ -19,11 +19,8 @@ export default function Header({ toggleNotif, iconRef, handleSidebar }: Props) {
     <>
       <header className="flex justify-between items-center shadow-md border-gray-200 w-full p-4 sticky top-0 z-30 bg-white">
         <div className="flex flex-1 font-heading items-center justify-between lg:justify-end">
-          <h2 className="text-base flex items-center gap-1 lg:hidden text-primary cursor-pointer" onClick={logoHandler} >
-            E&L
-            <span className="text-xs bot border-y-2 border-primary">
-              DELICATESSEN
-            </span>
+          <h2 className="text-base flex items-center gap-1 lg:hidden text-primary cursor-pointer font-heading" onClick={logoHandler} >
+            E&L DELICATESSEN
           </h2>
           <div className="flex gap-2 items-center">
             <div className="md:hidden cursor-pointer">

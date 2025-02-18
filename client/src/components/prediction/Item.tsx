@@ -12,7 +12,6 @@ export default function Item({ message, timestamp }: Notification) {
         <p className="font-semibold">{message}</p>
         <p className="text-sm text-primary">{timeAgo(timestamp)}</p>
       </div>
-      CustomModal
     </>
   );
 }

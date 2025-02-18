@@ -28,6 +28,10 @@ const fields = [
 ];
 
 export default function UserGroups() {
+  useEffect(() => {
+    document.title = "Group Settings | E&L Delicatessen";
+  }, [])
+
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isUpdateUser, setIsUpdateUser] = useState<boolean>(false);
   const [isDeleteUser, setIsDeleteUser] = useState<boolean>(false);

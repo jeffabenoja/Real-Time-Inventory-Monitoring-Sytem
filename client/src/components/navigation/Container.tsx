@@ -48,12 +48,9 @@ export default function Container({closeSidebar} : {closeSidebar: () => void}) {
 
   return (
     <div className="font-primary h-screen">
-      <div className="hidden text-white lg:flex flex-col items-center py-[13px] border-b-[1px] border-white font-heading">
-        <h2 className="text-3xl flex items-center gap-2 cursor-pointer" onClick={logoHandler}>
-          E&L
-          <span className="text-sm bot border-y-2">
-            DELICATESSEN
-          </span>
+      <div className="hidden text-white lg:flex flex-col items-center py-[17px] border-b-[1px] border-white font-heading">
+        <h2 className="text-xl flex items-center gap-2 cursor-pointer" onClick={logoHandler}>
+          E&L DELICATESSEN
         </h2>
       </div>
       <div className="h-fit text-white px-5 flex flex-col gap-5 py-5">
