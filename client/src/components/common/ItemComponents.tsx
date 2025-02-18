@@ -100,7 +100,7 @@ const ItemColumns = ({
             defaultValue={row.original.quantity}
             onChange={handleQuantityChange}
             onBlur={handleBlur}
-            className='w-[100px] py-1 pl-4 pr-1 border border-gray-900 border-opacity-25 rounded-md outline-transparent bg-transparent focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary'
+            className={`w-[100px] py-1 pl-4 pr-1 border border-gray-900 border-opacity-25 rounded-md outline-transparent bg-transparent focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
           />
         )
       },
@@ -232,6 +232,20 @@ const ItemComponents = () => {
       return
     }
 
+    const invalidRawMaterials = rawMaterials.filter(
+      (material) => material.quantity === ""
+    )
+
+    if (rawMaterials.length > 0) {
+      if (invalidRawMaterials) {
+        showToast.error("Invalid Quantity")
+        return
+      }
+    } else {
+      showToast.error("Please Select Materials")
+      return
+    }
+
     const totalCost = rawMaterials.reduce((acc, material) => {
       const cost = material?.rawMaterial?.cost ?? 0
       const quantity = Number(material?.quantity) || 0
@@ -252,14 +266,13 @@ const ItemComponents = () => {
         quantity: material.quantity,
       })),
     }
-
     createItem(updateProductComponent)
     navigate("/dashboard/products")
   }
 
   return (
     <div className='flex flex-col max-w-full mx-auto h-dynamic-sm lg:h-dynamic-lg px-4 lg:px-8 py-4'>
-      <PageTitle>Create Finished Product with Components</PageTitle>
+      <PageTitle>Create Finished Product</PageTitle>
 
       <form className='flex flex-col' onSubmit={handleOnSubmit}>
         <div className='overflow-x-auto bg-white shadow-md rounded-lg scrollbar'>

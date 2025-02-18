@@ -4,6 +4,7 @@ import { IoIosAdd } from "react-icons/io"
 import { HiOutlineViewfinderCircle } from "react-icons/hi2"
 import { ItemType } from "../../../type/itemType"
 
+
 // Define a reusable function to generate columns
 const StockListColumns = ({
   fields,
@@ -37,7 +38,7 @@ const StockListColumns = ({
 
         return <span>{formattedPrice}</span>
       },
-      header: () => <span className='truncate'>Total Amount</span>,
+      header: () => <span className='truncate'>Cost</span>,
     }),
     // Add the actions column
     columnHelper.accessor("actions", {

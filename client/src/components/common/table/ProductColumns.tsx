@@ -37,7 +37,7 @@ const ProductColumns = ({
 
         return <span>{formattedPrice}</span>
       },
-      header: () => <span className='truncate'>Total Amount</span>,
+      header: () => <span className='truncate'>Price</span>,
     }),
     // Add the actions column
     columnHelper.accessor("actions", {

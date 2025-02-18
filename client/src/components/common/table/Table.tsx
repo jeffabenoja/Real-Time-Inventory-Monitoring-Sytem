@@ -6,12 +6,14 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  SortingState,
 } from "@tanstack/react-table"
 import { TableProps } from "../../../type/tableType"
 import { IoIosAdd } from "react-icons/io"
 import { HiOutlineViewfinderCircle } from "react-icons/hi2"
 import { CiExport, CiImport } from "react-icons/ci"
 import { FaChevronUp, FaChevronDown } from "react-icons/fa"
+import { LuArrowUpDown } from "react-icons/lu"
 import {
   FiChevronsLeft,
   FiChevronsRight,
@@ -44,6 +46,7 @@ const Table: React.FC<TableProps> = ({
   const [isOpenExport, setIsOpenExport] = useState<boolean>(false)
   const [globalFilter, setGlobalFilter] = useState<string>("")
   const [rowSelection, setRowSelection] = useState({})
+  const [sortingArrow, setSortingArrow] = useState<SortingState>([])
 
   const table = useReactTable({
     data: data || [],
@@ -51,6 +54,7 @@ const Table: React.FC<TableProps> = ({
     state: {
       globalFilter,
       rowSelection: rowSelection,
+      sorting: sortingArrow,
     },
     initialState: {
       pagination: {
@@ -59,6 +63,7 @@ const Table: React.FC<TableProps> = ({
       sorting: sorting,
     },
     getCoreRowModel: getCoreRowModel(),
+    onSortingChange: setSortingArrow,
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -193,10 +198,26 @@ const Table: React.FC<TableProps> = ({
                     key={header.id}
                     className='px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider  bg-gray-50'
                   >
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
+                    <div
+                      {...{
+                        className: header.column.getCanSort()
+                          ? "flex items-center cursor-pointer select-none"
+                          : "",
+                        onClick: header.column.getToggleSortingHandler(),
+                      }}
+                    >
+                      {flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
+                      {header.column.getCanSort() &&
+                        header.column.id !== "actions" &&
+                        header.column.id !== "remove" &&
+                        header.column.id !== "qty" &&
+                        header.column.id !== "select" && (
+                          <LuArrowUpDown className='ml-2 font-no' size={12} />
+                        )}
+                    </div>
                   </th>
                 ))}
               </tr>
