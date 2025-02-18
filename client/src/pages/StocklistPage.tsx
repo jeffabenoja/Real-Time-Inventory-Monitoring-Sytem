@@ -1,18 +1,19 @@
-import Table from "../components/common/table/Table";
-import StockListColumns from "../components/common/table/StockListColumns";
-import Spinner from "../components/common/utils/Spinner";
-import PageTitle from "../components/common/utils/PageTitle";
-import { ItemType } from "../type/itemType";
-import { useEffect, useState } from "react";
-import CustomModal from "../components/common/utils/CustomModal";
-import AddItems from "../components/modal/AddItems";
-import AddStocksRawMats from "../components/modal/AddStockRawMats";
-import { useItemMaterials } from "../hooks/items/useItemMaterials";
-import { FaExclamationTriangle } from "react-icons/fa";
-import CSVUploader from "../components/modal/CsvUploader";
-import UpdateStockTable from "../components/common/UpdateStockTable";
-import ViewItemStock from "../components/modal/ViewItemStock";
-import InventoryTable from "../components/common/InventoryTable";
+import Table from "../components/common/table/Table"
+import StockListColumns from "../components/common/table/StockListColumns"
+import Spinner from "../components/common/utils/Spinner"
+import PageTitle from "../components/common/utils/PageTitle"
+import { ItemType } from "../type/itemType"
+import { useState } from "react"
+import CustomModal from "../components/common/utils/CustomModal"
+import AddItems from "../components/modal/AddItems"
+import AddStocksRawMats from "../components/modal/AddStockRawMats"
+import { useItemMaterials } from "../hooks/items/useItemMaterials"
+import { FaExclamationTriangle } from "react-icons/fa"
+import CSVUploader from "../components/modal/CsvUploader"
+import UpdateStockTable from "../components/common/UpdateStockTable"
+import ViewItemStock from "../components/modal/ViewItemStock"
+import InventoryTable from "../components/common/InventoryTable"
+import usePageTitle from "../hooks/usePageTitle"
 
 const fields = [
   { key: "code", label: "Product Code", classes: "uppercase" },
@@ -22,23 +23,20 @@ const fields = [
   { key: "unit", label: "Unit", classes: "lowercase" },
   { key: "reorderPoint", label: "Stock Level" },
   { key: "status", label: "Status", classes: "lowercase" },
-];
+]
 
 const StocklistPage = () => {
-  useEffect(() => {
-    document.title = "Stocklist | E&L Delicatessen";
-  }, []);
+  usePageTitle("Stocklist")
 
-  const [isOpenAdd, setIsOpenAdd] = useState<boolean>(false);
-  const [isOpenImport, setIsOpenImport] = useState<boolean>(false);
-  const [isOpenUpdate, setIsOpenUpdate] = useState<boolean>(false);
-  const [isOpenInventory, setIsOpenInventory] = useState<boolean>(false);
-  const [isAddStock, setIsAddStock] = useState<boolean>(false);
-  const [isUpdateStock, setIsUpdateStock] = useState<boolean>(false);
-  const [isViewItemInventory, setIsViewItemInventory] =
-    useState<boolean>(false);
-  const [productData, setProductData] = useState<ItemType | null>(null);
-  const [itemId, setItemId] = useState<string>("");
+  const [isOpenAdd, setIsOpenAdd] = useState<boolean>(false)
+  const [isOpenImport, setIsOpenImport] = useState<boolean>(false)
+  const [isOpenUpdate, setIsOpenUpdate] = useState<boolean>(false)
+  const [isOpenInventory, setIsOpenInventory] = useState<boolean>(false)
+  const [isAddStock, setIsAddStock] = useState<boolean>(false)
+  const [isUpdateStock, setIsUpdateStock] = useState<boolean>(false)
+  const [isViewItemInventory, setIsViewItemInventory] = useState<boolean>(false)
+  const [productData, setProductData] = useState<ItemType | null>(null)
+  const [itemId, setItemId] = useState<string>("")
 
   const {
     data,
@@ -48,74 +46,74 @@ const StocklistPage = () => {
     isPending,
     updateItem,
     isPendingUpdate,
-  } = useItemMaterials();
+  } = useItemMaterials()
 
   const handleModalAdd = () => {
-    setIsOpenAdd((prev) => !prev);
-  };
+    setIsOpenAdd((prev) => !prev)
+  }
 
   const handleModalImport = () => {
-    setIsOpenImport((prev) => !prev);
-  };
+    setIsOpenImport((prev) => !prev)
+  }
 
   const handleModalUpdate = () => {
-    setIsOpenUpdate((prev) => !prev);
-  };
+    setIsOpenUpdate((prev) => !prev)
+  }
 
   const handleUpdate = (row: ItemType) => {
-    handleModalUpdate();
-    setProductData(row);
-  };
+    handleModalUpdate()
+    setProductData(row)
+  }
 
   /* Stock functionality */
   const handleAddStockToggle = () => {
-    setIsAddStock((prev) => !prev);
-  };
+    setIsAddStock((prev) => !prev)
+  }
 
   const handleUpdateStockToggle = () => {
-    setIsUpdateStock((prev) => !prev);
-  };
+    setIsUpdateStock((prev) => !prev)
+  }
 
   const handleUpdateStock = async (item: ItemType) => {
-    handleUpdateStockToggle();
-    setItemId(item.id ?? "");
-  };
+    handleUpdateStockToggle()
+    setItemId(item.id ?? "")
+  }
 
   const handleAddStock = (item: ItemType) => {
-    handleAddStockToggle();
-    setProductData(item);
-  };
+    handleAddStockToggle()
+    setProductData(item)
+  }
 
   const handleViewStockToggle = () => {
-    setIsViewItemInventory((prev) => !prev);
-  };
+    setIsViewItemInventory((prev) => !prev)
+  }
 
   const handleViewStock = (item: ItemType) => {
-    handleViewStockToggle();
-    setProductData(item);
-  };
+    handleViewStockToggle()
+    setProductData(item)
+  }
 
   const handleModalViewInventory = () => {
-    setIsOpenInventory((prev) => !prev);
-  };
+    setIsOpenInventory((prev) => !prev)
+  }
 
   const columns = StockListColumns({
     fields,
     onUpdate: handleUpdateStock,
     onAdd: handleAddStock,
     onView: handleViewStock,
-  });
+  })
 
   if (isError) {
     return (
-      <section className="text-center flex flex-col justify-center items-center h-96">
-        <FaExclamationTriangle className="text-red-900 text-6xl mb-4" />
-        <h1 className="text-6xl font-bold mb-4">Something went wrong</h1>
-        <p className="text-xl mb-5 text-primary">
+      <section className='text-center flex flex-col justify-center items-center h-96'>
+        <FaExclamationTriangle className='text-red-900 text-6xl mb-4' />
+        <h1 className='text-6xl font-bold mb-4'>Something went wrong</h1>
+        <p className='text-xl mb-5 text-primary'>
           Please contact your administrator
         </p>
       </section>
-    );
+    )
   }
 
   return (
@@ -183,7 +181,7 @@ const StocklistPage = () => {
       {isUpdateStock && (
         <CustomModal
           toggleModal={handleUpdateStockToggle}
-          classes="h-[480px] md:p-8 w-[343px] md:w-[970px]"
+          classes='h-[480px] md:p-8 w-[343px] md:w-[970px]'
         >
           <UpdateStockTable itemId={itemId} />
         </CustomModal>
@@ -198,13 +196,13 @@ const StocklistPage = () => {
       {isOpenInventory && (
         <CustomModal
           toggleModal={handleModalViewInventory}
-          classes="h-[480px] md:p-8 w-[343px] md:w-[970px]"
+          classes='h-[480px] md:p-8 w-[343px] md:w-[970px]'
         >
-          <InventoryTable category="Raw Mats" />
+          <InventoryTable category='Raw Mats' />
         </CustomModal>
       )}
     </>
-  );
-};
+  )
+}
 
-export default StocklistPage;
+export default StocklistPage

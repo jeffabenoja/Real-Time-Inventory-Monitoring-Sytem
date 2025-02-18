@@ -1,31 +1,32 @@
-import PageTitle from "../components/common/utils/PageTitle";
-import { createColumnHelper } from "@tanstack/react-table";
-import { useEffect, useState } from "react";
-import { MdOutlineRemoveRedEye } from "react-icons/md";
-import { DetailsType, SalesOrderType } from "../type/salesType";
-import useSalesOrder from "../hooks/sales/useSalesOrder";
-import { FaExclamationTriangle } from "react-icons/fa";
-import Spinner from "../components/common/utils/Spinner";
-import Table from "../components/common/table/Table";
-import CustomModal from "../components/common/utils/CustomModal";
-import SalesOrderComponent from "../components/common/SalesOrderComponent";
-import ViewSalesOrder from "../components/modal/ViewSalesOrder";
-import UpdateSalesOrder from "../components/modal/UpdateSalesOrder";
+import PageTitle from "../components/common/utils/PageTitle"
+import { createColumnHelper } from "@tanstack/react-table"
+import usePageTitle from "../hooks/usePageTitle"
+import { useState } from "react"
+import { MdOutlineRemoveRedEye } from "react-icons/md"
+import { DetailsType, SalesOrderType } from "../type/salesType"
+import useSalesOrder from "../hooks/sales/useSalesOrder"
+import { FaExclamationTriangle } from "react-icons/fa"
+import Spinner from "../components/common/utils/Spinner"
+import Table from "../components/common/table/Table"
+import CustomModal from "../components/common/utils/CustomModal"
+import SalesOrderComponent from "../components/common/SalesOrderComponent"
+import ViewSalesOrder from "../components/modal/ViewSalesOrder"
+import UpdateSalesOrder from "../components/modal/UpdateSalesOrder"
 
 const fields = [
   { key: "salesorderNo", label: "Order Number", classes: "uppercase" },
   { key: "orderDate", label: "Order Date" },
   { key: "customer.name", label: "Customer Name", classes: "capitalize" },
-];
+]
 
 const Columns = ({
   fields,
   onView,
 }: {
-  fields: { key: string; label: string; classes?: string }[];
-  onView: (item: SalesOrderType) => void;
+  fields: { key: string; label: string; classes?: string }[]
+  onView: (item: SalesOrderType) => void
 }) => {
-  const columnHelper = createColumnHelper<any>();
+  const columnHelper = createColumnHelper<any>()
 
   return [
     // Dynamically generate columns based on fields
@@ -34,111 +35,109 @@ const Columns = ({
         cell: (info) => (
           <span className={`${field.classes}`}>{info.getValue()}</span>
         ),
-        header: () => <span className="truncate">{field.label}</span>,
+        header: () => <span className='truncate'>{field.label}</span>,
       })
     ),
 
     columnHelper.accessor("details", {
       id: "totalItems",
       cell: (info) => {
-        const detailsLength = info.row.original.details.length;
+        const detailsLength = info.row.original.details.length
 
-        return <span>{detailsLength}</span>;
+        return <span>{detailsLength}</span>
       },
-      header: () => <span className="truncate">Number of Item</span>,
+      header: () => <span className='truncate'>Number of Item</span>,
     }),
     columnHelper.accessor("details", {
       id: "totalAmount",
       cell: (info) => {
-        const details: DetailsType[] = info.getValue();
+        const details: DetailsType[] = info.getValue()
 
         const totalAmount = details
           .map((detail) => {
-            const amount = detail.amount;
+            const amount = detail.amount
 
-            return amount % 1 === 0 ? `${amount}.00` : amount.toFixed(2);
+            return amount % 1 === 0 ? `${amount}.00` : amount.toFixed(2)
           })
-          .reduce((acc, amount) => acc + parseFloat(amount), 0);
+          .reduce((acc, amount) => acc + parseFloat(amount), 0)
 
-        return <span>{totalAmount.toFixed(2)}</span>;
+        return <span>{totalAmount.toFixed(2)}</span>
       },
-      header: () => <span className="truncate">Total Amount</span>,
+      header: () => <span className='truncate'>Total Amount</span>,
     }),
 
     columnHelper.accessor("status", {
       id: "status",
-      cell: (info) => <span className="capitalize">{info.getValue()}</span>,
-      header: () => <span className="truncate">Status</span>,
+      cell: (info) => <span className='capitalize'>{info.getValue()}</span>,
+      header: () => <span className='truncate'>Status</span>,
     }),
 
     // Add the actions column
     columnHelper.accessor("actions", {
       id: "actions",
       cell: (info) => (
-        <div className="flex gap-2 items-center justify-center w-[150px] lg:w-full">
+        <div className='flex gap-2 items-center justify-center w-[150px] lg:w-full'>
           {/* Add Button */}
           <button
             onClick={(e) => {
-              e.stopPropagation();
-              onView(info.row.original);
+              e.stopPropagation()
+              onView(info.row.original)
             }}
-            className="py-2 px-4 bg-gray-200 hover:bg-gray-300 hover:text-primary rounded-md shadow-md"
+            className='py-2 px-4 bg-gray-200 hover:bg-gray-300 hover:text-primary rounded-md shadow-md'
           >
             <MdOutlineRemoveRedEye size={20} />
           </button>
         </div>
       ),
-      header: () => <span className="text-center truncate">Actions</span>,
+      header: () => <span className='text-center truncate'>Actions</span>,
     }),
-  ];
-};
+  ]
+}
 
 const SalesPage = () => {
-  useEffect(() => {
-    document.title = "Sales | E&L Delicatessen";
-  }, []);
-  const { data, isLoading, isError } = useSalesOrder();
-  const [openModal, setOpenModal] = useState<boolean>();
-  const [openSalesOrderModal, setOpenSalesOrderModal] = useState<boolean>();
-  const [openViewSalesOrder, setOpenViewOrderModal] = useState<boolean>();
-  const [salesOrderDetails, setSalesOrderDetails] = useState<SalesOrderType>();
+  usePageTitle("Sales")
+  const { data, isLoading, isError } = useSalesOrder()
+  const [openModal, setOpenModal] = useState<boolean>()
+  const [openSalesOrderModal, setOpenSalesOrderModal] = useState<boolean>()
+  const [openViewSalesOrder, setOpenViewOrderModal] = useState<boolean>()
+  const [salesOrderDetails, setSalesOrderDetails] = useState<SalesOrderType>()
 
   const handleSalesOrderModalToggle = () => {
-    setOpenSalesOrderModal((prev) => !prev);
-  };
+    setOpenSalesOrderModal((prev) => !prev)
+  }
 
   const handleOpenModalToggle = () => {
-    setOpenModal((prev) => !prev);
-  };
+    setOpenModal((prev) => !prev)
+  }
 
   const handleViewSalesOrderToggle = () => {
-    setOpenViewOrderModal((prev) => !prev);
-  };
+    setOpenViewOrderModal((prev) => !prev)
+  }
 
   const handleUpdate = (row: SalesOrderType) => {
-    handleOpenModalToggle();
-    setSalesOrderDetails(row);
-  };
+    handleOpenModalToggle()
+    setSalesOrderDetails(row)
+  }
 
   const handleViewSalesOrder = (row: SalesOrderType) => {
-    handleViewSalesOrderToggle();
-    setSalesOrderDetails(row);
-  };
+    handleViewSalesOrderToggle()
+    setSalesOrderDetails(row)
+  }
 
   const columns = Columns({
     fields,
     onView: handleViewSalesOrder,
-  });
+  })
   if (isError) {
     return (
-      <section className="text-center flex flex-col justify-center items-center h-96">
-        <FaExclamationTriangle className="text-red-900 text-6xl mb-4" />
-        <h1 className="text-6xl font-bold mb-4">Something went wrong</h1>
-        <p className="text-xl mb-5 text-primary">
+      <section className='text-center flex flex-col justify-center items-center h-96'>
+        <FaExclamationTriangle className='text-red-900 text-6xl mb-4' />
+        <h1 className='text-6xl font-bold mb-4'>Something went wrong</h1>
+        <p className='text-xl mb-5 text-primary'>
           Please contact your administrator
         </p>
       </section>
-    );
+    )
   }
 
   return (
@@ -169,7 +168,7 @@ const SalesPage = () => {
       {openSalesOrderModal && (
         <CustomModal
           toggleModal={handleSalesOrderModalToggle}
-          classes="h-[480px] md:p-8 w-[343px] md:w-[1080px]"
+          classes='h-[480px] md:p-8 w-[343px] md:w-[1080px]'
         >
           <SalesOrderComponent close={handleSalesOrderModalToggle} />
         </CustomModal>
@@ -178,7 +177,7 @@ const SalesPage = () => {
       {openModal && salesOrderDetails && (
         <CustomModal
           toggleModal={handleOpenModalToggle}
-          classes="h-[480px] md:p-8 w-[343px] md:w-[1020px]"
+          classes='h-[480px] md:p-8 w-[343px] md:w-[1020px]'
         >
           <UpdateSalesOrder
             row={salesOrderDetails}
@@ -190,13 +189,13 @@ const SalesPage = () => {
       {openViewSalesOrder && salesOrderDetails && (
         <CustomModal
           toggleModal={handleViewSalesOrderToggle}
-          classes="h-[480px] md:p-8 w-[343px] md:w-[1020px]"
+          classes='h-[480px] md:p-8 w-[343px] md:w-[1020px]'
         >
           <ViewSalesOrder row={salesOrderDetails} />
         </CustomModal>
       )}
     </>
-  );
-};
+  )
+}
 
-export default SalesPage;
+export default SalesPage

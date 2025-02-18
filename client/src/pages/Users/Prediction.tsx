@@ -1,26 +1,22 @@
-import { useSelector } from "react-redux";
-import { RootState } from "../../store/index"; // Adjust the import path based on your project structure
-import Item from "../../components/prediction/Item";
-import PageTitle from "../../components/common/utils/PageTitle";
-import { useEffect } from "react";
+import { useSelector } from "react-redux"
+import { RootState } from "../../store/index" // Adjust the import path based on your project structure
+import Item from "../../components/prediction/Item"
+import PageTitle from "../../components/common/utils/PageTitle"
+import usePageTitle from "../../hooks/usePageTitle"
 
 export default function Prediction() {
-  useEffect(() => {
-      document.title = "AI Predictions | E&L Delicatessen";
-    }, [])
-  
+  usePageTitle("AI Predictions")
+
   const notifications = useSelector(
     (state: RootState) => state.notifcation.notifications
-  );
-
-  
+  )
 
   return (
     <>
       <PageTitle>AI Predictions</PageTitle>
-      <ul className="flex flex-col gap-2">
+      <ul className='flex flex-col gap-2'>
         {notifications.length <= 0 ? (
-          <p className="text-center">No Notifications</p>
+          <p className='text-center'>No Notifications</p>
         ) : (
           notifications.map(
             ({ id, message, timestamp, isCompleted, isRead }) => (
@@ -38,5 +34,5 @@ export default function Prediction() {
         )}
       </ul>
     </>
-  );
+  )
 }

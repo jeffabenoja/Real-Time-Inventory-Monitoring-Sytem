@@ -1,15 +1,14 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import PageTitle from "../components/common/utils/PageTitle"
 import { flattenObject } from "../utils/flattenObject"
 import Papa from "papaparse"
 import { getItemList } from "../api/services/item"
 import { getUserList } from "../api/services/admin"
+import usePageTitle from "../hooks/usePageTitle"
 import { getStockList } from "../api/services/stock"
 
 const ReportsPage = () => {
-  useEffect(() => {
-    document.title = "Reports | E&L Delicatessen"
-  }, [])
+  usePageTitle("Reports")
 
   const [selectedReport, setSelectedReport] = useState<string>("")
   const [isRangeChecked, setIsRangeChecked] = useState<boolean>(false)

@@ -1,7 +1,8 @@
 import Table from "../components/common/table/Table";
 import Spinner from "../components/common/utils/Spinner";
 import PageTitle from "../components/common/utils/PageTitle";
-import { useEffect, useState } from "react";
+import usePageTitle from "../hooks/usePageTitle";
+import { useState } from "react";
 import CustomModal from "../components/common/utils/CustomModal";
 import AddItems from "../components/modal/AddItems";
 import ProductColumns from "../components/common/table/ProductColumns";
@@ -25,9 +26,9 @@ const fields = [
 ];
 
 const ProductsPage = () => {
-  useEffect(() => {
-    document.title = "Products | E&L Delicatessen";
-  }, []);
+  
+
+  usePageTitle("Products")
 
   const [isOpenAdd, setIsOpenAdd] = useState<boolean>(false);
   const [isOpenUpdate, setIsOpenUpdate] = useState<boolean>(false);
