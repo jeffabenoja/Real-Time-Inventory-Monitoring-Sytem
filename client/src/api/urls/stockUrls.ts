@@ -8,3 +8,4 @@ export const ADD_STOCK_FOR_FINISHED_GOODS = `/v1/assemble`
 export const UPDATE_ASSEMBLE_STOCK = (transactionNumber: String) =>
   `/v1//assemble/${transactionNumber}`
 export const GET_ALL_STOCK_LIST = `/v1/stockInList`
+export const GET_ASSEMBLE_LIST = "/v1/assembleList"

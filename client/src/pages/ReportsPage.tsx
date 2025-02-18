@@ -5,12 +5,17 @@ import Papa from "papaparse"
 import { getItemList } from "../api/services/item"
 import { getUserList } from "../api/services/admin"
 import usePageTitle from "../hooks/usePageTitle"
-import { getStockList } from "../api/services/stock"
+import { getStockList, getAssembleList } from "../api/services/stock"
+import { getCustomerList } from "../api/services/customer"
+import { getInventoryList } from "../api/services/inventory"
+import { getUserGroupList } from "../api/services/admin"
+import { getSalesOrderList } from "../api/services/sales"
+import { showToast } from "../utils/Toast"
 
 const ReportsPage = () => {
   usePageTitle("Reports")
 
-  const [selectedReport, setSelectedReport] = useState<string>("")
+  const [selectedReport, setSelectedReport] = useState<string>("itemList")
   const [isRangeChecked, setIsRangeChecked] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [startDate, setStartDate] = useState<string>(
@@ -42,13 +47,17 @@ const ReportsPage = () => {
     itemList: getItemList,
     userList: getUserList,
     stockList: getStockList,
+    assembleList: getAssembleList,
+    customerList: getCustomerList,
+    inventoryList: getInventoryList,
+    userGroupList: getUserGroupList,
+    salesOrderList: getSalesOrderList,
   }
 
   const handleGenerateReport = async () => {
     const reportFunction = reports[selectedReport as keyof typeof reports]
 
     if (!reportFunction) {
-      console.log("Invalid report type selected")
       return
     }
 
@@ -59,7 +68,26 @@ const ReportsPage = () => {
 
       const flattenData = response.map((item: any) => flattenObject(item))
 
-      const csv = Papa.unparse(flattenData, {
+      const allDynamicKeys: any[] = [
+        ...new Set(
+          flattenData.flatMap((item: any) =>
+            Object.keys(item).filter((key: string) =>
+              key.startsWith("details_")
+            )
+          )
+        ),
+      ]
+
+      const adjustedFlattenData = flattenData.map((item: any) => {
+        allDynamicKeys.forEach((key: string) => {
+          if (!(key in item)) {
+            item[key] = null
+          }
+        })
+        return item
+      })
+
+      const csv = Papa.unparse(adjustedFlattenData, {
         header: true,
       })
 
@@ -72,7 +100,7 @@ const ReportsPage = () => {
       link.click()
       document.body.removeChild(link)
     } catch (error) {
-      console.log(error)
+      showToast.error("Error generating reports")
     }
     setIsLoading(false)
   }
@@ -81,7 +109,7 @@ const ReportsPage = () => {
     <>
       <PageTitle>Reports Page</PageTitle>
 
-      <div className='flex items-center justify-center w-full h-full'>
+      <div className='flex justify-center w-full mt-20'>
         <div className='p-4 rounded-2xl shadow-md w-full md:w-2/4 flex flex-col gap-2.5'>
           <h1 className='text-2xl mb-2 font-bold'>Generate Reports</h1>
           <hr style={{ borderColor: "#14aff1" }} />

@@ -6,6 +6,7 @@ import {
 import {
   GET_INVENTORY_PER_ITEM,
   GET_INVENTORY_LIST_BY_CATEGORY,
+  GET_INVENTORY_LIST,
 } from "../urls/inventoryUrls"
 
 export const getInventoryPerItem = async (
@@ -20,6 +21,12 @@ export const getInventoryByCategory = async (
   category: string
 ): Promise<InventoryPerCategory[]> => {
   const response = await apiClient.get(GET_INVENTORY_LIST_BY_CATEGORY(category))
+
+  return response.data
+}
+
+export const getInventoryList = async (): Promise<InventoryPerItemType[]> => {
+  const response = await apiClient.get(GET_INVENTORY_LIST)
 
   return response.data
 }

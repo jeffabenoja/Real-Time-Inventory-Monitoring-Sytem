@@ -4,6 +4,7 @@ import {
   GET_STOCK_LIST,
   GET_ALL_STOCK_LIST,
   UPDATE_STOCK,
+  GET_ASSEMBLE_LIST,
   ADD_STOCK_FOR_FINISHED_GOODS,
   GET_ASSEMBLE_LIST_PER_ITEM,
   UPDATE_ASSEMBLE_STOCK,
@@ -70,6 +71,12 @@ export const getStockListPerItem = async (
   id: string
 ): Promise<StockListType[]> => {
   const response = await apiClient.get(GET_STOCK_LIST(id))
+
+  return response.data
+}
+
+export const getAssembleList = async (): Promise<AssembleStock[]> => {
+  const response = await apiClient.get(GET_ASSEMBLE_LIST)
 
   return response.data
 }

@@ -3,3 +3,5 @@ export const GET_INVENTORY_PER_ITEM = (transactionNumber: String) =>
 
 export const GET_INVENTORY_LIST_BY_CATEGORY = (category: String) =>
   `/v1/inventoryList?itemType=${category}`
+
+export const GET_INVENTORY_LIST = "/v1/inventoryList"

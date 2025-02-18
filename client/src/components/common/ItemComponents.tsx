@@ -232,19 +232,29 @@ const ItemComponents = () => {
       return
     }
 
-    const invalidRawMaterials = rawMaterials.filter(
-      (material) => material.quantity === ""
-    )
+    const invalidRawMaterials = rawMaterials.map((material) => ({
+      quantity: material.quantity,
+    }))
 
-    if (rawMaterials.length > 0) {
-      if (invalidRawMaterials) {
-        showToast.error("Invalid Quantity")
-        return
-      }
-    } else {
+    if (rawMaterials.length === 0) {
       showToast.error("Please Select Materials")
       return
     }
+
+    // Check if any quantity is empty or 0
+    const invalidQuantity = invalidRawMaterials.some(
+      (material) =>
+        material.quantity === "" ||
+        material.quantity === null ||
+        material.quantity === "0"
+    )
+
+    if (invalidQuantity) {
+      showToast.error("Invalid Quantity")
+      return
+    }
+
+    console.log(invalidRawMaterials)
 
     const totalCost = rawMaterials.reduce((acc, material) => {
       const cost = material?.rawMaterial?.cost ?? 0
