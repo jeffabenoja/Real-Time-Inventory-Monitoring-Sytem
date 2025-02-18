@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { UserLogin } from "../../type/userType";
 import { useLoginUser } from "../../hooks/user/useLoginUser";
 import banner from "../../assets/banner.jpg";
 
 const Login = () => {
+  useEffect(() => {
+    document.title = "Login | E&L Delicatessen";
+  }, [])
+
   const [login, setLogin] = useState<UserLogin>({
     usercode: "",
     password: "",
@@ -35,7 +39,7 @@ const Login = () => {
     <div className="flex relative p-10 md:p-0 h-screen w-screen justify-center ">
       <div className="lg:hidden absolute top-10  left-1/2 transform -translate-x-1/2">
         <div className="text-center font-heading">
-        <h1 className="text-5xl flex items-center gap-2 text-primary">E&L <span className="text-2xl bot border-y-2 border-primary">DELICATESSEN</span></h1>
+        <h1 className="text-5xl flex items-center gap-2 text-primary">E&L DELICATESSEN</h1>
         </div>
       </div>
       <div className="flex flex-col justify-center flex-1 lg:px-10">
@@ -97,7 +101,7 @@ const Login = () => {
       <div className="hidden lg:block flex-1 relative">
         <img src={banner} alt="Banner" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-b from-primary/90 via-primary/60 to-primary/95 p-5 lg:flex flex-col justify-between text-white font-heading">
-          <h1 className="text-5xl flex items-center gap-2">E&L <span className="text-2xl bot border-y-2 border-white">DELICATESSEN</span></h1>
+          <h1 className="text-5xl flex items-center gap-2">E&L DELICATESSEN</h1>
           <h3 className="text-2xl">
             Ensuring quality ingredients, seamless inventory, and strong
             supplier partnerships with integrity and innovation.

@@ -4,6 +4,7 @@
 // import { MdOutlineEmail } from "react-icons/md"
 // import Spinner from "../components/common/Spinner"
 // import { useQuery } from "@tanstack/react-query"
+import { useEffect } from "react";
 import PageTitle from "../components/common/utils/PageTitle"
 
 // const columnHelper = createColumnHelper<any>()
@@ -65,7 +66,10 @@ const OverviewPage = () => {
   //     return response.json()
   //   },
   // })
-
+  useEffect(() => {
+      document.title = "Overview | E&L Delicatessen";
+    }, []);
+  
   return (
     <>
       <PageTitle>Overview Page</PageTitle>
