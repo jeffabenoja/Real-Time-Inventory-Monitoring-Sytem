@@ -10,13 +10,15 @@ import { getCustomerList } from "../api/services/customer"
 import { getInventoryList } from "../api/services/inventory"
 import { getUserGroupList } from "../api/services/admin"
 import { getSalesOrderList } from "../api/services/sales"
+import { FaChevronUp, FaChevronDown } from "react-icons/fa"
 import { showToast } from "../utils/Toast"
 
 const ReportsPage = () => {
   usePageTitle("Reports")
 
-  const [selectedReport, setSelectedReport] = useState<string>("itemList")
+  const [selectedReport, setSelectedReport] = useState<string>("")
   const [isRangeChecked, setIsRangeChecked] = useState<boolean>(false)
+  const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [startDate, setStartDate] = useState<string>(
     `${new Date().toISOString().split("T")[0]}`
@@ -25,8 +27,20 @@ const ReportsPage = () => {
     `${new Date().toISOString().split("T")[0]}`
   )
 
-  const handleReportChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedReport(event.target.value)
+  const options = [
+    "ITEM LIST",
+    "USER LIST",
+    "ASSEMBLE LIST",
+    "CUSTOMER LIST",
+    "STOCK-IN LIST",
+    "INVENTORY LIST",
+    "USER GROUP LIST",
+    "SALES ORDER LIST",
+  ]
+
+  const handleSelect = (option: string) => {
+    setSelectedReport(option)
+    setIsOpen(false)
   }
 
   const handleRangeToggle = () => {
@@ -115,23 +129,35 @@ const ReportsPage = () => {
           <hr style={{ borderColor: "#14aff1" }} />
           <div className='flex flex-col gap-3'>
             <p className='text-base px-2'>Type of Reports</p>
-            <select
-              id='reports'
-              name='reports'
-              value={selectedReport}
-              onChange={handleReportChange}
-              className='w-full p-2 rounded-md border cursor-pointer outline-transparent bg-transparent text-xs
-                focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary'
-            >
-              <option value='itemList'>ITEM LIST</option>
-              <option value='userList'>USER LIST</option>
-              <option value='stockList'>STOCK LIST</option>
-              <option value='assembleList'>ASSEMBLE LIST</option>
-              <option value='customerList'>CUSTOMER LIST</option>
-              <option value='inventoryList'>INVENTORY LIST</option>
-              <option value='userGroupList'>USER GROUP LIST</option>
-              <option value='salesOrderList'>SALES ORDER LIST</option>
-            </select>
+            <div className='relative'>
+              <div
+                onClick={() => setIsOpen(!isOpen)}
+                className='w-full p-2 rounded-md border cursor-pointer outline-transparent bg-transparent text-xs
+          focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary flex items-center justify-between'
+              >
+                <span>{selectedReport || "Select a report"}</span>
+                {isOpen ? <FaChevronUp /> : <FaChevronDown />}
+              </div>
+
+              {isOpen && (
+                <div
+                  className={`${
+                    isRangeChecked ? "max-h-[120px]" : "max-h-[80px]"
+                  } absolute w-full bg-white border border-gray-300 rounded-md overflow-y-auto mt-1 scrollbar`}
+                  style={{ zIndex: 10 }}
+                >
+                  {options.map((option) => (
+                    <div
+                      key={option}
+                      onClick={() => handleSelect(option)}
+                      className='p-2 cursor-pointer hover:bg-gray-200'
+                    >
+                      {option}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
           <div className='flex flex-col gap-3'>
             <div className='flex items-center justify-between gap-2'>
