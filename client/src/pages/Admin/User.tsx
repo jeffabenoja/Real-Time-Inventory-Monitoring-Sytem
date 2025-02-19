@@ -96,7 +96,7 @@ export default function Users() {
     onDelete: handleDeleteUser,
   })
 
-  const { data, isLoading } = useQuery({
+  const { data, isFetching } = useQuery({
     queryFn: getUserList,
     queryKey: ["admin", "getUsers"],
     refetchOnWindowFocus: false
@@ -116,7 +116,7 @@ export default function Users() {
 
   return (
     <>
-      {isLoading ? (
+      {isFetching ? (
         <Spinner />
       ) : (
         <Table

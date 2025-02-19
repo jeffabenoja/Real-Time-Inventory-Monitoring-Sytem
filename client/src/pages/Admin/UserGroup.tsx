@@ -82,7 +82,7 @@ export default function UserGroups() {
     onDelete: handleDeletGroup,
   })
 
-  const { data, isLoading } = useQuery({
+  const { data, isFetching } = useQuery({
     queryFn: getUserGroupList,
     queryKey: ["admin", "getUserGroups"],
     refetchOnWindowFocus: false
@@ -100,7 +100,7 @@ export default function UserGroups() {
 
   return (
     <>
-      {isLoading ? (
+      {isFetching ? (
         <Spinner />
       ) : (
         <Table
