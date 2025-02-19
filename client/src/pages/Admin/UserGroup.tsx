@@ -85,6 +85,7 @@ export default function UserGroups() {
   const { data, isLoading } = useQuery({
     queryFn: getUserGroupList,
     queryKey: ["admin", "getUserGroups"],
+    refetchOnWindowFocus: false
   })
 
   let tableData = useSelector((state: RootState) => state.admin.userGroup)

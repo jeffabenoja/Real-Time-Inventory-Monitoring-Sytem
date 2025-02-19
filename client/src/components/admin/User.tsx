@@ -36,7 +36,12 @@ const schema = z.object({
     .string()
     .min(1, "Required Field")
     .email({ message: "Please enter a valid email address" }),
-  password: z.string().min(1, "Required Field"),
+  password: z
+    .string()
+    .min(8, "Must be at least 8 characters")
+    .refine((val) => /^\S+$/.test(val), {
+      message: "No whitespace allowed",
+    }),
 });
 
 type FormFields = z.infer<typeof schema>;
@@ -52,7 +57,7 @@ export default function UserForm({ close, defaultValue, userList }: Props) {
       id: defaultValue?.userGroup?.id?.toString(),
     },
   };
-  
+
   const {
     handleSubmit,
     register,
@@ -102,7 +107,7 @@ export default function UserForm({ close, defaultValue, userList }: Props) {
       ...data,
       status: "ACTIVE",
     };
-    console.log(user)
+    console.log(user);
     if (!defaultValue) {
       await addUser(user);
     } else {

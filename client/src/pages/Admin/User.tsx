@@ -99,6 +99,7 @@ export default function Users() {
   const { data, isLoading } = useQuery({
     queryFn: getUserList,
     queryKey: ["admin", "getUsers"],
+    refetchOnWindowFocus: false
   })
 
   let tableData = useSelector((state: RootState) => {

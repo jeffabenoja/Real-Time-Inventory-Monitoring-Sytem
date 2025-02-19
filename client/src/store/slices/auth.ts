@@ -20,7 +20,11 @@ const authSlice = createSlice({
       state.user = null
     },
     updateCurrentUser(state, action) {
-      state.user = action.payload
+      state.user = {
+        ...state.user,
+        ...action.payload,
+        loggedInAt: state.user?.loggedInAt,
+      };
     }
   },
 })

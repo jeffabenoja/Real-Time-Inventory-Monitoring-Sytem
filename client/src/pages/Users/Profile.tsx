@@ -99,7 +99,7 @@ export default function Profile() {
     groupList.map((item: UserGroup) => ({ code: item.code, id: item.id }));
 
   const success = (data: User) => {
-    const { id, ...user } = data;
+    const { id, password, ...user } = data;
     console.log(user);
     const transformedUser = {
       ...user,
