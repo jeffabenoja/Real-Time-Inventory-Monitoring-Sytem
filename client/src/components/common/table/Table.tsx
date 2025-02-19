@@ -201,7 +201,7 @@ const Table: React.FC<TableProps> = ({
                     <div
                       {...{
                         className: header.column.getCanSort()
-                          ? "flex items-center cursor-pointer select-none"
+                          ? "flex items-center justify-center cursor-pointer select-none"
                           : "",
                         onClick: header.column.getToggleSortingHandler(),
                       }}
