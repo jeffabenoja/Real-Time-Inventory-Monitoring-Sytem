@@ -169,9 +169,12 @@ const SalesOrderComponent: React.FC<SalesOrderProps> = ({ close }) => {
     const usercode = user.usercode
     const token = user.password
 
-    createSalesOrder({ salesOrder, usercode, token })
-
-    close()
+    if (token !== undefined) {
+      createSalesOrder({ salesOrder, usercode, token })
+      close()
+    } else {
+      showToast.error("Unauthorized user to create orders")
+    }
   }
 
   return (

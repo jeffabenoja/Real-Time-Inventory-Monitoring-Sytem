@@ -266,7 +266,7 @@ const UpdateSalesOrder: React.FC<UpdateSalesOrderProps> = ({ row, close }) => {
       })),
     }
 
-    if (row?.status === "COMPLETED" || "completed") {
+    if (row?.status === "COMPLETED" || row?.status === "completed") {
       showToast.error("Sales status is already completed!")
     } else {
       updateSalesOrder(updatedOrder)
