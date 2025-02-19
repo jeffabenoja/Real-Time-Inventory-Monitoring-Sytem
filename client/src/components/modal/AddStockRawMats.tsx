@@ -73,7 +73,7 @@ const AddStocksRawMats: React.FC<AddStockProps> = ({
     }
 
     const usercode = user.usercode
-    const token = user.password
+    const token = user.password!
 
     addStock({ stock, usercode, token })
 

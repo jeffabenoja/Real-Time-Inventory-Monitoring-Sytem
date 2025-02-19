@@ -101,7 +101,7 @@ const AddStocksFinishedProduct: React.FC<AddStockProps> = ({
     }
 
     const usercode = user.usercode
-    const token = user.password
+    const token = user.password!
 
     addStockFinishGoods({ assembleStock, usercode, token })
 

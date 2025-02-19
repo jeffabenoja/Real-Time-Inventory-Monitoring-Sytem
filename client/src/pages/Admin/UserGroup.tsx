@@ -15,7 +15,7 @@ import CustomModal from "../../components/common/utils/CustomModalV2"
 import UserGroup from "../../components/admin/UserGroup"
 import { Delete } from "../../components/common/utils/Delete"
 import { showToast } from "../../utils/Toast"
-import { extractErrorMessage } from "../../utils/extractErrorMessage"
+// import { extractErrorMessage } from "../../utils/extractErrorMessage"
 
 const fields = [
   { key: "code", label: "Group Description", classes: "uppercase" },

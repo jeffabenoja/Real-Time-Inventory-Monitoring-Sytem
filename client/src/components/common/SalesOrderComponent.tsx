@@ -167,7 +167,7 @@ const SalesOrderComponent: React.FC<SalesOrderProps> = ({ close }) => {
     }
 
     const usercode = user.usercode
-    const token = user.password
+    const token = user.password!
 
     createSalesOrder({ salesOrder, usercode, token })
 

@@ -1,10 +1,10 @@
 import timeAgo from "../../utils/timeAgo";
 import { Notification } from "../../type/notifications";
-import { useState } from "react";
-import CustomModal from "../common/utils/CustomModal";
+// import { useState } from "react";
+// import CustomModal from "../common/utils/CustomModal";
 
 export default function Item({ message, timestamp }: Notification) {
-  const [openModal, setOpenModal] = useState(false);
+  // const [openModal, setOpenModal] = useState(false);
 
   return (
     <>
