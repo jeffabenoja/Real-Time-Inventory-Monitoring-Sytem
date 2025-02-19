@@ -140,7 +140,7 @@ export default function Users() {
 
       {isUpdateUser && (
         <CustomModal toggleModal={handleUpdateUserToggle}>
-          <h2 className='text-center text-2xl'>Update User Group</h2>
+          <h2 className='text-center text-2xl'>Update User</h2>
           <User
             close={() => setIsUpdateUser(false)}
             defaultValue={defaultValues}
