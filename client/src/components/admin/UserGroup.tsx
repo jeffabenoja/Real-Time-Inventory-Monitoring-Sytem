@@ -27,7 +27,9 @@ interface Props {
 }
 
 const schema = z.object({
-  code: z.string().min(1, "Required Field"),
+  code: z.string().nonempty("Required Field").min(5, "must be at least 5 characters").refine((val) => /^\S+$/.test(val), {
+    message: "No whitespace allowed",
+  }),
   isAdmin: z.string().min(1, "Required Field"),
   isCreator: z.string().min(1, "Required Field"),
   isEditor: z.string().min(1, "Required Field"),

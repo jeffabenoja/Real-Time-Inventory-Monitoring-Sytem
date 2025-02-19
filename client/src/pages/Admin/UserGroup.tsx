@@ -15,17 +15,13 @@ import CustomModal from "../../components/common/utils/CustomModalV2"
 import UserGroup from "../../components/admin/UserGroup"
 import { Delete } from "../../components/common/utils/Delete"
 import { showToast } from "../../utils/Toast"
+import { extractErrorMessage } from "../../utils/extractErrorMessage"
 
 const fields = [
   { key: "code", label: "Group Description", classes: "uppercase" },
   { key: "isAdmin", label: "Admin", classes: "capitalize" },
   { key: "isCreator", label: "Creator", classes: "capitalize" },
   { key: "isEditor", label: "Editor", classes: "capitalize" },
-  {
-    key: "status",
-    label: "Status",
-    classes: "lowercase",
-  },
 ]
 
 export default function UserGroups() {
@@ -80,6 +76,7 @@ export default function UserGroups() {
     fields,
     onUpdate: handleUpdateGroup,
     onDelete: handleDeletGroup,
+    entity: "Group"
   })
 
   const { data, isFetching } = useQuery({
