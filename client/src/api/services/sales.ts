@@ -6,14 +6,30 @@ import {
 } from "../urls/salesOrderUrls"
 import { SalesOrderType, SalesOrderCreateType } from "../../type/salesType"
 
+interface CreateSalesOrderTypeWithAuth {
+  salesOrder: SalesOrderCreateType
+  usercode: string
+  token: string
+}
+
 export const getSalesOrderList = async (): Promise<SalesOrderType[]> => {
   const response = await apiClient.get(GET_SALES_ORDER)
 
   return response.data
 }
 
-export const createSalesOrder = async (item: SalesOrderCreateType) => {
-  const response = await apiClient.post(CREATE_SALES_ORDER, item)
+export const createSalesOrder = async ({
+  salesOrder,
+  usercode,
+  token,
+}: CreateSalesOrderTypeWithAuth) => {
+  const response = await apiClient.post(CREATE_SALES_ORDER, salesOrder, {
+    headers: {
+      usercode: usercode,
+      token: token,
+      "Content-Type": "application/json",
+    },
+  })
 
   return response.data
 }

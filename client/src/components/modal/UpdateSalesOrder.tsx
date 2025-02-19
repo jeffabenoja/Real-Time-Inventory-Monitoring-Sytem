@@ -266,10 +266,12 @@ const UpdateSalesOrder: React.FC<UpdateSalesOrderProps> = ({ row, close }) => {
       })),
     }
 
-    updateSalesOrder(updatedOrder)
-    console.log(JSON.stringify(updatedOrder, null, 2))
-
-    close()
+    if (row?.status === "COMPLETED" || "completed") {
+      showToast.error("Sales status is already completed!")
+    } else {
+      updateSalesOrder(updatedOrder)
+      close()
+    }
   }
 
   return (
@@ -410,7 +412,11 @@ const UpdateSalesOrder: React.FC<UpdateSalesOrderProps> = ({ row, close }) => {
                   name='status'
                   value={status}
                   onChange={handleChange}
-                  disabled={status === "COMPLETED" ? true : false}
+                  disabled={
+                    row?.status === "COMPLETED" || row?.status === "completed"
+                      ? true
+                      : false
+                  }
                   className={`${
                     invalidFields.includes("status") && "border-red-900"
                   }  w-full p-2 rounded-md border cursor-pointer outline-transparent bg-transparent text-xs

@@ -12,6 +12,7 @@ export interface DetailsType {
   id: number
   item: ItemType
   orderQuantity: number
+  stockQuantity?: number
   itemPrice: number
   amount: number
 }

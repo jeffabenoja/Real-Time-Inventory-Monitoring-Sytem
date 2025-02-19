@@ -9,6 +9,14 @@ import { showToast } from "../../utils/Toast"
 import ItemSalesOrder from "./ItemSalesOrder"
 import DisplaySalesOrderItems from "./DisplaySalesOrderItems"
 import useSalesOrder from "../../hooks/sales/useSalesOrder"
+import { User } from "../../type/userType"
+import { useSelector } from "react-redux"
+
+interface UserAuthenticationType {
+  auth: {
+    user: User
+  }
+}
 
 export interface DetailsProduct {
   id?: string
@@ -23,6 +31,7 @@ interface SalesOrderProps {
 }
 
 const SalesOrderComponent: React.FC<SalesOrderProps> = ({ close }) => {
+  const { user } = useSelector((state: UserAuthenticationType) => state.auth)
   const [isOpenModal, setIsOpenModal] = useState<boolean>()
   const [openCustomerModal, setOpenCustomerModal] = useState<boolean>()
   const [productItems, setProductItems] = useState<DetailsProduct[]>([])
@@ -157,7 +166,10 @@ const SalesOrderComponent: React.FC<SalesOrderProps> = ({ close }) => {
       })),
     }
 
-    createSalesOrder(salesOrder)
+    const usercode = user.usercode
+    const token = user.password
+
+    createSalesOrder({ salesOrder, usercode, token })
 
     close()
   }
