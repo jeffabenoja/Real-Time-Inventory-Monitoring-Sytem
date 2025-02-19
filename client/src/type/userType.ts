@@ -15,7 +15,7 @@ export interface UserLogin {
 
 export interface User {
   id?: string
-  password: string
+  password?: string
   usercode: string
   first_name: string
   last_name: string

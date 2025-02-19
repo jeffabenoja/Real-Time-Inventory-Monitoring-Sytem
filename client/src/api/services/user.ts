@@ -7,3 +7,9 @@ export const loginUser = async (credentials: UserLogin) => {
 
   return response.data
 }
+
+export const getUserDetails = async (usercode: string) => {
+  const response = await apiClient.get(loginUrls.GET_USER_DETAILS(usercode))
+
+  return response.data
+}
