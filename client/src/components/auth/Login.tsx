@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { UserLogin } from "../../type/userType";
 import { useLoginUser } from "../../hooks/user/useLoginUser";
 import banner from "../../assets/banner.jpg";
-import { extractErrorMessage } from "../../utils/extractErrorMessage";
 
 const Login = () => {
   useEffect(() => {
