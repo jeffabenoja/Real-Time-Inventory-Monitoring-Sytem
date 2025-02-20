@@ -139,7 +139,7 @@ const ViewSalesOrder: React.FC<ViewSalesOrderProps> = ({ row }) => {
 
           <div className='flex items-center gap-2 flex-1 '>
             <label htmlFor='remarks' className='text-sm '>
-              Description:
+              Remarks:
             </label>
             <div className='flex-1'>
               <input

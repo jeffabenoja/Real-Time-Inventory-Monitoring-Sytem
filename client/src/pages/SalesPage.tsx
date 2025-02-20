@@ -11,6 +11,7 @@ import Table from "../components/common/table/Table"
 import CustomModal from "../components/common/utils/CustomModal"
 import SalesOrderComponent from "../components/common/SalesOrderComponent"
 import ViewSalesOrder from "../components/modal/ViewSalesOrder"
+import { CiEdit } from "react-icons/ci"
 import UpdateSalesOrder from "../components/modal/UpdateSalesOrder"
 
 const fields = [
@@ -22,9 +23,11 @@ const fields = [
 const Columns = ({
   fields,
   onView,
+  onUpdate,
 }: {
   fields: { key: string; label: string; classes?: string }[]
   onView: (item: SalesOrderType) => void
+  onUpdate: (item: SalesOrderType) => void
 }) => {
   const columnHelper = createColumnHelper<any>()
 
@@ -87,6 +90,15 @@ const Columns = ({
           >
             <MdOutlineRemoveRedEye size={20} />
           </button>
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              onUpdate(info.row.original)
+            }}
+            className='py-2 px-4 bg-gray-200 hover:bg-gray-300 hover:text-blue-700 rounded-md shadow-md'
+          >
+            <CiEdit size={20} />
+          </button>
         </div>
       ),
       header: () => <span className='text-center truncate'>Actions</span>,
@@ -127,6 +139,7 @@ const SalesPage = () => {
   const columns = Columns({
     fields,
     onView: handleViewSalesOrder,
+    onUpdate: handleOpenModalToggle,
   })
   if (isError) {
     return (
