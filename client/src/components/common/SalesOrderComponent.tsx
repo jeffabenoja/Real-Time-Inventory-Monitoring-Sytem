@@ -323,7 +323,7 @@ const SalesOrderComponent: React.FC<SalesOrderProps> = ({ close }) => {
 
             {openCustomerModal && (
               <CustomModal
-                classes='h-[420px] md:p-8 w-[343px] md:w-[860px]'
+                classes='md:h-[420px] md:p-8 w-full h-full md:w-[860px]'
                 toggleModal={handleCustomerToggle}
               >
                 <SalesOrderCustomer

@@ -322,7 +322,7 @@ const UpdateSalesOrder: React.FC<UpdateSalesOrderProps> = ({ row, close }) => {
                   value={customerDetails.contactPerson}
                   readOnly
                   autoComplete='off'
-                  className={`p-2 rounded-md border outline-transparent bg-transparent text-xs
+                  className={`w-full p-2 rounded-md border outline-transparent bg-transparent text-xs
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
                 />
               </div>
@@ -339,7 +339,7 @@ const UpdateSalesOrder: React.FC<UpdateSalesOrderProps> = ({ row, close }) => {
                   value={customerDetails.contactNumber}
                   readOnly
                   autoComplete='off'
-                  className={`p-2 rounded-md border outline-transparent bg-transparent text-xs
+                  className={`w-full p-2 rounded-md border outline-transparent bg-transparent text-xs
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
                 />
               </div>
@@ -362,9 +362,12 @@ const UpdateSalesOrder: React.FC<UpdateSalesOrderProps> = ({ row, close }) => {
               />
             </div>
           </div>
-          <div className='flex gap-5 items-center justify-between'>
+          <div className='flex flex-col md:flex-row gap-5 md:items-center md:justify-between'>
             <div className='flex items-center gap-2 '>
-              <label htmlFor='orderDate' className='text-sm '>
+              <label
+                htmlFor='orderDate'
+                className='text-sm w-[125px] md:w-[80px]'
+              >
                 Order Date:
               </label>
               <div className='flex-1'>
@@ -384,7 +387,10 @@ const UpdateSalesOrder: React.FC<UpdateSalesOrderProps> = ({ row, close }) => {
             </div>
 
             <div className='flex items-center gap-2 flex-1 '>
-              <label htmlFor='remarks' className='text-sm '>
+              <label
+                htmlFor='remarks'
+                className='text-sm w-[125px] md:w-[80px]'
+              >
                 Remarks:
               </label>
               <div className='flex-1'>
@@ -403,7 +409,7 @@ const UpdateSalesOrder: React.FC<UpdateSalesOrderProps> = ({ row, close }) => {
             </div>
 
             <div className='flex items-center gap-2 '>
-              <label htmlFor='status' className='text-sm '>
+              <label htmlFor='status' className='text-sm w-[125px] md:w-[80px]'>
                 Status:
               </label>
               <div className='flex-1'>

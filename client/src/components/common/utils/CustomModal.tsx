@@ -25,7 +25,7 @@ const CustomModal: React.FC<CustomModalProps> = ({
         onClick={(e: MouseEvent<HTMLDivElement>) => e.stopPropagation()}
         className={`${
           classes ? classes : "md:p-8 w-[343px] md:w-[480px]"
-        } p-6 bg-white dark:bg-secondary-600 rounded-md overflow-hidden overflow-y-auto  scrollbar`}
+        } p-6 bg-white dark:bg-secondary-600 md:rounded-md overflow-hidden overflow-y-auto  scrollbar`}
       >
         {/* Content */}
         {children}
