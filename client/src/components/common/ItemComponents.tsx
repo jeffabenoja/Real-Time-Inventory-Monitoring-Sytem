@@ -76,7 +76,7 @@ const ItemColumns = ({
     ),
     columnHelper.accessor("quantity", {
       id: "qty",
-      header: () => <span className='truncate'>Quantity</span>,
+      header: () => <span className='truncate'>Used Quantity</span>,
       cell: ({ row }) => {
         const handleQuantityChange = (
           e: React.ChangeEvent<HTMLInputElement>
@@ -392,7 +392,7 @@ const ItemComponents = () => {
                   >
                     <option value='kg'>KG</option>
                     <option value='pcs'>PCS</option>
-                    <option value='pcs'>PACK</option>
+                    <option value='pack'>PACK</option>
                   </select>
                 </td>
                 <td className='hover:bg-gray-50 p-2 whitespace-nowrap text-sm text-gray-900 cursor-pointer text-center'>

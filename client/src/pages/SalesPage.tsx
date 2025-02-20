@@ -2,7 +2,7 @@ import PageTitle from "../components/common/utils/PageTitle"
 import { createColumnHelper } from "@tanstack/react-table"
 import usePageTitle from "../hooks/usePageTitle"
 import { useState } from "react"
-import { MdOutlineRemoveRedEye } from "react-icons/md"
+import { IoEyeOutline } from "react-icons/io5"
 import { DetailsType, SalesOrderType } from "../type/salesType"
 import useSalesOrder from "../hooks/sales/useSalesOrder"
 import { FaExclamationTriangle } from "react-icons/fa"
@@ -86,16 +86,16 @@ const Columns = ({
               e.stopPropagation()
               onView(info.row.original)
             }}
-            className='py-2 px-4 bg-gray-200 hover:bg-gray-300 hover:text-primary rounded-md shadow-md'
+            className='lg:py-2 lg:px-4 p-2 bg-gray-200 hover:bg-gray-300 hover:text-primary rounded-md shadow-md'
           >
-            <MdOutlineRemoveRedEye size={20} />
+            <IoEyeOutline size={20} />
           </button>
           <button
             onClick={(e) => {
               e.stopPropagation()
               onUpdate(info.row.original)
             }}
-            className='py-2 px-4 bg-gray-200 hover:bg-gray-300 hover:text-blue-700 rounded-md shadow-md'
+            className='lg:py-2 lg:px-4 p-2 bg-gray-200 hover:bg-gray-300 hover:text-blue-700 rounded-md shadow-md'
           >
             <CiEdit size={20} />
           </button>
@@ -139,7 +139,7 @@ const SalesPage = () => {
   const columns = Columns({
     fields,
     onView: handleViewSalesOrder,
-    onUpdate: handleOpenModalToggle,
+    onUpdate: handleUpdate,
   })
   if (isError) {
     return (
@@ -174,7 +174,6 @@ const SalesPage = () => {
           add={true}
           view={false}
           handleAdd={handleSalesOrderModalToggle}
-          handleUpdate={handleUpdate}
         />
       )}
 

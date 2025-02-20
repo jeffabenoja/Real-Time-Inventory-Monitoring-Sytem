@@ -4,6 +4,7 @@ import { IoIosAdd } from "react-icons/io"
 import { IoEyeOutline } from "react-icons/io5"
 import { ItemType } from "../../../type/itemType"
 import { MdOutlineInventory } from "react-icons/md"
+import Tooltip from "../Tooltip"
 
 // Define a reusable function to generate columns
 const ProductColumns = ({
@@ -48,47 +49,54 @@ const ProductColumns = ({
       cell: (info) => (
         <div className='flex gap-2 items-center justify-center w-[150px] lg:w-full'>
           {/* View Button */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              onView(info.row.original)
-            }}
-            className='lg:py-2 lg:px-4 p-2 bg-gray-200 hover:bg-gray-300 hover:text-primary rounded-md shadow-md'
-          >
-            <IoEyeOutline size={20} />
-          </button>
-
+          <Tooltip text='View Stock'>
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                onView(info.row.original)
+              }}
+              className='lg:py-2 lg:px-4 p-2 bg-gray-200 hover:bg-gray-300 hover:text-primary rounded-md shadow-md'
+            >
+              <IoEyeOutline size={20} />
+            </button>
+          </Tooltip>
           {/* Add Button */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              onAdd(info.row.original)
-            }}
-            className='lg:py-2 lg:px-4 p-2 bg-gray-200 hover:bg-gray-300 hover:text-primary rounded-md shadow-md'
-          >
-            <IoIosAdd size={20} />
-          </button>
+          <Tooltip text='Add Stock'>
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                onAdd(info.row.original)
+              }}
+              className='lg:py-2 lg:px-4 p-2 bg-gray-200 hover:bg-gray-300 hover:text-primary rounded-md shadow-md'
+            >
+              <IoIosAdd size={20} />
+            </button>
+          </Tooltip>
 
           {/* Update Button */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              onUpdate(info.row.original)
-            }}
-            className='lg:py-2 lg:px-4 p-2 bg-gray-200 hover:bg-gray-300 hover:text-blue-700 rounded-md shadow-md'
-          >
-            <CiEdit size={20} />
-          </button>
+          <Tooltip text='Update Product'>
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                onUpdate(info.row.original)
+              }}
+              className='lg:py-2 lg:px-4 p-2 bg-gray-200 hover:bg-gray-300 hover:text-blue-700 rounded-md shadow-md'
+            >
+              <CiEdit size={20} />
+            </button>
+          </Tooltip>
 
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              onApproval(info.row.original)
-            }}
-            className='lg:py-2 lg:px-4 p-2 bg-gray-200 hover:bg-gray-300 hover:text-blue-700 rounded-md shadow-md'
-          >
-            <MdOutlineInventory size={20} />
-          </button>
+          <Tooltip text='Stock Approval'>
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                onApproval(info.row.original)
+              }}
+              className='lg:py-2 lg:px-4 p-2 bg-gray-200 hover:bg-gray-300 hover:text-blue-700 rounded-md shadow-md'
+            >
+              <MdOutlineInventory size={20} />
+            </button>
+          </Tooltip>
         </div>
       ),
       header: () => <span className='text-center truncate'>Actions</span>,

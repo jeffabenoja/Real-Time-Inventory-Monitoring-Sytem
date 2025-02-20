@@ -11,6 +11,7 @@ export interface TableProps {
   materials?: boolean
   add: boolean
   view: boolean
+  toolTip?: string
   openModal?: () => void
   handleExport?: () => void
   handleAdd?: () => void

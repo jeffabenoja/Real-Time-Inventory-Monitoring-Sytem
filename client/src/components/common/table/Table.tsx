@@ -14,6 +14,7 @@ import { IoEyeOutline } from "react-icons/io5"
 import { CiExport, CiImport } from "react-icons/ci"
 import { FaChevronUp, FaChevronDown } from "react-icons/fa"
 import { LuArrowUpDown } from "react-icons/lu"
+import Tooltip from "../Tooltip"
 import {
   FiChevronsLeft,
   FiChevronsRight,
@@ -34,6 +35,7 @@ const Table: React.FC<TableProps> = ({
   withSubmit,
   materials,
   add,
+  toolTip,
   view,
   handleAdd,
   handleImport,
@@ -172,8 +174,14 @@ const Table: React.FC<TableProps> = ({
         </div>
 
         {view && (
-          <div className='ml-2'>
-            <Buttons label={"View"} Icon={IoEyeOutline} onClick={handleView} />
+          <div className='ml-2 text-center'>
+            <Tooltip text={toolTip || ""}>
+              <Buttons
+                label={"View"}
+                Icon={IoEyeOutline}
+                onClick={handleView}
+              />
+            </Tooltip>
           </div>
         )}
 

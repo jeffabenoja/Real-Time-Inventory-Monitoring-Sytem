@@ -373,7 +373,7 @@ const UpdateSalesOrder: React.FC<UpdateSalesOrderProps> = ({ row, close }) => {
               <div className='flex-1'>
                 <input
                   id='orderDate'
-                  type='text'
+                  type='date'
                   name='orderDate'
                   value={orderDate}
                   onChange={handleChange}

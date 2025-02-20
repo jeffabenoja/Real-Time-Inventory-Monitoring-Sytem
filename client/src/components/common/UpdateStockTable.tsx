@@ -8,6 +8,7 @@ import { StockListType } from "../../type/stockType"
 import CustomModal from "./utils/CustomModal"
 import UpdateStockRawMats from "../modal/UpdateStockRawMats"
 import { CiEdit } from "react-icons/ci"
+import Tooltip from "./Tooltip"
 const fields = [
   { key: "transactionNo", label: "Transaction Number", classes: "uppercase" },
   { key: "batchNo", label: "Batch Number", classes: "uppercase" },
@@ -45,15 +46,17 @@ const Columns = ({
       cell: (info) => (
         <div className='flex gap-2 items-center justify-center w-[150px] lg:w-full'>
           {/* Update Button */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              onUpdate(info.row.original)
-            }}
-            className='py-2 px-4 bg-gray-200 hover:bg-gray-300 hover:text-blue-700 rounded-md shadow-md'
-          >
-            <CiEdit size={20} />
-          </button>
+          <Tooltip text='Update Transaction'>
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                onUpdate(info.row.original)
+              }}
+              className='py-2 px-4 bg-gray-200 hover:bg-gray-300 hover:text-blue-700 rounded-md shadow-md'
+            >
+              <CiEdit size={20} />
+            </button>
+          </Tooltip>
         </div>
       ),
       header: () => <span className='text-center truncate'>Actions</span>,

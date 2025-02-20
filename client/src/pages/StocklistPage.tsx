@@ -22,7 +22,7 @@ const fields = [
   { key: "brand", label: "Brand", classes: "uppercase" },
   { key: "unit", label: "Unit", classes: "lowercase" },
   { key: "reorderPoint", label: "Stock Level" },
-  { key: "status", label: "Status", classes: "lowercase" },
+  { key: "status", label: "Status", classes: "uppercase" },
 ]
 
 const StocklistPage = () => {
@@ -131,6 +131,7 @@ const StocklistPage = () => {
           withExport={true}
           add={true}
           view={true}
+          toolTip='Inventory'
           handleAdd={handleModalAdd}
           handleImport={handleModalImport}
           handleUpdate={handleUpdate}

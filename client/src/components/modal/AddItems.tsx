@@ -237,7 +237,7 @@ const AddItems: React.FC<AddItemsProps> = ({
                 <option value='pcs' className='hover:bg-primary'>
                   pcs
                 </option>
-                <option value='pcs' className='hover:bg-primary'>
+                <option value='pack' className='hover:bg-primary'>
                   pack
                 </option>
               </select>
