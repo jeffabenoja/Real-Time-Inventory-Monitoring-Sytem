@@ -28,12 +28,6 @@ const fields = [
   { key: "last_name", label: "Last Name", classes: "capitalize" },
   { key: "userGroup.code", label: "User Type", classes: "uppercase" },
   { key: "email", label: "Email", classes: "lowercase" },
-  { key: "password", label: "Password" },
-  {
-    key: "status",
-    label: "Status",
-    classes: "lowercase",
-  },
 ]
 
 export default function Users() {
@@ -90,15 +84,22 @@ export default function Users() {
     await deleteUserFn(defaultValues)
   }
 
+  let currentUserCode = useSelector((state: RootState) => {
+    return state.auth.user?.usercode!
+  })
+
   const columns = AdminTableColumn({
     fields,
     onUpdate: handleUpdateUser,
     onDelete: handleDeleteUser,
+    currentUserCode,
+    entity: "User",
   })
 
-  const { data, isLoading } = useQuery({
+  const { data, isFetching } = useQuery({
     queryFn: getUserList,
     queryKey: ["admin", "getUsers"],
+    refetchOnWindowFocus: false
   })
 
   let tableData = useSelector((state: RootState) => {
@@ -115,7 +116,7 @@ export default function Users() {
 
   return (
     <>
-      {isLoading ? (
+      {isFetching ? (
         <Spinner />
       ) : (
         <Table
@@ -139,7 +140,7 @@ export default function Users() {
 
       {isUpdateUser && (
         <CustomModal toggleModal={handleUpdateUserToggle}>
-          <h2 className='text-center text-2xl'>Update User Group</h2>
+          <h2 className='text-center text-2xl'>Update User</h2>
           <User
             close={() => setIsUpdateUser(false)}
             defaultValue={defaultValues}

@@ -6,7 +6,7 @@ import banner from "../../assets/banner.jpg";
 const Login = () => {
   useEffect(() => {
     document.title = "Login | E&L Delicatessen";
-  }, [])
+  }, []);
 
   const [login, setLogin] = useState<UserLogin>({
     usercode: "",
@@ -36,15 +36,17 @@ const Login = () => {
   };
 
   return (
-    <div className="flex relative p-10 md:p-0 h-screen w-screen justify-center ">
-      <div className="lg:hidden absolute top-10  left-1/2 transform -translate-x-1/2">
+    <div className="flex flex-col items-center md:items-stretch  lg:flex lg:flex-row lg:items-stretch relative p-10 md:p-0 h-screen w-screen justify-center">
+      <div className="lg:hidden">
         <div className="text-center font-heading">
-        <h1 className="text-5xl flex items-center gap-2 text-primary">E&L DELICATESSEN</h1>
+          <h1 className="text-xl md:text-3xl gap-2 text-primary">
+            E&L DELICATESSEN
+          </h1>
         </div>
       </div>
-      <div className="flex flex-col justify-center flex-1 lg:px-10">
+      <div className="flex flex-col justify-center lg:flex-1 lg:px-10">
         <h2 className="text-2xl lg:text-4xl mb-10 text-center">
-        Welcome! Let’s get you signed in.
+          Welcome! Let’s get you signed in.
         </h2>
         <form onSubmit={handleSubmit} className="flex justify-center">
           <div className="w-full md:w-3/5 lg:w-4/5 2xl:w-3/5">

@@ -26,9 +26,15 @@ interface Props {
 }
 
 const schema = z.object({
-  first_name: z.string().min(1, "Required Field"),
-  last_name: z.string().min(1, "Required Field"),
-  usercode: z.string().min(1, "Required Field"),
+  first_name: z.string().nonempty("Required Field").min(2, "Must be at least 2 characters"),
+  last_name: z.string().nonempty("Required Field").min(2, "Must be at least 8 characters"),
+  usercode: z
+  .string()
+  .nonempty('Required Field')
+  .min(5, "Must be at least 5 characters")
+  .refine((val) => /^\S+$/.test(val), {
+    message: "No whitespace allowed",
+  }),
   userGroup: z.object({
     id: z.string().min(1, "Required Field"),
   }),
@@ -36,7 +42,13 @@ const schema = z.object({
     .string()
     .min(1, "Required Field")
     .email({ message: "Please enter a valid email address" }),
-  password: z.string().min(1, "Required Field"),
+  password: z
+    .string()
+    .nonempty('Required Field')
+    .min(8, "Must be at least 8 characters")
+    .refine((val) => /^\S+$/.test(val), {
+      message: "No whitespace allowed",
+    }),
 });
 
 type FormFields = z.infer<typeof schema>;
@@ -52,7 +64,7 @@ export default function UserForm({ close, defaultValue, userList }: Props) {
       id: defaultValue?.userGroup?.id?.toString(),
     },
   };
-  
+
   const {
     handleSubmit,
     register,
@@ -102,7 +114,7 @@ export default function UserForm({ close, defaultValue, userList }: Props) {
       ...data,
       status: "ACTIVE",
     };
-    console.log(user)
+    console.log(user);
     if (!defaultValue) {
       await addUser(user);
     } else {
@@ -185,6 +197,7 @@ export default function UserForm({ close, defaultValue, userList }: Props) {
         id="password"
         error={errors.password?.message}
         touched={touchedFields.password}
+        attributes={{type: "password"}}
       />
       <div className="flex self-center gap-4 pt-3">
         <button

@@ -2,10 +2,7 @@ import { ReactNode, useEffect, useState } from "react";
 import PageTitle from "../../components/common/utils/PageTitle";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import usePageTitle from "../../hooks/usePageTitle";
-import {
-  getUserGroupList,
-  updateUser,
-} from "../../api/services/admin";
+import { getUserGroupList, updateUser } from "../../api/services/admin";
 import Spinner from "../../components/common/utils/Spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store";
@@ -54,7 +51,7 @@ export default function Profile() {
       return getUserDetails(userCode); // Pass userCode to getUserDetails
     },
     enabled: !!userCode,
-    refetchOnWindowFocus: false
+    refetchOnWindowFocus: false,
   });
 
   const {
@@ -89,7 +86,11 @@ export default function Profile() {
     }
   }, [userDetails, reset, dispatch]);
 
-  const { data: groupList, isLoading: groupListLoading, isFetching: groupListFetching } = useQuery({
+  const {
+    data: groupList,
+    isLoading: groupListLoading,
+    isFetching: groupListFetching,
+  } = useQuery({
     queryFn: getUserGroupList,
     queryKey: ["profile", "getGroups"],
   });
@@ -99,7 +100,7 @@ export default function Profile() {
     groupList.map((item: UserGroup) => ({ code: item.code, id: item.id }));
 
   const success = (data: User) => {
-    const { id, ...user } = data;
+    const { id, password, ...user } = data;
     console.log(user);
     const transformedUser = {
       ...user,
@@ -248,9 +249,9 @@ function Input({
   const isPasswordType = attributes?.type === "password";
   return (
     <div className="flex flex-col">
-      <label htmlFor={id} className="text-lg">
-        {label}
-      </label>
+        <label htmlFor={id} className="text-lg">
+          {label}
+        </label>
       <div className="relative md:w-4/6">
         <input
           className="w-full text-base p-1 pr-10 border-b border-b-gray-500 focus:border-b-sky-500 focus-visible:outline-none"
