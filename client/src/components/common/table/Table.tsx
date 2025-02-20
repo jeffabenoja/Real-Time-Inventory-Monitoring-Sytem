@@ -10,7 +10,7 @@ import {
 } from "@tanstack/react-table"
 import { TableProps } from "../../../type/tableType"
 import { IoIosAdd } from "react-icons/io"
-import { IoEyeOutline } from "react-icons/io5";
+import { IoEyeOutline } from "react-icons/io5"
 import { CiExport, CiImport } from "react-icons/ci"
 import { FaChevronUp, FaChevronDown } from "react-icons/fa"
 import { LuArrowUpDown } from "react-icons/lu"
@@ -173,11 +173,7 @@ const Table: React.FC<TableProps> = ({
 
         {view && (
           <div className='ml-2'>
-            <Buttons
-              label={"View"}
-              Icon={IoEyeOutline}
-              onClick={handleView}
-            />
+            <Buttons label={"View"} Icon={IoEyeOutline} onClick={handleView} />
           </div>
         )}
 
@@ -362,18 +358,18 @@ const Table: React.FC<TableProps> = ({
       </div>
       {withSubmit && (
         <div className='flex items-center justify-end'>
-          <div className='flex gap-5'>
+          <div className='flex gap-2.5 lg:gap-5 items-center justify-between'>
             <button
               onClick={toggleModal}
               type='button'
-              className='bg-red-700 rounded-md py-2.5 w-[150px]'
+              className='bg-red-700 rounded-md py-2.5 w-[120px] lg:w-[150px]'
             >
               <p className='text-white font-bold text-xs'>Cancel</p>
             </button>
             <button
               type='button'
               onClick={handleSubmitButton}
-              className='bg-blue-700 rounded-md py-2.5 w-[150px]'
+              className='bg-blue-700 rounded-md py-2.5 w-[120px] lg:w-[150px]'
             >
               <p className='text-white font-bold text-xs'>Select</p>
             </button>

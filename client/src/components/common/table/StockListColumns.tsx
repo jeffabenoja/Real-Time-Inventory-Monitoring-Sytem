@@ -1,7 +1,7 @@
 import { createColumnHelper } from "@tanstack/react-table"
 import { CiEdit } from "react-icons/ci"
 import { IoIosAdd } from "react-icons/io"
-import { IoEyeOutline } from "react-icons/io5";
+import { IoEyeOutline } from "react-icons/io5"
 import { ItemType } from "../../../type/itemType"
 import { MdOutlineInventory } from "react-icons/md"
 
@@ -53,7 +53,7 @@ const StockListColumns = ({
               e.stopPropagation()
               onView(info.row.original)
             }}
-            className=' py-2 px-4 bg-gray-200 hover:bg-gray-300 hover:text-primary rounded-md shadow-md'
+            className='lg:py-2 lg:px-4 p-2 bg-gray-200 hover:bg-gray-300 hover:text-primary rounded-md shadow-md'
           >
             <IoEyeOutline size={20} />
           </button>
@@ -64,7 +64,7 @@ const StockListColumns = ({
               e.stopPropagation()
               onAdd(info.row.original)
             }}
-            className='py-2 px-4 bg-gray-200 hover:bg-gray-300 hover:text-primary rounded-md shadow-md'
+            className='lg:py-2 lg:px-4 p-2 bg-gray-200 hover:bg-gray-300 hover:text-primary rounded-md shadow-md'
           >
             <IoIosAdd size={20} />
           </button>
@@ -75,7 +75,7 @@ const StockListColumns = ({
               e.stopPropagation()
               onUpdate(info.row.original)
             }}
-            className='py-2 px-4 bg-gray-200 hover:bg-gray-300 hover:text-blue-700 rounded-md shadow-md'
+            className='lg:py-2 lg:px-4 p-2 bg-gray-200 hover:bg-gray-300 hover:text-blue-700 rounded-md shadow-md'
           >
             <CiEdit size={20} />
           </button>
@@ -84,7 +84,7 @@ const StockListColumns = ({
               e.stopPropagation()
               onApproval(info.row.original)
             }}
-            className='py-2 px-4 bg-gray-200 hover:bg-gray-300 hover:text-blue-700 rounded-md shadow-md'
+            className='lg:py-2 lg:px-4 p-2 bg-gray-200 hover:bg-gray-300 hover:text-blue-700 rounded-md shadow-md'
           >
             <MdOutlineInventory size={20} />
           </button>

@@ -442,6 +442,7 @@ const ItemComponents = () => {
                 {/* Material Items Table */}
                 <>
                   <PageTitle>Material List</PageTitle>
+                  <hr style={{ borderColor: "#14aff1" }} />
                   <Table
                     data={data || []}
                     columns={columns}

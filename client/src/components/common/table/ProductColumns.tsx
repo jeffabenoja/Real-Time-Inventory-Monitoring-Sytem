@@ -53,7 +53,7 @@ const ProductColumns = ({
               e.stopPropagation()
               onView(info.row.original)
             }}
-            className=' py-2 px-4 bg-gray-200 hover:bg-gray-300 hover:text-primary rounded-md shadow-md'
+            className='lg:py-2 lg:px-4 p-2 bg-gray-200 hover:bg-gray-300 hover:text-primary rounded-md shadow-md'
           >
             <IoEyeOutline size={20} />
           </button>
@@ -64,7 +64,7 @@ const ProductColumns = ({
               e.stopPropagation()
               onAdd(info.row.original)
             }}
-            className='py-2 px-4 bg-gray-200 hover:bg-gray-300 hover:text-primary rounded-md shadow-md'
+            className='lg:py-2 lg:px-4 p-2 bg-gray-200 hover:bg-gray-300 hover:text-primary rounded-md shadow-md'
           >
             <IoIosAdd size={20} />
           </button>
@@ -75,7 +75,7 @@ const ProductColumns = ({
               e.stopPropagation()
               onUpdate(info.row.original)
             }}
-            className='py-2 px-4 bg-gray-200 hover:bg-gray-300 hover:text-blue-700 rounded-md shadow-md'
+            className='lg:py-2 lg:px-4 p-2 bg-gray-200 hover:bg-gray-300 hover:text-blue-700 rounded-md shadow-md'
           >
             <CiEdit size={20} />
           </button>
@@ -85,7 +85,7 @@ const ProductColumns = ({
               e.stopPropagation()
               onApproval(info.row.original)
             }}
-            className='py-2 px-4 bg-gray-200 hover:bg-gray-300 hover:text-blue-700 rounded-md shadow-md'
+            className='lg:py-2 lg:px-4 p-2 bg-gray-200 hover:bg-gray-300 hover:text-blue-700 rounded-md shadow-md'
           >
             <MdOutlineInventory size={20} />
           </button>
