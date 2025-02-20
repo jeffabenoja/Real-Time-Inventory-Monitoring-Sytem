@@ -7,6 +7,7 @@ import { useState } from "react"
 import CustomModal from "./utils/CustomModal"
 import { AssembleTransaction } from "../../type/stockType"
 import UpdateAssemble from "../modal/UpdateAssemble"
+import { CiEdit } from "react-icons/ci"
 
 const fields = [
   { key: "transactionNo", label: "Transaction Number", classes: "uppercase" },
@@ -26,8 +27,10 @@ type AssembleTableProps = {
 
 const Columns = ({
   fields,
+  onUpdate,
 }: {
   fields: { key: string; label: string; classes?: string }[]
+  onUpdate: (item: AssembleTransaction) => void
 }) => {
   const columnHelper = createColumnHelper<any>()
 
@@ -41,6 +44,26 @@ const Columns = ({
         header: () => <span className='truncate'>{field.label}</span>,
       })
     ),
+
+    // Add the actions column
+    columnHelper.accessor("actions", {
+      id: "actions",
+      cell: (info) => (
+        <div className='flex gap-2 items-center justify-center w-[150px] lg:w-full'>
+          {/* Update Button */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              onUpdate(info.row.original)
+            }}
+            className='py-2 px-4 bg-gray-200 hover:bg-gray-300 hover:text-blue-700 rounded-md shadow-md'
+          >
+            <CiEdit size={20} />
+          </button>
+        </div>
+      ),
+      header: () => <span className='text-center truncate'>Actions</span>,
+    }),
   ]
 }
 
@@ -54,10 +77,6 @@ const ViewAssembleTable = ({ itemId }: AssembleTableProps) => {
   const [assembleDataUpdate, setAssembleDataUpdate] =
     useState<AssembleTransaction | null>(null)
 
-  const columns = Columns({
-    fields,
-  })
-
   const handleModalUpdate = () => {
     setOpenModal((prev) => !prev)
   }
@@ -66,6 +85,11 @@ const ViewAssembleTable = ({ itemId }: AssembleTableProps) => {
     handleModalUpdate()
     setAssembleDataUpdate(row)
   }
+
+  const columns = Columns({
+    fields,
+    onUpdate: handleUpdate,
+  })
 
   if (isError) {
     return (
@@ -113,15 +137,11 @@ const ViewAssembleTable = ({ itemId }: AssembleTableProps) => {
             withCancel={false}
             add={false}
             view={false}
-            handleUpdate={handleUpdate}
           />
         </>
       )}
       {openModal && (
-        <CustomModal
-          classes='h-[420px] lg:h-[510px] md:p-8 w-[343px] md:w-[860px]'
-          toggleModal={handleModalUpdate}
-        >
+        <CustomModal classes='h-[420px] lg:h-[510px] md:p-8 w-[343px] md:w-[860px]'>
           <UpdateAssemble row={assembleDataUpdate} close={handleModalUpdate} />
         </CustomModal>
       )}

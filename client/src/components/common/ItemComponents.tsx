@@ -225,7 +225,8 @@ const ItemComponents = () => {
 
     if (
       productData.unit.toLowerCase() !== "kg" &&
-      productData.unit.toLowerCase() !== "pcs"
+      productData.unit.toLowerCase() !== "pcs" &&
+      productData.unit.toLowerCase() !== "pack"
     ) {
       setInvalidFields((prev) => [...prev, "unit"])
       showToast.error("Invalid unit type")
@@ -391,6 +392,7 @@ const ItemComponents = () => {
                   >
                     <option value='kg'>KG</option>
                     <option value='pcs'>PCS</option>
+                    <option value='pcs'>PACK</option>
                   </select>
                 </td>
                 <td className='hover:bg-gray-50 p-2 whitespace-nowrap text-sm text-gray-900 cursor-pointer text-center'>

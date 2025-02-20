@@ -1,9 +1,9 @@
 import { createColumnHelper } from "@tanstack/react-table"
 import { CiEdit } from "react-icons/ci"
 import { IoIosAdd } from "react-icons/io"
-import { HiOutlineViewfinderCircle } from "react-icons/hi2"
+import { IoEyeOutline } from "react-icons/io5";
 import { ItemType } from "../../../type/itemType"
-
+import { MdOutlineInventory } from "react-icons/md"
 
 // Define a reusable function to generate columns
 const StockListColumns = ({
@@ -11,11 +11,13 @@ const StockListColumns = ({
   onUpdate,
   onAdd,
   onView,
+  onApproval,
 }: {
   fields: { key: string; label: string; classes?: string }[]
   onUpdate: (item: ItemType) => void
   onAdd: (item: ItemType) => void
   onView: (item: ItemType) => void
+  onApproval: (item: ItemType) => void
 }) => {
   const columnHelper = createColumnHelper<any>()
 
@@ -53,7 +55,7 @@ const StockListColumns = ({
             }}
             className=' py-2 px-4 bg-gray-200 hover:bg-gray-300 hover:text-primary rounded-md shadow-md'
           >
-            <HiOutlineViewfinderCircle size={20} />
+            <IoEyeOutline size={20} />
           </button>
 
           {/* Add Button */}
@@ -76,6 +78,15 @@ const StockListColumns = ({
             className='py-2 px-4 bg-gray-200 hover:bg-gray-300 hover:text-blue-700 rounded-md shadow-md'
           >
             <CiEdit size={20} />
+          </button>
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              onApproval(info.row.original)
+            }}
+            className='py-2 px-4 bg-gray-200 hover:bg-gray-300 hover:text-blue-700 rounded-md shadow-md'
+          >
+            <MdOutlineInventory size={20} />
           </button>
         </div>
       ),

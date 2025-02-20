@@ -99,9 +99,10 @@ const StocklistPage = () => {
 
   const columns = StockListColumns({
     fields,
-    onUpdate: handleUpdateStock,
+    onUpdate: handleUpdate,
     onAdd: handleAddStock,
     onView: handleViewStock,
+    onApproval: handleUpdateStock,
   })
 
   if (isError) {
@@ -137,7 +138,7 @@ const StocklistPage = () => {
         />
       )}
       {isOpenAdd && (
-        <CustomModal toggleModal={handleModalAdd}>
+        <CustomModal>
           <AddItems
             title={"Create Materials"}
             isStocklist={true}
@@ -148,7 +149,7 @@ const StocklistPage = () => {
         </CustomModal>
       )}
       {isOpenUpdate && (
-        <CustomModal toggleModal={handleModalUpdate}>
+        <CustomModal>
           <AddItems
             title={"Raw Materials"}
             isStocklist={true}
@@ -170,7 +171,7 @@ const StocklistPage = () => {
       )}
       {/* Stocking functionality  */}
       {isAddStock && (
-        <CustomModal toggleModal={handleAddStockToggle}>
+        <CustomModal>
           <AddStocksRawMats
             productCode={productData?.code || ""}
             productName={productData?.description || ""}

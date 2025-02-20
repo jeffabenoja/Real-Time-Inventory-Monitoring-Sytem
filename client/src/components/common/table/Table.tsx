@@ -10,7 +10,7 @@ import {
 } from "@tanstack/react-table"
 import { TableProps } from "../../../type/tableType"
 import { IoIosAdd } from "react-icons/io"
-import { HiOutlineViewfinderCircle } from "react-icons/hi2"
+import { IoEyeOutline } from "react-icons/io5";
 import { CiExport, CiImport } from "react-icons/ci"
 import { FaChevronUp, FaChevronDown } from "react-icons/fa"
 import { LuArrowUpDown } from "react-icons/lu"
@@ -175,7 +175,7 @@ const Table: React.FC<TableProps> = ({
           <div className='ml-2'>
             <Buttons
               label={"View"}
-              Icon={HiOutlineViewfinderCircle}
+              Icon={IoEyeOutline}
               onClick={handleView}
             />
           </div>

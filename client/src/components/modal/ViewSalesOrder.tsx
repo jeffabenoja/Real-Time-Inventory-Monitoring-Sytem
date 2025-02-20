@@ -36,8 +36,6 @@ interface ViewSalesOrderProps {
   row: SalesOrderType | null
 }
 const ViewSalesOrder: React.FC<ViewSalesOrderProps> = ({ row }) => {
-  console.log(row)
-
   const columns = Columns({
     itemFields,
   })

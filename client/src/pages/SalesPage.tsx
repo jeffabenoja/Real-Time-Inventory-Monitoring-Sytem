@@ -179,19 +179,13 @@ const SalesPage = () => {
       )}
 
       {openSalesOrderModal && (
-        <CustomModal
-          toggleModal={handleSalesOrderModalToggle}
-          classes='h-[480px] md:p-8 w-[343px] md:w-[1080px]'
-        >
+        <CustomModal classes='h-[480px] md:p-8 w-[343px] md:w-[1080px]'>
           <SalesOrderComponent close={handleSalesOrderModalToggle} />
         </CustomModal>
       )}
 
       {openModal && salesOrderDetails && (
-        <CustomModal
-          toggleModal={handleOpenModalToggle}
-          classes='h-[480px] md:p-8 w-[343px] md:w-[1020px]'
-        >
+        <CustomModal classes='h-[480px] md:p-8 w-[343px] md:w-[1020px]'>
           <UpdateSalesOrder
             row={salesOrderDetails}
             close={handleOpenModalToggle}

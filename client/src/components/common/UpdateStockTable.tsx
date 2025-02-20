@@ -7,6 +7,7 @@ import { FaExclamationTriangle } from "react-icons/fa"
 import { StockListType } from "../../type/stockType"
 import CustomModal from "./utils/CustomModal"
 import UpdateStockRawMats from "../modal/UpdateStockRawMats"
+import { CiEdit } from "react-icons/ci"
 const fields = [
   { key: "transactionNo", label: "Transaction Number", classes: "uppercase" },
   { key: "batchNo", label: "Batch Number", classes: "uppercase" },
@@ -21,8 +22,10 @@ type UpdateStockTableProps = {
 
 const Columns = ({
   fields,
+  onUpdate,
 }: {
   fields: { key: string; label: string; classes?: string }[]
+  onUpdate: (item: StockListType) => void
 }) => {
   const columnHelper = createColumnHelper<any>()
 
@@ -35,6 +38,26 @@ const Columns = ({
         header: () => <span className='truncate'>{field.label}</span>,
       })
     ),
+
+    // Add the actions column
+    columnHelper.accessor("actions", {
+      id: "actions",
+      cell: (info) => (
+        <div className='flex gap-2 items-center justify-center w-[150px] lg:w-full'>
+          {/* Update Button */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              onUpdate(info.row.original)
+            }}
+            className='py-2 px-4 bg-gray-200 hover:bg-gray-300 hover:text-blue-700 rounded-md shadow-md'
+          >
+            <CiEdit size={20} />
+          </button>
+        </div>
+      ),
+      header: () => <span className='text-center truncate'>Actions</span>,
+    }),
   ]
 }
 
@@ -48,10 +71,6 @@ const UpdateStockTable = ({ itemId }: UpdateStockTableProps) => {
   } = useStockInList(itemId)
   const [productData, setProductData] = useState<StockListType | null>(null)
   const [isOpenUpdate, setIsOpenUpdate] = useState<boolean>(false)
-
-  const columns = Columns({
-    fields,
-  })
 
   if (isError) {
     return (
@@ -85,6 +104,10 @@ const UpdateStockTable = ({ itemId }: UpdateStockTableProps) => {
 
     setProductData(row)
   }
+  const columns = Columns({
+    fields,
+    onUpdate: handleUpdate,
+  })
 
   return (
     <>
@@ -109,13 +132,12 @@ const UpdateStockTable = ({ itemId }: UpdateStockTableProps) => {
             withCancel={false}
             add={false}
             view={false}
-            handleUpdate={handleUpdate}
           />
         </>
       )}
 
       {isOpenUpdate && (
-        <CustomModal toggleModal={handleModalUpdate}>
+        <CustomModal>
           <UpdateStockRawMats
             product={productData}
             toggleModal={handleModalUpdate}

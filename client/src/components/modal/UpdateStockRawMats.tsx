@@ -102,24 +102,6 @@ const UpdateStockRawMats: React.FC<UpdateStockProps> = ({
           </div>
         </div>
 
-        <div className='flex flex-col gap-2'>
-          <label htmlFor='remarks' className='body-l'>
-            Remarks
-          </label>
-          <textarea
-            id='remarks'
-            rows={1}
-            placeholder='Add remarks'
-            name='remarks'
-            value={updateStock.remarks}
-            autoComplete='off'
-            onChange={handleChange}
-            className={`${
-              invalidFields.includes("remarks") && "border-primary"
-            } py-2 px-4 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent placeholder:text-sm focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
-          />
-        </div>
-
         <div className='flex justify-between items-center gap-2'>
           <div className='flex flex-col gap-2'>
             <label htmlFor='quantity' className='text-sm'>
@@ -157,6 +139,24 @@ const UpdateStockRawMats: React.FC<UpdateStockProps> = ({
           </div>
         </div>
 
+        <div className='flex flex-col gap-2'>
+          <label htmlFor='remarks' className='body-l'>
+            Remarks
+          </label>
+          <textarea
+            id='remarks'
+            rows={1}
+            placeholder='Add remarks'
+            name='remarks'
+            value={updateStock.remarks}
+            autoComplete='off'
+            onChange={handleChange}
+            className={`${
+              invalidFields.includes("remarks") && "border-primary"
+            } py-2 px-4 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent placeholder:text-sm focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
+          />
+        </div>
+
         <div className='flex justify-between items-center'>
           <p className='text-xs'>
             Created Date:{" "}
@@ -172,22 +172,24 @@ const UpdateStockRawMats: React.FC<UpdateStockProps> = ({
           </p>
         </div>
 
-        <div className='flex items-center justify-between gap-2'>
+        <div className='flex items-center justify-end mt-4 gap-5'>
           <button
-            className='w-full rounded-xl border-0 outline-transparent p-2 font-medium mt-5 cursor-pointer text-white bg-gray-700'
             type='button'
             onClick={toggleModal}
+            className='bg-red-700 rounded-md py-2.5 w-[150px] text-white font-bold text-xs text-center'
           >
-            <p>Cancel</p>
+            Cancel
           </button>
+
           <button
-            className='w-full rounded-xl border-0 outline-transparent p-2 font-medium mt-5 cursor-pointer text-white bg-primary'
             type='submit'
+            className={`rounded-md border-0 outline-transparent py-2.5
+           font-medium cursor-pointer text-white bg-blue-700 w-[150px]`}
           >
             {isLoading ? (
               <div className='w-5 h-5 border-2 border-t-2 border-[#0A140A] border-t-white rounded-full animate-spin'></div>
             ) : (
-              <p>Update Stock</p>
+              <p className='text-white font-bold text-xs'>Update</p>
             )}
           </button>
         </div>

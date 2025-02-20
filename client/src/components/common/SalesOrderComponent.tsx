@@ -8,9 +8,9 @@ import { CustomerType } from "../../type/salesType"
 import { showToast } from "../../utils/Toast"
 import ItemSalesOrder from "./ItemSalesOrder"
 import DisplaySalesOrderItems from "./DisplaySalesOrderItems"
-import useSalesOrder from "../../hooks/sales/useSalesOrder"
 import { User } from "../../type/userType"
 import { useSelector } from "react-redux"
+import useCreateSalesOrder from "../../hooks/sales/useCreateSalesOrder"
 
 interface UserAuthenticationType {
   auth: {
@@ -47,7 +47,7 @@ const SalesOrderComponent: React.FC<SalesOrderProps> = ({ close }) => {
   const [orderDate, setOrderDate] = useState<string>(
     `${new Date().toISOString().split("T")[0]}`
   )
-  const { createSalesOrder, isPending } = useSalesOrder()
+  const { createSalesOrder, isPending } = useCreateSalesOrder()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target

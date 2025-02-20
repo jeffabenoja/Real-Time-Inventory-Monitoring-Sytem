@@ -99,7 +99,8 @@ const AddItems: React.FC<AddItemsProps> = ({
 
     if (
       product.unit.toLowerCase() !== "kg" &&
-      product.unit.toLowerCase() !== "pcs"
+      product.unit.toLowerCase() !== "pcs" &&
+      product.unit.toLowerCase() !== "pack"
     ) {
       setInvalidFields((prev) => [...prev, "unit"])
       showToast.error("Invalid unit type")
@@ -236,6 +237,9 @@ const AddItems: React.FC<AddItemsProps> = ({
                 <option value='pcs' className='hover:bg-primary'>
                   pcs
                 </option>
+                <option value='pcs' className='hover:bg-primary'>
+                  pack
+                </option>
               </select>
             </div>
           </div>
@@ -326,19 +330,27 @@ const AddItems: React.FC<AddItemsProps> = ({
           )}
         </div>
 
-        <button
-          className={`${
-            productData ? "" : "mt-5"
-          } w-full rounded-full border-0 outline-transparent p-2
-           font-medium cursor-pointer text-white bg-primary`}
-          type='submit'
-        >
-          {isLoading ? (
-            <div className='w-5 h-5 border-2 border-t-2 border-[#0A140A] border-t-white rounded-full animate-spin'></div>
-          ) : (
-            <p>{!productData ? "Add New Product" : "Update Product"}</p>
-          )}
-        </button>
+        <div className='flex items-center justify-end mt-4 gap-5'>
+          <button
+            type='button'
+            onClick={toggleModal}
+            className='bg-red-700 rounded-md py-2.5 w-[150px] text-white font-bold text-xs text-center'
+          >
+            Cancel
+          </button>
+
+          <button
+            type='submit'
+            className={`rounded-md border-0 outline-transparent py-2.5
+           font-medium cursor-pointer text-white bg-blue-700 w-[150px]`}
+          >
+            {isLoading ? (
+              <div className='w-5 h-5 border-2 border-t-2 border-[#0A140A] border-t-white rounded-full animate-spin'></div>
+            ) : (
+              <p className='text-white font-bold text-xs'>Update</p>
+            )}
+          </button>
+        </div>
       </form>
     </div>
   )

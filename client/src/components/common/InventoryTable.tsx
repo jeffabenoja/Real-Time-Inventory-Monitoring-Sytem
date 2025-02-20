@@ -111,7 +111,7 @@ const InventoryTable = ({ category }: InventoryTableProps) => {
             columns={columns}
             search={true}
             withImport={false}
-            withExport={false}
+            withExport={true}
             withSubmit={false}
             withCancel={false}
             add={false}

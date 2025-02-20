@@ -8,7 +8,7 @@ import { TbZoomScan } from "react-icons/tb"
 import CustomModal from "../common/utils/CustomModal"
 import SalesOrderCustomer from "./SalesOrderCustomer"
 import { showToast } from "../../utils/Toast"
-import useSalesOrder from "../../hooks/sales/useSalesOrder"
+import useUpdateSalesOrder from "../../hooks/sales/useUpdateSalesOrder"
 
 const itemFields = [
   { key: "item.code", label: "Product Code", classes: "uppercase" },
@@ -140,7 +140,7 @@ const UpdateSalesOrder: React.FC<UpdateSalesOrderProps> = ({ row, close }) => {
     contactNumber: row?.customer.contactNumber || "",
     status: row?.customer.status || "",
   })
-  const { updateSalesOrder, isUpdatePending } = useSalesOrder()
+  const { updateSalesOrder, isUpdatePending } = useUpdateSalesOrder()
 
   const [orderDate, setOrderDate] = useState(row?.orderDate)
   const [remarks, setRemarks] = useState(row?.remarks || "")

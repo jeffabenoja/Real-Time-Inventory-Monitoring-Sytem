@@ -27,16 +27,16 @@ const ReportsPage = () => {
     `${new Date().toISOString().split("T")[0]}`
   )
 
-  const options = [
-    "ITEM LIST",
-    "USER LIST",
-    "ASSEMBLE LIST",
-    "CUSTOMER LIST",
-    "STOCK-IN LIST",
-    "INVENTORY LIST",
-    "USER GROUP LIST",
-    "SALES ORDER LIST",
-  ]
+  const options = {
+    itemList: "ITEM LIST",
+    userList: "USER LIST",
+    stockList: "STOCK-IN LIST",
+    assembleList: "CUSTOMER LIST",
+    customerList: "ASSEMBLE LIST",
+    inventoryList: "INVENTORY LIST",
+    userGroupList: "USER GROUP LIST",
+    salesOrderList: "SALES ORDER LIST",
+  }
 
   const handleSelect = (option: string) => {
     setSelectedReport(option)
@@ -72,6 +72,7 @@ const ReportsPage = () => {
     const reportFunction = reports[selectedReport as keyof typeof reports]
 
     if (!reportFunction) {
+      console.log(selectedReport)
       return
     }
 
@@ -116,6 +117,7 @@ const ReportsPage = () => {
     } catch (error) {
       showToast.error("Error generating reports")
     }
+
     setIsLoading(false)
   }
 
@@ -146,13 +148,13 @@ const ReportsPage = () => {
                   } absolute w-full bg-white border border-gray-300 rounded-md overflow-y-auto mt-1 scrollbar`}
                   style={{ zIndex: 10 }}
                 >
-                  {options.map((option) => (
+                  {Object.keys(options).map((key) => (
                     <div
-                      key={option}
-                      onClick={() => handleSelect(option)}
+                      key={key}
+                      onClick={() => handleSelect(key)}
                       className='p-2 cursor-pointer hover:bg-gray-200'
                     >
-                      {option}
+                      {options[key as keyof typeof options]}
                     </div>
                   ))}
                 </div>
