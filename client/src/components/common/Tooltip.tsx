@@ -40,7 +40,7 @@ export default function Tooltip({ text, children, width }: TooltipProps) {
               top: `${position.top}px`,
               left: `${position.left}px`,
             }}
-            className={`absolute ${width ? width : "w-28"} text-xs bg-primary text-white rounded-md p-2 shadow-lg z-50 whitespace-normal break-words`}
+            className={`absolute ${width ? width : "max-w-28"} text-xs text-center bg-primary text-white rounded-md p-2 shadow-lg z-50 whitespace-normal break-words`}
           >
             {text}
           </div>,
