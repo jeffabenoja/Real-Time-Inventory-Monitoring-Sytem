@@ -51,9 +51,13 @@ export default function Container({
     navigate("/dashboard/overview");
   };
 
-  const logoutModalHandler = () => {
-    setLogoutModal(prevstate => !prevstate);
+  const logoutModalClose = () => {
+    setLogoutModal(false);
   };
+
+  const logoutModalOpen = () => {
+    setLogoutModal(true)
+  }
 
   return (
     <div className="font-primary h-screen">
@@ -101,16 +105,16 @@ export default function Container({
       </div>
       <div
         className="text-white absolute bottom-5 left-5 text-base font-primary flex gap-3 hover:text-primary cursor-pointer font-medium"
-        onClick={logoutModalHandler}
+        onClick={logoutModalOpen}
       >
         <TbLogout2 size={20} /> Logout
-        {logoutModal && <CustomModal toggleModal={logoutModalHandler}>
+        {logoutModal && <CustomModal toggleModal={logoutModalClose}>
           <p className="text-center">Are you sure you want to log out?</p>
           <div className="flex justify-center gap-5 mt-3">
             <button
-              type="submit"
+              type="button"
               className="px-4 py-2 bg-gray-500 text-white font-semibold rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200 active:bg-gray-500 transition duration-150 ease-in-out"
-              onClick={logoutModalHandler}
+              onClick={logoutModalClose}
             >
               No
             </button>

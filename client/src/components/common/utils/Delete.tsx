@@ -26,7 +26,7 @@ export function Delete({ children, closeModal, clicked, pending }: Props) {
           className="px-4 py-2 bg-red-500 text-white font-semibold rounded-md hover:bg-red-400 focus:outline-none focus:ring-2 focus:ring-red-200 active:bg-red-500 transition duration-150 ease-in-out"
           disabled={pending}
         >
-            {!pending ? "Delete" : "Deleting"}
+            {!pending ? "Delete" : "Deleting..."}
         </button>
       </div>
     </div>
