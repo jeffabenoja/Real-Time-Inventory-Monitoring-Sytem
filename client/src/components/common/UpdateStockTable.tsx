@@ -79,7 +79,7 @@ const UpdateStockTable = ({ itemId }: UpdateStockTableProps) => {
     return (
       <section className='text-center flex flex-col justify-center items-center h-96'>
         <FaExclamationTriangle className='text-red-900 text-6xl mb-4' />
-        <h1 className='text-6xl font-bold mb-4'>Something went wrong</h1>
+        <h1 className='text-6xl font-bold mb-4'>Error Fetching Data</h1>
         <p className='text-xl mb-5 text-primary'>
           Please contact your administrator
         </p>
@@ -92,7 +92,7 @@ const UpdateStockTable = ({ itemId }: UpdateStockTableProps) => {
       <section className='text-center flex flex-col justify-center items-center h-96'>
         <FaExclamationTriangle className='text-red-900 text-6xl mb-4' />
         <h1 className='text-6xl font-bold mb-4'>
-          No transaction data available
+          No Available Transaction History
         </h1>
       </section>
     )
@@ -119,7 +119,7 @@ const UpdateStockTable = ({ itemId }: UpdateStockTableProps) => {
       ) : (
         <>
           <h1 className='font-bold text-xl pb-2 border-b border-[#14aff1] '>
-            Transaction Stock for{" "}
+            Transaction History for{" "}
             <span className='uppercase text-[#14aff1]'>
               {stockData[0]?.item?.code}
             </span>

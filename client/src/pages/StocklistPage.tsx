@@ -18,7 +18,6 @@ import usePageTitle from "../hooks/usePageTitle"
 const fields = [
   { key: "code", label: "Product Code", classes: "uppercase" },
   { key: "description", label: "Product Name", classes: "capitalize" },
-  { key: "category", label: "Category", classes: "capitalize" },
   { key: "brand", label: "Brand", classes: "uppercase" },
   { key: "unit", label: "Unit", classes: "lowercase" },
   { key: "reorderPoint", label: "Stock Level" },
@@ -134,14 +133,13 @@ const StocklistPage = () => {
           toolTip='Inventory'
           handleAdd={handleModalAdd}
           handleImport={handleModalImport}
-          handleUpdate={handleUpdate}
           handleView={handleModalViewInventory}
         />
       )}
       {isOpenAdd && (
         <CustomModal>
           <AddItems
-            title={"Create Materials"}
+            title={"Add Item"}
             isStocklist={true}
             isOnSubmit={createItem}
             isLoading={isPending}
@@ -152,7 +150,6 @@ const StocklistPage = () => {
       {isOpenUpdate && (
         <CustomModal>
           <AddItems
-            title={"Raw Materials"}
             isStocklist={true}
             isOnSubmit={updateItem}
             isLoading={isPendingUpdate}

@@ -114,19 +114,13 @@ const AddStocksFinishedProduct: React.FC<AddStockProps> = ({
         {product?.code}
       </h3>
       <div className='flex flex-col gap-2'>
-        <label htmlFor='productName' className='text-sm'>
-          Product Name
-        </label>
-        <input
-          id='productName'
-          type='text'
-          name='productName'
-          value={product?.description}
-          readOnly
-          autoComplete='off'
+        <p className='text-sm font-bold'>Product Name</p>
+        <span
           className={`py-2 px-4 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent placeholder:text-sm
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
-        />
+        >
+          {product?.description}
+        </span>
       </div>
       <form
         className='flex flex-col gap-4 text-secondary-200'
@@ -225,7 +219,7 @@ const AddStocksFinishedProduct: React.FC<AddStockProps> = ({
             {isPendingFinishedGoods ? (
               <div className='w-5 h-5 border-2 border-t-2 border-[#0A140A] border-t-white rounded-full animate-spin'></div>
             ) : (
-              <p className='text-white font-bold text-xs'>Update</p>
+              <p className='text-white font-bold text-xs'>Submit</p>
             )}
           </button>
         </div>

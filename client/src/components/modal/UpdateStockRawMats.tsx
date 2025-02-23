@@ -67,8 +67,8 @@ const UpdateStockRawMats: React.FC<UpdateStockProps> = ({
 
   return (
     <div className='flex flex-col gap-6'>
-      <h3 className='heading-l text-primary font-bold text-2xl'>
-        {product?.item?.code}
+      <h3 className='heading-l text-primary font-bold '>
+        Update Status for {product?.item?.code} - {product?.item?.description}
       </h3>
       <form
         className='flex flex-col gap-4 text-secondary-200'

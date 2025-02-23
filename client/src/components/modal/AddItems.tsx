@@ -100,7 +100,8 @@ const AddItems: React.FC<AddItemsProps> = ({
     if (
       product.unit.toLowerCase() !== "kg" &&
       product.unit.toLowerCase() !== "pcs" &&
-      product.unit.toLowerCase() !== "pack"
+      product.unit.toLowerCase() !== "pack" &&
+      product.unit.toLowerCase() !== "liters"
     ) {
       setInvalidFields((prev) => [...prev, "unit"])
       showToast.error("Invalid unit type")
@@ -133,8 +134,10 @@ const AddItems: React.FC<AddItemsProps> = ({
 
   return (
     <div className='flex flex-col gap-6'>
-      <h3 className=' border-b border-[#14aff1] pb-1 uppercase'>
-        {!productData ? title : `${productData.code}`}
+      <h3 className=' border-b border-[#14aff1] pb-1'>
+        {!productData
+          ? title
+          : `Update ${productData.code} - ${productData.description}`}
       </h3>
       <form
         className='flex flex-col gap-4 text-secondary-200'
@@ -193,7 +196,7 @@ const AddItems: React.FC<AddItemsProps> = ({
               readOnly
               className={`${
                 invalidFields.includes("category") && "border-primary"
-              } w-[120px] md:w-[200px] py-1 px-4 border border-opacity-25 rounded-md outline-transparent bg-transparent
+              } w-[120px] md:w-[180px]  py-1 px-4 border border-opacity-25 rounded-md outline-transparent bg-transparent
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
             />
           </div>
@@ -239,6 +242,9 @@ const AddItems: React.FC<AddItemsProps> = ({
                 </option>
                 <option value='pack' className='hover:bg-primary'>
                   pack
+                </option>
+                <option value='liters' className='hover:bg-primary'>
+                  liters
                 </option>
               </select>
             </div>
@@ -315,17 +321,17 @@ const AddItems: React.FC<AddItemsProps> = ({
               <label htmlFor='status' className='text-sm'>
                 Status
               </label>
-              <input
-                type='text'
+              <select
                 id='status'
-                autoComplete='off'
                 name='status'
                 value={product.status}
                 onChange={handleChange}
-                className='
-                   w-[120px] md:w-[150px] uppercase py-1 pl-4 pr-1 border border-opacity-25 rounded-md outline-transparent bg-transparent
-                focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary'
-              />
+                className={`w-[120px] capitalize md:w-[150px] p-2 rounded-md border cursor-pointer outline-transparent bg-transparent text-xs
+        focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
+              >
+                <option value='ACTIVE'>ACTIVE</option>
+                <option value='INACTIVE'>INACTIVE</option>
+              </select>
             </div>
           )}
         </div>
@@ -347,7 +353,9 @@ const AddItems: React.FC<AddItemsProps> = ({
             {isLoading ? (
               <div className='w-5 h-5 border-2 border-t-2 border-[#0A140A] border-t-white rounded-full animate-spin'></div>
             ) : (
-              <p className='text-white font-bold text-xs'>Update</p>
+              <p className='text-white font-bold text-xs'>
+                {title ? "Submit" : "Update"}
+              </p>
             )}
           </button>
         </div>

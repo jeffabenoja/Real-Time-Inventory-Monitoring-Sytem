@@ -18,7 +18,7 @@ export const useStockInList = (id: string) => {
     onSuccess: () => {
       // Refetch the list of items
       queryClient.invalidateQueries({ queryKey: ["Stock", "Raw Mats"] })
-      showToast.success("Successfully added new stock")
+      showToast.success("Successfully updated stock transaction ")
     },
     onError: (error) => {
       const message =

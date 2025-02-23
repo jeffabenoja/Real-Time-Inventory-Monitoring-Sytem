@@ -5,7 +5,8 @@ export interface StockInType {
   transactionDate: string
   remarks: string
   item: {
-    code: string
+    code: string,
+    description?: string
   }
   quantity: number
   batchNo: string

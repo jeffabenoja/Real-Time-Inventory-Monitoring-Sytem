@@ -18,7 +18,6 @@ import ViewAssembleTable from "../components/common/ViewAssembleTable"
 const fields = [
   { key: "code", label: "Product Code", classes: "uppercase" },
   { key: "description", label: "Product Name", classes: "capitalize" },
-  { key: "category", label: "Category", classes: "capitalize" },
   { key: "brand", label: "Brand", classes: "uppercase" },
   { key: "unit", label: "Unit", classes: "lowercase" },
   { key: "reorderPoint", label: "Stock Level" },
