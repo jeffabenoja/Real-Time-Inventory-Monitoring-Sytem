@@ -164,7 +164,7 @@ export default function Profile() {
         <Container title="Identification">
           <div className="flex flex-col md:justify-around md:flex-row  gap-2">
             <div className="flex-1">
-              <Input id="usercode" label="User Code" register={register} />
+              <Input id="usercode" label="User Name" register={register} />
             </div>
             <div className="flex-1">
               <Input id="email" label="Email" register={register} />

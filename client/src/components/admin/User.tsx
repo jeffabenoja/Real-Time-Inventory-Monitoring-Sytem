@@ -163,7 +163,7 @@ export default function UserForm({ close, defaultValue, userList }: Props) {
         <div className="w-[48%]">
           <Input
             register={register}
-            label="User Code"
+            label="User Name"
             id="usercode"
             error={errors.usercode?.message}
             touched={touchedFields.usercode}

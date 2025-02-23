@@ -52,7 +52,7 @@ const Login = () => {
           <div className="w-full md:w-3/5 lg:w-4/5 2xl:w-3/5">
             <div className="flex flex-col mb-5">
               <label htmlFor="usercode" className="text-sm">
-                User Code
+                User Name
               </label>
               <input
                 type="text"

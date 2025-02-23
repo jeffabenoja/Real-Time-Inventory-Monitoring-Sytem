@@ -23,7 +23,7 @@ import User from "../../components/admin/User"
 import { User as TypeUser } from "../../type/userType"
 
 const fields = [
-  { key: "usercode", label: "User Code", classes: "uppercase" },
+  { key: "usercode", label: "User Name", classes: "uppercase" },
   { key: "first_name", label: "First Name", classes: "capitalize" },
   { key: "last_name", label: "Last Name", classes: "capitalize" },
   { key: "userGroup.code", label: "User Type", classes: "uppercase" },
