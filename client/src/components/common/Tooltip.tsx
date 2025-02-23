@@ -1,4 +1,5 @@
-import { ReactNode } from "react"
+import { ReactNode, useState, useRef, useEffect } from "react"
+import { createPortal } from "react-dom"
 
 interface TooltipProps {
   text: string
@@ -7,16 +8,44 @@ interface TooltipProps {
 }
 
 export default function Tooltip({ text, children, width }: TooltipProps) {
+  const [position, setPosition] = useState({ top: 0, left: 0 })
+  const [visible, setVisible] = useState(false)
+  const triggerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (visible && triggerRef.current) {
+      const rect = triggerRef.current.getBoundingClientRect()
+      setPosition({
+        top: rect.bottom + window.scrollY + 8, // 8px margin
+        left: rect.left + window.scrollX,
+      })
+    }
+  }, [visible])
+
   return (
-    <div className='relative group inline-block'>
-      {children}
+    <>
       <div
-        className={`absolute hidden lg:block bottom-full mb-2 ${
-          width ? width : "w-28"
-        } text-xs bg-primary text-white rounded-md p-2 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 whitespace-normal break-words overflow-visible`}
+        ref={triggerRef}
+        className='inline-block relative'
+        onMouseEnter={() => setVisible(true)}
+        onMouseLeave={() => setVisible(false)}
       >
-        {text}
+        {children}
       </div>
-    </div>
+
+      {visible &&
+        createPortal(
+          <div
+            style={{
+              top: `${position.top}px`,
+              left: `${position.left}px`,
+            }}
+            className={`absolute ${width ? width : "w-28"} text-xs bg-primary text-white rounded-md p-2 shadow-lg z-50 whitespace-normal break-words`}
+          >
+            {text}
+          </div>,
+          document.body
+        )}
+    </>
   )
 }
