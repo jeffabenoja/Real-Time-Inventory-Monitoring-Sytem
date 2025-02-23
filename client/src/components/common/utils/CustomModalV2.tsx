@@ -19,7 +19,6 @@ export default function CustomModalV2({
 
   return createPortal(
     <div
-      onClick={toggleModal}
       className="lg:pl-64 fixed left-0 right-0 bottom-0 top-0 bg-[rgba(0,0,0,0.2)] z-50 flex items-center justify-center max-h-screen scrollbar-hide overflow-y-auto"
     >
       <div
