@@ -4,13 +4,13 @@ import { IoClose } from "react-icons/io5";
 
 interface CustomModalProps {
   classes?: string;
-  toggleModal: () => void;
+  closeModal: () => void;
   children: ReactNode;
 }
 
 export default function CustomModalV2({
   classes,
-  toggleModal,
+  closeModal,
   children,
 }: CustomModalProps) {
   const overlayRoot = document.getElementById("overlay");
@@ -27,7 +27,7 @@ export default function CustomModalV2({
           classes ? classes : "md:p-8 md:w-[480px]"
         } h-screen w-screen md:h-auto px-6 bg-white dark:bg-secondary-600 rounded-md overflow-hidden overflow-y-auto scrollbar flex flex-col justify-center md:block`}
       > 
-        <IoClose className="absolute top-4 right-4 cursor-pointer md:hidden" size={24} onClick={toggleModal} />
+        <IoClose className="absolute top-4 right-4 cursor-pointer md:hidden" size={24} onClick={closeModal} />
         {children}
       </div>
     </div>,

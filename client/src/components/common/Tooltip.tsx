@@ -16,7 +16,7 @@ export default function Tooltip({ text, children, width }: TooltipProps) {
     if (visible && triggerRef.current) {
       const rect = triggerRef.current.getBoundingClientRect()
       setPosition({
-        top: rect.bottom + window.scrollY + 8, // 8px margin
+        top: rect.bottom + window.scrollY + 8,
         left: rect.left + window.scrollX,
       })
     }
@@ -40,7 +40,7 @@ export default function Tooltip({ text, children, width }: TooltipProps) {
               top: `${position.top}px`,
               left: `${position.left}px`,
             }}
-            className={`absolute ${width ? width : "max-w-28"} text-xs text-center bg-primary text-white rounded-md p-2 shadow-lg z-50 whitespace-normal break-words`}
+            className={`absolute ${width ? width : "max-w-28"} text-xs text-center bg-primary text-white rounded-md p-2 shadow-lg z-50 whitespace-normal break-words sm:hidden lg:block`}
           >
             {text}
           </div>,
