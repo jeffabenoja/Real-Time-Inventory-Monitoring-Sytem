@@ -132,14 +132,14 @@ export default function Users() {
       )}
 
       {isModalOpen && (
-        <CustomModal toggleModal={handleModalToggle}>
+        <CustomModal closeModal={handleModalToggle}>
           <h2 className='text-center text-2xl'>Create User</h2>
           <SignUp close={handleModalToggle} userList={userListData} />
         </CustomModal>
       )}
 
       {isUpdateUser && (
-        <CustomModal toggleModal={handleUpdateUserToggle}>
+        <CustomModal closeModal={handleUpdateUserToggle}>
           <h2 className='text-center text-2xl'>Update User</h2>
           <User
             close={() => setIsUpdateUser(false)}
@@ -149,7 +149,7 @@ export default function Users() {
         </CustomModal>
       )}
       {isDeleteUser && (
-        <CustomModal toggleModal={handleDeleteToggle}>
+        <CustomModal closeModal={handleDeleteToggle}>
           <div className='text-center'>
             <Delete
               pending={isPending}

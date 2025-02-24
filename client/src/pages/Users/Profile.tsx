@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import PageTitle from "../../components/common/utils/PageTitle";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import usePageTitle from "../../hooks/usePageTitle";
@@ -8,13 +8,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store";
 import { User, UserGroup } from "../../type/userType";
 import { z } from "zod";
-import { useForm, UseFormRegister } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { showToast } from "../../utils/Toast";
 import { updateCurrentUser } from "../../store/slices/auth";
-import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { getUserDetails } from "../../api/services/user";
 import transformUserDetails from "../../utils/transformUserDetails";
+import CustomModal from "../../components/common/utils/CustomModalV2";
+import Input from "../../components/profile/Input";
+import PasswordUpdate from "../../components/profile/PasswordUpdate";
+import md5 from "md5"
 
 const schema = z.object({
   first_name: z.string().min(1, "Required Field"),
@@ -32,6 +35,12 @@ const schema = z.object({
 
 type FormFields = z.infer<typeof schema>;
 export default function Profile() {
+  const [updatePasswordModal, setIsUpdatePasswordModal] = useState(false);
+
+  const toggleUpdatePasswordModal = () => {
+    setIsUpdatePasswordModal((prev) => !prev);
+  };
+
   usePageTitle("User Profile");
 
   const dispatch = useDispatch<AppDispatch>();
@@ -46,9 +55,9 @@ export default function Profile() {
   const userCode = currentUser?.usercode!;
 
   const { data: userDetails, isFetching: userDetailsFetching } = useQuery({
-    queryKey: ["profile", userCode], // Correctly pass queryKey as part of an object
+    queryKey: ["profile", userCode],
     queryFn: async () => {
-      return getUserDetails(userCode); // Pass userCode to getUserDetails
+      return getUserDetails(userCode);
     },
     enabled: !!userCode,
     refetchOnWindowFocus: false,
@@ -58,17 +67,18 @@ export default function Profile() {
     handleSubmit,
     register,
     reset,
-    formState: { isDirty },
+    formState: { dirtyFields, errors },
   } = useForm<FormFields>({
     resolver: zodResolver(schema),
     mode: "onBlur",
-    defaultValues: undefined,
+    defaultValues: transformedUser || undefined,
   });
 
   useEffect(() => {
     if (userDetails && !userDetailsFetching) {
-      console.log(userDetails);
+      console.log("did this run")
       const formDefaultValue = transformUserDetails(userDetails);
+      console.log(formDefaultValue)
       setTransformedUser(formDefaultValue);
 
       reset(formDefaultValue);
@@ -84,7 +94,7 @@ export default function Profile() {
         })
       );
     }
-  }, [userDetails, reset, dispatch]);
+  }, [userDetails, reset, dispatch, userDetailsFetching]);
 
   const {
     data: groupList,
@@ -93,6 +103,7 @@ export default function Profile() {
   } = useQuery({
     queryFn: getUserGroupList,
     queryKey: ["profile", "getGroups"],
+    refetchOnWindowFocus: false,
   });
 
   let groupListData: { code: string; id: string }[] | undefined =
@@ -100,18 +111,23 @@ export default function Profile() {
     groupList.map((item: UserGroup) => ({ code: item.code, id: item.id }));
 
   const success = (data: User) => {
+    const formDefaultValue = transformUserDetails(data);
     const { id, password, ...user } = data;
-    console.log(user);
+
+    const hashPassword = md5(password)
+
     const transformedUser = {
       ...user,
+      password: hashPassword,
+      loggedInAt: data?.loggedInAt,
       userGroup: {
         ...user?.userGroup,
         id: user?.userGroup.id?.toString(),
       },
     };
     dispatch(updateCurrentUser(transformedUser));
+    reset(formDefaultValue);
     showToast.success("User Updated");
-    reset(transformedUser);
   };
 
   const error = () => {
@@ -133,16 +149,22 @@ export default function Profile() {
   };
 
   const onSubmit = async (data: FormFields) => {
+    const isPassword = updatePasswordModal
     const user: User = {
       ...data,
       status: "ACTIVE",
     };
     await updateUserMutate({ id: userId, user });
+    if(isPassword){
+      toggleUpdatePasswordModal()
+    }
   };
 
   if (userDetailsFetching && groupListFetching) {
     return <Spinner />;
   }
+
+  const isDirty = Object.keys(dirtyFields).length > 0;
 
   return (
     <>
@@ -151,126 +173,95 @@ export default function Profile() {
         className="flex flex-col py-4 gap-10"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <Container title="Personal Information">
-          <div className="flex flex-col md:justify-around md:flex-row gap-2">
-            <div className="flex-1">
-              <Input id="first_name" label="First Name" register={register} />
-            </div>
-            <div className="flex-1">
-              <Input id="last_name" label="Last Name" register={register} />
-            </div>
-          </div>
-        </Container>
-        <Container title="Identification">
-          <div className="flex flex-col md:justify-around md:flex-row  gap-2">
-            <div className="flex-1">
-              <Input id="usercode" label="User Name" register={register} />
-            </div>
-            <div className="flex-1">
-              <Input id="email" label="Email" register={register} />
+        <div className="p-10 border rounded-2xl shadow-lg bg-white flex flex-col gap-10">
+          <div>
+            <h2 className="text-xl mb-5 font-bold">Personal Information</h2>
+            <div className="flex flex-col md:flex-row">
+              <div className="md:w-1/3">
+                <Input id="first_name" label="First Name" register={register} error={errors.first_name?.message} />
+              </div>
+              <div className="md:w-1/3">
+                <Input id="last_name" label="Last Name" register={register} />
+              </div>
             </div>
           </div>
-        </Container>
-        <Container title="Account Details">
-          <div className="flex flex-col md:justify-around md:flex-row  gap-2">
-            <div className="flex-1 flex flex-col">
-              <label className="text-lg">Role</label>
-              <select
-                className="md:w-4/6 p-1 bg-white border-b border-b-gray-500 focus-visible:outline-none outline-none"
-                id="role"
-                {...register("userGroup.id")}
-                disabled={!currentUser?.userGroup.isAdmin || groupListLoading}
-              >
-                {groupListData?.map((option) => (
-                  <option key={option.id} value={option.id}>
-                    {option.code}
-                  </option>
-                ))}
-              </select>
+          <div>
+            <h2 className="text-xl mb-5 font-bold">Account Information</h2>
+            <div className="flex flex-col md:flex-row gap-2">
+              <div className="md:w-1/3">
+                <Input id="usercode" label="User Name" register={register} />
+              </div>
+              <div className="md:w-1/3">
+                <Input id="email" label="Email" register={register} />
+              </div>
+              <div className="flex flex-col md:w-1/3">
+                <label className="text-lg mb-2">Role</label>
+                <select
+                  className="p-1 bg-white border-b border-b-gray-500 focus-visible:outline-none outline-none md:w-5/6"
+                  id="role"
+                  {...register("userGroup.id")}
+                  disabled={!currentUser?.userGroup.isAdmin || groupListLoading}
+                >
+                  {groupListData?.map((option) => (
+                    <option key={option.id} value={option.id}>
+                      {option.code}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
-            <div className="flex-1 hidden">
+          </div>
+          <div className="flex justify-between gap-10 md:justify-end md:gap-5">
+            <button
+              className="p-3 bg-gray-500 text-white rounded-md flex-1 md:flex-none font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed disabled:font-normal"
+              onClick={handleReset}
+              disabled={!isDirty || updateUserPending}
+            >
+              Reset
+            </button>
+            <button
+              className="p-3 bg-primary text-white rounded-md disabled:bg-gray-400 font-semibold disabled:cursor-not-allowed flex-1 md:flex-none disabled:font-normal"
+              disabled={!isDirty || updateUserPending}
+              type="submit"
+            >
+              {updateUserPending && !updatePasswordModal ? "Saving..." : "Save Changes"}
+            </button>
+          </div>
+        </div>
+        <div className="p-10 border rounded-2xl shadow-lg bg-white flex flex-col ">
+          <h2 className="text-xl mb-5 font-bold">Security</h2>
+          <div className="flex flex-col gap-2 md:flex-row md:gap-0 md:justify-between">
+            <div className="md:w-1/3">
               <Input
+                customWidth="md:w-5/6"
                 id="password"
                 label="Password"
                 attributes={{ type: "password" }}
                 register={register}
+                isDisabled={true}
               />
             </div>
+            <button
+              type="button"
+              className="p-3 bg-primary rounded text-white cursor-pointer"
+              onClick={toggleUpdatePasswordModal}
+            >
+              Update Password
+            </button>
           </div>
-        </Container>
-        <div className="flex justify-between gap-10 md:justify-end md:gap-5 md:px-5">
-          <button
-            className="p-3 bg-green-500 text-white rounded-md flex-1 md:flex-none disabled:bg-gray-400 disabled:cursor-not-allowed"
-            onClick={handleReset}
-            disabled={!isDirty || updateUserPending}
-          >
-            Reset
-          </button>
-          <button
-            className="p-3 bg-primary text-white rounded-md disabled:bg-gray-400 disabled:cursor-not-allowed flex-1 md:flex-none"
-            disabled={!isDirty || updateUserPending}
-            type="submit"
-          >
-            {updateUserPending ? "Loading..." : "Update"}
-          </button>
         </div>
       </form>
+      {updatePasswordModal && (
+        <CustomModal closeModal={() => setIsUpdatePasswordModal(false)}>
+          <PasswordUpdate
+            closeModal={() => setIsUpdatePasswordModal(false)}
+            currentPassword={userDetails.password}
+            updateUserPending={false}
+            userDetails={userDetails}
+            onSubmit={onSubmit}
+          />
+        </CustomModal>
+      )}
     </>
-  );
-}
-
-function Container({
-  children,
-  title,
-}: {
-  title: string;
-  children: ReactNode;
-}) {
-  return (
-    <div className="p-10 border rounded-2xl shadow-lg bg-white">
-      <h2 className="text-xl mb-5 font-bold">{title}</h2>
-      {children}
-    </div>
-  );
-}
-
-function Input({
-  register,
-  id,
-  label,
-  attributes,
-}: {
-  register: UseFormRegister<any>;
-  id: string;
-  label: string;
-  attributes?: Partial<JSX.IntrinsicElements["input"]>;
-}) {
-  const [showPassword, setShowPassword] = useState(false);
-  const isPasswordType = attributes?.type === "password";
-  return (
-    <div className="flex flex-col">
-        <label htmlFor={id} className="text-lg">
-          {label}
-        </label>
-      <div className="relative md:w-4/6">
-        <input
-          className="w-full text-base p-1 pr-10 border-b border-b-gray-500 focus:border-b-sky-500 focus-visible:outline-none"
-          {...register(id)}
-          {...attributes}
-          type={isPasswordType && showPassword ? "text" : attributes?.type}
-          id={id}
-        />
-
-        {isPasswordType && (
-          <button
-            type="button"
-            onClick={() => setShowPassword((prev) => !prev)}
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 text-primary focus:outline-none"
-          >
-            {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
-          </button>
-        )}
-      </div>
-    </div>
   );
 }

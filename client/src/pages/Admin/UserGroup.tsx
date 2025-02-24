@@ -113,14 +113,14 @@ export default function UserGroups() {
       )}
 
       {isModalOpen && (
-        <CustomModal toggleModal={handleModalToggle}>
+        <CustomModal closeModal={handleModalToggle}>
           <h2 className='text-center text-2xl'>Create User Group</h2>
           <UserGroup close={() => setIsModalOpen(false)} />
         </CustomModal>
       )}
 
       {isUpdateUser && (
-        <CustomModal toggleModal={handleUpdateUserToggle}>
+        <CustomModal closeModal={handleUpdateUserToggle}>
           <h2 className='text-center text-2xl'>Update User Group</h2>
           <UserGroup
             close={() => setIsUpdateUser(false)}
@@ -130,7 +130,7 @@ export default function UserGroups() {
       )}
 
       {isDeleteUser && (
-        <CustomModal toggleModal={handleDeleteToggle}>
+        <CustomModal closeModal={handleDeleteToggle}>
           <div className='text-center'>
             <Delete
               pending={isPending}
