@@ -4,6 +4,7 @@ import { z } from "zod";
 import { User } from "../../type/userType";
 import transformUserDetails from "../../utils/transformUserDetails";
 import Input from "./Input";
+import { useEffect, useState } from "react";
 
 type Props = {
   closeModal: () => void;
@@ -20,7 +21,11 @@ export default function PasswordUpdate({
   onSubmit,
   userDetails,
 }: Props) {
-    console.log(userDetails)
+  const [isPending, setIsPending] = useState(updateUserPending);
+
+  useEffect(() => {
+    setIsPending(updateUserPending);
+  }, [updateUserPending]);
   const passwordSchema = z
     .object({
       currentPassword: z
@@ -44,7 +49,7 @@ export default function PasswordUpdate({
   const {
     register,
     handleSubmit,
-    formState: { errors, isDirty },
+    formState: { errors },
   } = useForm<PasswordFormFields>({
     resolver: zodResolver(passwordSchema),
     mode: "onBlur",
@@ -53,7 +58,7 @@ export default function PasswordUpdate({
   const handlePasswordSubmit = async (data: PasswordFormFields) => {
     const details = transformUserDetails(userDetails);
     details!.password = data.newPassword;
-    userDetails!.password = data.newPassword
+    userDetails!.password = data.newPassword;
 
     onSubmit(details);
   };
@@ -61,10 +66,33 @@ export default function PasswordUpdate({
     <form className="flex flex-col gap-5 p-5">
       <h2 className="text-center text-2xl font-bold mb-4">Update Password</h2>
 
-      <Input id="currentPassword" label="Current Password" register={register} attributes={{type: "password"}} customWidth={"w-full"} error={errors.currentPassword?.message} showFunctionality={true}/>
-      <Input id="newPassword" label="New Password" register={register} attributes={{type: "password"}} customWidth={"w-full"} error={errors.newPassword?.message} showFunctionality={true}
+      <Input
+        id="currentPassword"
+        label="Current Password"
+        register={register}
+        attributes={{ type: "password" }}
+        customWidth={"w-full"}
+        error={errors.currentPassword?.message}
+        showFunctionality={true}
       />
-      <Input id="confirmPassword" label="Confirm Password" register={register} attributes={{type: "password"}} customWidth={"w-full"} error={errors.confirmPassword?.message} showFunctionality={true}/>
+      <Input
+        id="newPassword"
+        label="New Password"
+        register={register}
+        attributes={{ type: "password" }}
+        customWidth={"w-full"}
+        error={errors.newPassword?.message}
+        showFunctionality={true}
+      />
+      <Input
+        id="confirmPassword"
+        label="Confirm Password"
+        register={register}
+        attributes={{ type: "password" }}
+        customWidth={"w-full"}
+        error={errors.confirmPassword?.message}
+        showFunctionality={true}
+      />
 
       <div className="flex justify-end gap-3 mt-4">
         <button
@@ -76,11 +104,11 @@ export default function PasswordUpdate({
         </button>
         <button
           type="button"
-          className="px-4 py-2 bg-primary text-white rounded-md disabled:bg-gray-400"
-          disabled={!isDirty || updateUserPending}
+          className="px-4 py-2 bg-primary text-white rounded-md"
+          disabled={isPending}
           onClick={handleSubmit(handlePasswordSubmit)}
         >
-          {updateUserPending ? "Updating..." : "Update Password"}
+          {isPending ? "Updating..." : "Update Password"}
         </button>
       </div>
     </form>

@@ -256,7 +256,7 @@ export default function Profile() {
           <PasswordUpdate
             closeModal={() => setIsUpdatePasswordModal(false)}
             currentPassword={userDetails.password}
-            updateUserPending={false}
+            updateUserPending={updateUserPending}
             userDetails={userDetails}
             onSubmit={onSubmit}
           />
