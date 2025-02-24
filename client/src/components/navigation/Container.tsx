@@ -108,7 +108,7 @@ export default function Container({
         onClick={logoutModalOpen}
       >
         <TbLogout2 size={20} /> Logout
-        {logoutModal && <CustomModal toggleModal={logoutModalClose}>
+        {logoutModal && <CustomModal closeModal={logoutModalClose}>
           <p className="text-center">Are you sure you want to log out?</p>
           <div className="flex justify-center gap-5 mt-3">
             <button
