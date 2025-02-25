@@ -44,7 +44,7 @@ export default function Tooltip({ text, children, width }: TooltipProps) {
           >
             {text}
           </div>,
-          document.body
+          document.getElementById('tooltip')!
         )}
     </>
   )
