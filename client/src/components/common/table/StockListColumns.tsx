@@ -32,6 +32,7 @@ const StockListColumns = ({
         header: () => <span className='truncate'>{field.label}</span>,
       })
     ),
+
     columnHelper.accessor("price", {
       id: "productPrice",
       cell: (info) => {

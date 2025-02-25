@@ -18,8 +18,8 @@ const fields = [
   { key: "brand", label: "Brand", classes: "uppercase" },
   { key: "unit", label: "Unit", classes: "lowercase" },
   { key: "reorderPoint", label: "Stock Level" },
-  { key: "cost", label: "Cost" },
-  { key: "status", label: "Status", classes: "lowercase" },
+
+  { key: "status", label: "Status", classes: "uppercase" },
 ]
 
 const Columns = ({
@@ -50,6 +50,28 @@ const Columns = ({
         header: () => <span className='truncate'>{field.label}</span>,
       })
     ),
+    columnHelper.accessor("price", {
+      id: "productPrice",
+      cell: (info) => {
+        const price = info.getValue()
+        const formattedPrice =
+          price % 1 === 0 ? `${price}.00` : price.toFixed(2)
+
+        return <span>{formattedPrice}</span>
+      },
+      header: () => <span className='truncate'>Price</span>,
+    }),
+    columnHelper.accessor("cost", {
+      id: "productAmount",
+      cell: (info) => {
+        const price = info.getValue()
+        const formattedPrice =
+          price % 1 === 0 ? `${price}.00` : price.toFixed(2)
+
+        return <span>{formattedPrice}</span>
+      },
+      header: () => <span className='truncate'>Cost</span>,
+    }),
   ]
 }
 const ItemColumns = ({
@@ -169,6 +191,14 @@ const ItemComponents = () => {
     setIsOpenModal((prev) => !prev)
   }
 
+  const totalPrice = rawMaterials
+    .reduce((acc, material) => {
+      const price = material?.rawMaterial?.price ?? 0
+      const quantity = Number(material?.quantity) || 0
+      return acc + price * quantity
+    }, 0)
+    .toFixed(2)
+
   const handleSubmit = (products: ItemType[]) => {
     setRawMaterials((prevProduct) => {
       const updatedProductItems = [
@@ -213,7 +243,6 @@ const ItemComponents = () => {
       "description",
       "unit",
       "reorderPoint",
-      "price",
     ]
 
     const emptyFields = requiredFields.filter(
@@ -234,11 +263,6 @@ const ItemComponents = () => {
     ) {
       setInvalidFields((prev) => [...prev, "unit"])
       showToast.error("Invalid unit type")
-      return
-    }
-
-    if (productData.price === 0) {
-      showToast.error("Price cannot be 0")
       return
     }
 
@@ -270,11 +294,12 @@ const ItemComponents = () => {
       return acc + cost * quantity
     }, 0)
 
-    const { cost, ...rest } = productData
+    const { cost, price, ...rest } = productData
 
     const updateProductComponent = {
       finishProduct: {
         ...rest,
+        price: parseFloat(totalPrice),
         cost: totalCost,
       },
       components: rawMaterials.map((material) => ({
@@ -442,11 +467,10 @@ const ItemComponents = () => {
                   id='price'
                   name='price'
                   autoComplete='off'
-                  value={productData.price}
-                  onChange={handleChange}
-                  className={`${
-                    invalidFields.includes("price") && "border-primary"
-                  } w-full p-2 rounded-md border outline-transparent bg-transparent text-xs
+                  value={totalPrice}
+                  readOnly
+                  disabled={true}
+                  className={`w-full p-2 rounded-md border outline-transparent bg-transparent text-xs
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
                 />
               </div>
@@ -554,12 +578,13 @@ const ItemComponents = () => {
               </button>
 
               <button
-                type='submit'
+                type='button'
+                onClick={() => document.querySelector("form")?.requestSubmit()}
                 className={`rounded-md border-0 outline-transparent py-2.5
            font-medium cursor-pointer text-white bg-blue-700 w-[100px]`}
               >
                 {isPending ? (
-                  <div className='w-5 h-5 border-2 border-t-2 border-[#0A140A] border-t-white rounded-full animate-spin'></div>
+                  <div className='flex item-center justify-center w-5 h-5 border-2 border-t-2 border-[#0A140A] border-t-white rounded-full animate-spin'></div>
                 ) : (
                   <p className='text-white font-bold text-xs'>Confirm</p>
                 )}
