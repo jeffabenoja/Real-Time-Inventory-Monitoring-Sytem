@@ -130,7 +130,7 @@ const StocklistPage = () => {
           withExport={true}
           add={true}
           view={true}
-          toolTip='Inventory'
+          toolTip='Inventory List'
           handleAdd={handleModalAdd}
           handleImport={handleModalImport}
           handleView={handleModalViewInventory}
@@ -180,9 +180,9 @@ const StocklistPage = () => {
       {isUpdateStock && (
         <CustomModal
           toggleModal={handleUpdateStockToggle}
-          classes='h-[480px] md:p-8 w-[343px] md:w-[970px]'
+          classes='md:h-[480px] md:p-8 w-full h-full md:w-[970px]'
         >
-          <UpdateStockTable itemId={itemId} />
+          <UpdateStockTable itemId={itemId} close={handleUpdateStockToggle} />
         </CustomModal>
       )}
 
@@ -193,11 +193,11 @@ const StocklistPage = () => {
       )}
 
       {isOpenInventory && (
-        <CustomModal
-          toggleModal={handleModalViewInventory}
-          classes='h-[480px] md:p-8 w-[343px] md:w-[970px]'
-        >
-          <InventoryTable category='Raw Mats' />
+        <CustomModal classes='md:h-[480px] md:p-8 w-full h-full md:w-[970px]'>
+          <InventoryTable
+            category='Raw Mats'
+            close={handleModalViewInventory}
+          />
         </CustomModal>
       )}
     </>

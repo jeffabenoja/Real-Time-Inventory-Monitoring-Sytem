@@ -174,7 +174,7 @@ const Table: React.FC<TableProps> = ({
         </div>
 
         {view && (
-          <div className='ml-2 text-center'>
+          <div className='ml-2 text-cente'>
             <Tooltip text={toolTip || ""}>
               <Buttons
                 label={"View"}

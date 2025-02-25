@@ -9,6 +9,7 @@ import { createColumnHelper } from "@tanstack/react-table"
 import { Link, useNavigate } from "react-router-dom"
 import { showToast } from "../../utils/Toast"
 import { useItemComponents } from "../../hooks/items/useItemComponents"
+import ConfirmationModal from "../modal/ConfirmationModal"
 
 const fields = [
   { key: "code", label: "Product Code", classes: "uppercase" },
@@ -126,6 +127,8 @@ const ItemComponents = () => {
   const { data } = useItemMaterials()
   const { createItem, isPending } = useItemComponents()
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
+  const [confirmSubmit, setConfirmSubmit] = useState<boolean>(false)
+  const [confirmCancel, setConfirmCancel] = useState<boolean>(false)
   const [rawMaterials, setRawMaterials] = useState<ComponentsMaterials[]>([])
   const [invalidFields, setInvalidFields] = useState<string[]>([])
   const [productData, setProductData] = useState<ItemType>({
@@ -134,7 +137,7 @@ const ItemComponents = () => {
     category: "Finished Goods",
     brand: "N/A",
     unit: "pcs",
-    reorderPoint: 0,
+    reorderPoint: 1,
     price: 0,
     cost: 0,
   })
@@ -226,10 +229,16 @@ const ItemComponents = () => {
     if (
       productData.unit.toLowerCase() !== "kg" &&
       productData.unit.toLowerCase() !== "pcs" &&
-      productData.unit.toLowerCase() !== "pack"
+      productData.unit.toLowerCase() !== "pack" &&
+      productData.unit.toLowerCase() !== "liters"
     ) {
       setInvalidFields((prev) => [...prev, "unit"])
       showToast.error("Invalid unit type")
+      return
+    }
+
+    if (productData.price === 0) {
+      showToast.error("Price cannot be 0")
       return
     }
 
@@ -254,8 +263,6 @@ const ItemComponents = () => {
       showToast.error("Invalid Quantity")
       return
     }
-
-    console.log(invalidRawMaterials)
 
     const totalCost = rawMaterials.reduce((acc, material) => {
       const cost = material?.rawMaterial?.cost ?? 0
@@ -282,154 +289,169 @@ const ItemComponents = () => {
   }
 
   return (
-    <div className='flex flex-col max-w-full mx-auto h-dynamic-sm lg:h-dynamic-lg px-4 lg:px-8 py-4'>
-      <PageTitle>Create Finished Product</PageTitle>
+    <>
+      <div className='hidden md:block'>
+        <PageTitle>Create Finished Product</PageTitle>
+      </div>
+      <h1 className='md:hidden'>Create Finished Product</h1>
 
       <form className='flex flex-col' onSubmit={handleOnSubmit}>
-        <div className='overflow-x-auto bg-white shadow-md rounded-lg scrollbar'>
-          <table className='min-w-full divide-y divide-gray-200'>
-            <thead className='bg-gray-50 sticky top-0'>
-              <tr>
-                <th className='px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider  bg-gray-50'>
-                  Code
-                </th>
+        <div className='pt-4 px-2 border-t border-[#14aff1] flex flex-col gap-5'>
+          <div className='flex flex-col md:flex-row gap-5 md:items-center '>
+            <div className='flex items-center gap-2 relative'>
+              <label htmlFor='productCode' className='text-sm w-[125px]'>
+                Product Code:
+              </label>
+              <div className='flex-1'>
+                <input
+                  id='productCode'
+                  type='text'
+                  name='code'
+                  value={productData.code}
+                  onChange={handleChange}
+                  autoComplete='off'
+                  className={`${
+                    invalidFields.includes("code") && "border-primary"
+                  }  w-full p-2 rounded-md border outline-transparent bg-transparent text-xs
+              focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
+                />
+              </div>
+            </div>
+            <div className='flex items-center gap-2'>
+              <label
+                htmlFor='description'
+                className='text-sm w-[125px] md:w-[95px] xl:w-[125px]'
+              >
+                Product Name:
+              </label>
+              <div className='flex-1'>
+                <input
+                  id='description'
+                  type='text'
+                  name='description'
+                  value={productData.description}
+                  onChange={handleChange}
+                  autoComplete='off'
+                  className={`${
+                    invalidFields.includes("description") && "border-primary"
+                  } w-full p-2 rounded-md border outline-transparent bg-transparent text-xs
+              focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
+                />
+              </div>
+            </div>
+            <div className='flex items-center gap-2'>
+              <label
+                htmlFor='category'
+                className='text-sm w-[125px] md:w-[60px] xl:w-[125px]'
+              >
+                Category:
+              </label>
+              <div className='flex-1'>
+                <input
+                  id='category'
+                  type='text'
+                  name='category'
+                  value={productData.category}
+                  readOnly
+                  className={`${
+                    invalidFields.includes("category") && "border-primary"
+                  } w-full p-2 rounded-md border outline-transparent bg-transparent text-xs
+              focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
+                />
+              </div>
+            </div>
+            <div className='flex items-center gap-2 xl:flex-1'>
+              <label htmlFor='unit' className='text-sm  w-[125px] md:w-[30px] '>
+                Unit:
+              </label>
+              <div className='flex-1'>
+                <select
+                  id='unit'
+                  name='unit'
+                  value={productData.unit}
+                  onChange={handleChange}
+                  className={`${
+                    invalidFields.includes("unit") && "border-red-900"
+                  } w-full p-2 rounded-md border outline-transparent bg-transparent text-xs
+              focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
+                >
+                  <option value='kg'>KG</option>
+                  <option value='pcs'>PCS</option>
+                  <option value='pack'>PACK</option>
+                  <option value='liters'>LITERS</option>
+                </select>
+              </div>
+            </div>
+          </div>
 
-                <th className='px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider  bg-gray-50'>
-                  Product Name
-                </th>
+          <div className='flex flex-col md:flex-row gap-5 md:items-center '>
+            <div className='flex items-center gap-2 relative'>
+              <label htmlFor='brand' className='text-sm w-[125px]'>
+                Brand:
+              </label>
+              <div className='flex-1'>
+                <input
+                  id='brand'
+                  type='text'
+                  name='brand'
+                  value={productData.brand}
+                  onChange={handleChange}
+                  placeholder='e.g. ITEM101'
+                  autoComplete='off'
+                  className={`${
+                    invalidFields.includes("brand") && "border-primary"
+                  } w-full p-2 rounded-md border outline-transparent bg-transparent text-xs
+              focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
+                />
+              </div>
+            </div>
 
-                <th className='px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider  bg-gray-50'>
-                  Category
-                </th>
-
-                <th className='px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider  bg-gray-50'>
-                  Brand
-                </th>
-
-                <th className='px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider  bg-gray-50'>
-                  Unit
-                </th>
-
-                <th className='px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider  bg-gray-50'>
-                  Reordering Point
-                </th>
-
-                <th className='px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider  bg-gray-50'>
-                  Selling Price
-                </th>
-              </tr>
-            </thead>
-            <tbody className='bg-white divide-y divide-gray-200'>
-              <tr>
-                <td className='hover:bg-gray-50 p-2 whitespace-nowrap text-sm text-gray-900 cursor-pointer text-center'>
-                  <input
-                    id='productCode'
-                    type='text'
-                    name='code'
-                    value={productData.code}
-                    onChange={handleChange}
-                    placeholder='e.g. ITEM101'
-                    autoComplete='off'
-                    className={`${
-                      invalidFields.includes("code") && "border-primary"
-                    } w-full text-center py-2 px-4 border uppercase border-gray-900 outline-transparent bg-transparent placeholder:text-sm
+            <div className='flex items-center gap-2'>
+              <label htmlFor='reorderPoint' className='text-sm w-[125px]'>
+                Reorder Point:
+              </label>
+              <div className='flex-1'>
+                <input
+                  type='number'
+                  step='0.01'
+                  min='1'
+                  id='reorderPoint'
+                  autoComplete='off'
+                  name='reorderPoint'
+                  value={productData.reorderPoint}
+                  onChange={handleChange}
+                  className={`${
+                    invalidFields.includes("reorderPoint") && "border-primary"
+                  }  w-full p-2 rounded-md border outline-transparent bg-transparent text-xs
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
-                  />
-                </td>
-                <td className='hover:bg-gray-50 py-2 whitespace-nowrap text-sm text-gray-900 cursor-pointer text-center'>
-                  <input
-                    id='description'
-                    type='text'
-                    name='description'
-                    value={productData.description}
-                    onChange={handleChange}
-                    placeholder='e.g. Ube Halaya'
-                    autoComplete='off'
-                    className={`${
-                      invalidFields.includes("description") && "border-primary"
-                    } w-full text-center py-2 px-4 border uppercase border-gray-900 outline-transparent bg-transparent placeholder:text-sm
+                />
+              </div>
+            </div>
+            <div className='flex items-center gap-2'>
+              <label
+                htmlFor='price'
+                className='text-sm w-[125px] md:w-[60px] xl:w-[125px]'
+              >
+                Price:
+              </label>
+              <div className='flex-1'>
+                <input
+                  type='number'
+                  step='0.01'
+                  min='0.01'
+                  id='price'
+                  name='price'
+                  autoComplete='off'
+                  value={productData.price}
+                  onChange={handleChange}
+                  className={`${
+                    invalidFields.includes("price") && "border-primary"
+                  } w-full p-2 rounded-md border outline-transparent bg-transparent text-xs
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
-                  />
-                </td>
-                <td className='hover:bg-gray-50 p-2 whitespace-nowrap text-sm text-gray-900 cursor-pointer text-center'>
-                  <input
-                    id='category'
-                    type='text'
-                    name='category'
-                    value={productData.category}
-                    readOnly
-                    className={`${
-                      invalidFields.includes("category") && "border-primary"
-                    } w-full text-center py-2 px-4 border uppercase border-gray-900 outline-transparent bg-transparent placeholder:text-sm
-              focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
-                  />
-                </td>
-                <td className='hover:bg-gray-50 p-2 whitespace-nowrap text-sm text-gray-900 cursor-pointer text-center'>
-                  <input
-                    id='brand'
-                    type='text'
-                    name='brand'
-                    value={productData.brand}
-                    onChange={handleChange}
-                    placeholder='e.g. ITEM101'
-                    autoComplete='off'
-                    className={`${
-                      invalidFields.includes("brand") && "border-primary"
-                    } w-full text-center py-2 px-4 border uppercase border-gray-900 outline-transparent bg-transparent placeholder:text-sm
-              focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
-                  />
-                </td>
-                <td className='hover:bg-gray-50 p-2 whitespace-nowrap text-sm text-gray-900 cursor-pointer text-center'>
-                  <select
-                    id='unit'
-                    name='unit'
-                    value={productData.unit}
-                    onChange={handleChange}
-                    className={`${
-                      invalidFields.includes("unit") && "border-red-900"
-                    } w-[100px] py-2 cursor-pointer px-4 border uppercase border-gray-900 outline-transparent bg-transparent placeholder:text-sm
-              focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
-                  >
-                    <option value='kg'>KG</option>
-                    <option value='pcs'>PCS</option>
-                    <option value='pack'>PACK</option>
-                  </select>
-                </td>
-                <td className='hover:bg-gray-50 p-2 whitespace-nowrap text-sm text-gray-900 cursor-pointer text-center'>
-                  <input
-                    type='number'
-                    step='0.01'
-                    min='1'
-                    id='reorderPoint'
-                    autoComplete='off'
-                    name='reorderPoint'
-                    value={productData.reorderPoint}
-                    onChange={handleChange}
-                    className={`${
-                      invalidFields.includes("reorderPoint") && "border-primary"
-                    } w-full text-center py-2 px-4 border  border-gray-900 outline-transparent bg-transparent placeholder:text-sm
-              focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
-                  />
-                </td>
-                <td className='hover:bg-gray-50 p-2 whitespace-nowrap text-sm text-gray-900 cursor-pointer text-center'>
-                  <input
-                    type='number'
-                    step='0.01'
-                    min='0.01'
-                    id='price'
-                    name='price'
-                    autoComplete='off'
-                    value={productData.price}
-                    onChange={handleChange}
-                    className={`${
-                      invalidFields.includes("price") && "border-primary"
-                    } w-full text-center py-2 px-4 border  border-gray-900 outline-transparent bg-transparent placeholder:text-sm
-              focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
-                  />
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                />
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className='mt-4'>
@@ -481,27 +503,72 @@ const ItemComponents = () => {
           )}
 
           <div className='flex items-center justify-end mt-4 gap-5'>
-            <Link
-              to={"/dashboard/products"}
+            <button
+              type='button'
+              onClick={() => setConfirmCancel(true)}
               className='bg-red-700 rounded-md py-2.5 w-[150px] text-white font-bold text-xs text-center'
             >
               Cancel
-            </Link>
+            </button>
 
             <button
-              type='submit'
-              className='bg-blue-700 rounded-md py-2.5 w-[150px]'
+              type='button'
+              onClick={() => setConfirmSubmit(true)}
+              className={`rounded-md border-0 outline-transparent py-2.5
+           font-medium cursor-pointer text-white bg-blue-700 w-[150px]`}
             >
-              {isPending ? (
-                <div className='w-5 h-5 border-2 border-t-2 border-[#0A140A] border-t-white rounded-full animate-spin'></div>
-              ) : (
-                <p className='text-white font-bold text-xs'>Submit</p>
-              )}
+              <p className='text-white font-bold text-xs'>Submit</p>
             </button>
           </div>
+
+          {confirmCancel && (
+            <ConfirmationModal>
+              <button
+                type='button'
+                onClick={() => setConfirmCancel(false)}
+                className='bg-red-700 rounded-md py-2.5 w-[100px] text-white font-bold text-xs text-center'
+              >
+                Cancel
+              </button>
+
+              <Link to={"/dashboard/products"}>
+                <button
+                  type='button'
+                  className={`rounded-md border-0 outline-transparent py-2.5
+           font-medium cursor-pointer text-white bg-blue-700 w-[100px]`}
+                >
+                  <p className='text-white font-bold text-xs'>Confirm</p>
+                </button>
+              </Link>
+            </ConfirmationModal>
+          )}
+
+          {confirmSubmit && (
+            <ConfirmationModal>
+              <button
+                type='button'
+                onClick={() => setConfirmSubmit(false)}
+                className='bg-red-700 rounded-md py-2.5 w-[100px] text-white font-bold text-xs text-center'
+              >
+                Cancel
+              </button>
+
+              <button
+                type='submit'
+                className={`rounded-md border-0 outline-transparent py-2.5
+           font-medium cursor-pointer text-white bg-blue-700 w-[100px]`}
+              >
+                {isPending ? (
+                  <div className='w-5 h-5 border-2 border-t-2 border-[#0A140A] border-t-white rounded-full animate-spin'></div>
+                ) : (
+                  <p className='text-white font-bold text-xs'>Confirm</p>
+                )}
+              </button>
+            </ConfirmationModal>
+          )}
         </div>
       </form>
-    </div>
+    </>
   )
 }
 

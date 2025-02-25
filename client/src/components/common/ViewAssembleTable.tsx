@@ -9,6 +9,7 @@ import { AssembleTransaction } from "../../type/stockType"
 import UpdateAssemble from "../modal/UpdateAssemble"
 import { CiEdit } from "react-icons/ci"
 import Tooltip from "./Tooltip"
+import { IoIosClose } from "react-icons/io"
 
 const fields = [
   { key: "transactionNo", label: "Transaction Number", classes: "uppercase" },
@@ -24,6 +25,7 @@ const fields = [
 ]
 type AssembleTableProps = {
   itemId: string
+  close: () => void
 }
 
 const Columns = ({
@@ -70,7 +72,7 @@ const Columns = ({
   ]
 }
 
-const ViewAssembleTable = ({ itemId }: AssembleTableProps) => {
+const ViewAssembleTable = ({ itemId, close }: AssembleTableProps) => {
   const {
     data: assembleData = [],
     isLoading,
@@ -122,26 +124,31 @@ const ViewAssembleTable = ({ itemId }: AssembleTableProps) => {
       {isLoading ? (
         <Spinner />
       ) : (
-        <>
-          <h1 className='font-bold text-xl pb-2 border-b border-[#14aff1]'>
-            Transaction History for{" "}
-            <span className='uppercase text-[#14aff1]'>
-              {assembleData[0]?.finishProduct?.code}
-            </span>
-          </h1>
-          <Table
-            data={assembleData}
-            columns={columns}
-            sorting={[{ id: "transactionNo", desc: true }]}
-            search={true}
-            withImport={false}
-            withExport={false}
-            withSubmit={false}
-            withCancel={false}
-            add={false}
-            view={false}
-          />
-        </>
+        <div className='flex flex-col gap-2 h-full'>
+          <div className='flex gap-2 justify-between items-center border-b border-[#14aff1]'>
+            <h1 className='font-bold text-xl'>
+              Transaction History for{" "}
+              <span className='uppercase text-[#14aff1]'>
+                {assembleData[0]?.finishProduct?.code}
+              </span>
+            </h1>
+            <IoIosClose className=' cursor-pointer' size={30} onClick={close} />
+          </div>
+          <div className='flex-1 overflow-hidden overflow-y-auto scrollbar'>
+            <Table
+              data={assembleData}
+              columns={columns}
+              sorting={[{ id: "transactionNo", desc: true }]}
+              search={true}
+              withImport={false}
+              withExport={false}
+              withSubmit={false}
+              withCancel={false}
+              add={false}
+              view={false}
+            />
+          </div>
+        </div>
       )}
       {openModal && (
         <CustomModal classes='h-[420px] lg:h-[510px] md:p-8 w-[343px] md:w-[860px]'>

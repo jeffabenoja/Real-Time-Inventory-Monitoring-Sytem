@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { showToast } from "../../utils/Toast"
 import { ItemType } from "../../type/itemType"
+import ConfirmationModal from "./ConfirmationModal"
 
 interface AddItemsProps {
   title?: string
@@ -50,6 +51,8 @@ const AddItems: React.FC<AddItemsProps> = ({
   }, [productData])
 
   const [invalidFields, setInvalidFields] = useState<string[]>([])
+  const [confirmSubmit, setConfirmSubmit] = useState<boolean>(false)
+  const [confirmCancel, setConfirmCancel] = useState<boolean>(false)
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -75,9 +78,8 @@ const AddItems: React.FC<AddItemsProps> = ({
       "reorderPoint",
     ]
 
-    if (isProduct) {
+    if (isStocklist) {
       requiredFields.push("price")
-    } else {
       requiredFields.push("cost")
     }
 
@@ -125,6 +127,19 @@ const AddItems: React.FC<AddItemsProps> = ({
       category,
       brand: product.brand || "N/A",
       status: normalizeStatus,
+    }
+
+    if (productData) {
+      const isSameProduct = Object.keys(updatedProduct).every(
+        (key) =>
+          updatedProduct[key as keyof ItemType] ===
+          productData[key as keyof ItemType]
+      )
+
+      if (isSameProduct) {
+        showToast.success("Already up to date.")
+        return
+      }
     }
 
     isOnSubmit(updatedProduct)
@@ -271,8 +286,8 @@ const AddItems: React.FC<AddItemsProps> = ({
           </div>
         </div>
 
-        <div className='w-full flex justify-between'>
-          {isProduct && (
+        {isStocklist && (
+          <div className='w-full flex justify-between'>
             <div className='flex flex-col gap-2'>
               <label htmlFor='price' className='text-sm'>
                 Selling Price
@@ -292,9 +307,7 @@ const AddItems: React.FC<AddItemsProps> = ({
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
               />
             </div>
-          )}
 
-          {isStocklist && (
             <div className='flex flex-col gap-2'>
               <label htmlFor='cost' className='text-sm'>
                 Expenses Cost
@@ -310,55 +323,98 @@ const AddItems: React.FC<AddItemsProps> = ({
                 onChange={handleChange}
                 className={`${
                   invalidFields.includes("cost") && "border-primary"
-                } w-[120px] md:w-[180px] py-1 pl-4 pr-1 border border-opacity-25 rounded-md outline-transparent bg-transparent
+                } w-[120px] md:w-[150px] py-1 pl-4 pr-1 border border-opacity-25 rounded-md outline-transparent bg-transparent
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
               />
             </div>
-          )}
+          </div>
+        )}
 
-          {productData && (
-            <div className='flex flex-col gap-2'>
-              <label htmlFor='status' className='text-sm'>
-                Status
-              </label>
-              <select
-                id='status'
-                name='status'
-                value={product.status}
-                onChange={handleChange}
-                className={`w-[120px] capitalize md:w-[150px] p-2 rounded-md border cursor-pointer outline-transparent bg-transparent text-xs
+        {productData && (
+          <div className='flex flex-col gap-2'>
+            <label htmlFor='status' className='text-sm'>
+              Status
+            </label>
+            <select
+              id='status'
+              name='status'
+              value={product.status}
+              onChange={handleChange}
+              className={`w-full capitalize p-2 rounded-md border cursor-pointer outline-transparent bg-transparent text-xs
         focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
-              >
-                <option value='ACTIVE'>ACTIVE</option>
-                <option value='INACTIVE'>INACTIVE</option>
-              </select>
-            </div>
-          )}
-        </div>
+            >
+              <option value='ACTIVE'>ACTIVE</option>
+              <option value='INACTIVE'>INACTIVE</option>
+            </select>
+          </div>
+        )}
 
         <div className='flex items-center justify-end mt-4 gap-5'>
           <button
             type='button'
-            onClick={toggleModal}
+            onClick={() => setConfirmCancel(true)}
             className='bg-red-700 rounded-md py-2.5 w-[150px] text-white font-bold text-xs text-center'
           >
             Cancel
           </button>
 
           <button
-            type='submit'
+            type='button'
+            onClick={() => setConfirmSubmit(true)}
             className={`rounded-md border-0 outline-transparent py-2.5
            font-medium cursor-pointer text-white bg-blue-700 w-[150px]`}
           >
-            {isLoading ? (
-              <div className='w-5 h-5 border-2 border-t-2 border-[#0A140A] border-t-white rounded-full animate-spin'></div>
-            ) : (
-              <p className='text-white font-bold text-xs'>
-                {title ? "Submit" : "Update"}
-              </p>
-            )}
+            <p className='text-white font-bold text-xs'>
+              {title ? "Submit" : "Update"}
+            </p>
           </button>
         </div>
+
+        {confirmCancel && (
+          <ConfirmationModal>
+            <button
+              type='button'
+              onClick={() => setConfirmCancel(false)}
+              className='bg-red-700 rounded-md py-2.5 w-[100px] text-white font-bold text-xs text-center'
+            >
+              Cancel
+            </button>
+
+            <button
+              type='button'
+              onClick={toggleModal}
+              className={`rounded-md border-0 outline-transparent py-2.5
+           font-medium cursor-pointer text-white bg-blue-700 w-[100px]`}
+            >
+              <p className='text-white font-bold text-xs'>Confirm</p>
+            </button>
+          </ConfirmationModal>
+        )}
+
+        {confirmSubmit && (
+          <ConfirmationModal>
+            <button
+              type='button'
+              onClick={() => setConfirmSubmit(false)}
+              className='bg-red-700 rounded-md py-2.5 w-[100px] text-white font-bold text-xs text-center'
+            >
+              Cancel
+            </button>
+
+            <button
+              type='button'
+              onClick={() => document.querySelector("form")?.requestSubmit()}
+              className={`rounded-md border-0 outline-transparent py-2.5
+           font-medium cursor-pointer text-white bg-blue-700 w-[100px]`}
+            >
+              {isLoading ? (
+                <div className='w-5 h-5 border-2 border-t-2 border-[#0A140A] border-t-white rounded-full animate-spin'></div>
+              ) : (
+                <p className='text-white font-bold text-xs'>Confirm</p>
+              )}
+            </button>
+          </ConfirmationModal>
+        )}
       </form>
     </div>
   )

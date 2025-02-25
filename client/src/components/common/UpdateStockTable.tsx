@@ -9,6 +9,7 @@ import CustomModal from "./utils/CustomModal"
 import UpdateStockRawMats from "../modal/UpdateStockRawMats"
 import { CiEdit } from "react-icons/ci"
 import Tooltip from "./Tooltip"
+import { IoIosClose } from "react-icons/io"
 const fields = [
   { key: "transactionNo", label: "Transaction Number", classes: "uppercase" },
   { key: "batchNo", label: "Batch Number", classes: "uppercase" },
@@ -19,6 +20,7 @@ const fields = [
 ]
 type UpdateStockTableProps = {
   itemId: string
+  close: () => void
 }
 
 const Columns = ({
@@ -64,7 +66,7 @@ const Columns = ({
   ]
 }
 
-const UpdateStockTable = ({ itemId }: UpdateStockTableProps) => {
+const UpdateStockTable = ({ itemId, close }: UpdateStockTableProps) => {
   const {
     data: stockData = [],
     isLoading,
@@ -117,26 +119,31 @@ const UpdateStockTable = ({ itemId }: UpdateStockTableProps) => {
       {isLoading ? (
         <Spinner />
       ) : (
-        <>
-          <h1 className='font-bold text-xl pb-2 border-b border-[#14aff1] '>
-            Transaction History for{" "}
-            <span className='uppercase text-[#14aff1]'>
-              {stockData[0]?.item?.code}
-            </span>
-          </h1>
-          <Table
-            data={stockData}
-            columns={columns}
-            sorting={[{ id: "transactionNo", desc: true }]}
-            search={true}
-            withImport={false}
-            withExport={false}
-            withSubmit={false}
-            withCancel={false}
-            add={false}
-            view={false}
-          />
-        </>
+        <div className='flex flex-col gap-2 h-full'>
+          <div className='flex gap-2 justify-between items-center border-b border-[#14aff1]'>
+            <h1 className='font-bold text-xl'>
+              Transaction History for{" "}
+              <span className='uppercase text-[#14aff1]'>
+                {stockData[0]?.item?.code}
+              </span>
+            </h1>
+            <IoIosClose className=' cursor-pointer' size={30} onClick={close} />
+          </div>
+          <div className='flex-1 overflow-hidden overflow-y-auto scrollbar'>
+            <Table
+              data={stockData}
+              columns={columns}
+              sorting={[{ id: "transactionNo", desc: true }]}
+              search={true}
+              withImport={false}
+              withExport={false}
+              withSubmit={false}
+              withCancel={false}
+              add={false}
+              view={false}
+            />
+          </div>
+        </div>
       )}
 
       {isOpenUpdate && (

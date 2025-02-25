@@ -8,6 +8,7 @@ import { TbZoomScan } from "react-icons/tb"
 import CustomModal from "../common/utils/CustomModal"
 import SalesOrderCustomer from "./SalesOrderCustomer"
 import { showToast } from "../../utils/Toast"
+import ConfirmationModal from "./ConfirmationModal"
 import useUpdateSalesOrder from "../../hooks/sales/useUpdateSalesOrder"
 
 const itemFields = [
@@ -141,7 +142,8 @@ const UpdateSalesOrder: React.FC<UpdateSalesOrderProps> = ({ row, close }) => {
     status: row?.customer.status || "",
   })
   const { updateSalesOrder, isUpdatePending } = useUpdateSalesOrder()
-
+  const [confirmSubmit, setConfirmSubmit] = useState<boolean>(false)
+  const [confirmCancel, setConfirmCancel] = useState<boolean>(false)
   const [orderDate, setOrderDate] = useState(row?.orderDate)
   const [remarks, setRemarks] = useState(row?.remarks || "")
   const [status, setStatus] = useState(row?.status)
@@ -277,7 +279,7 @@ const UpdateSalesOrder: React.FC<UpdateSalesOrderProps> = ({ row, close }) => {
   return (
     <div className='max-w-full mx-auto'>
       <div className='flex justify-between items-center'>
-        <h1 className='mb-2 font-bold'>Order Number: {row?.salesorderNo}</h1>
+        <h1 className='font-bold'>Order Number: {row?.salesorderNo}</h1>
         <p className='text-xs'>
           Created Date:{" "}
           {row?.createdDateTime
@@ -464,23 +466,67 @@ const UpdateSalesOrder: React.FC<UpdateSalesOrderProps> = ({ row, close }) => {
         <div className='flex items-center justify-end mt-4 gap-5'>
           <button
             type='button'
-            onClick={close}
+            onClick={() => setConfirmCancel(true)}
             className='bg-red-700 rounded-md py-2.5 w-[150px] text-white font-bold text-xs text-center'
           >
             Cancel
           </button>
 
           <button
-            type='submit'
-            className='bg-blue-700 rounded-md py-2.5 w-[150px]'
+            type='button'
+            onClick={() => setConfirmSubmit(true)}
+            className={`rounded-md border-0 outline-transparent py-2.5
+           font-medium cursor-pointer text-white bg-blue-700 w-[150px]`}
           >
-            {isUpdatePending ? (
-              <div className='w-5 h-5 border-2 border-t-2 border-[#0A140A] border-t-white rounded-full animate-spin'></div>
-            ) : (
-              <p className='text-white font-bold text-xs'>Update</p>
-            )}
+            <p className='text-white font-bold text-xs'>Update</p>
           </button>
         </div>
+
+        {confirmCancel && (
+          <ConfirmationModal>
+            <button
+              type='button'
+              onClick={() => setConfirmCancel(false)}
+              className='bg-red-700 rounded-md py-2.5 w-[100px] text-white font-bold text-xs text-center'
+            >
+              Cancel
+            </button>
+
+            <button
+              type='button'
+              onClick={close}
+              className={`rounded-md border-0 outline-transparent py-2.5
+           font-medium cursor-pointer text-white bg-blue-700 w-[100px]`}
+            >
+              <p className='text-white font-bold text-xs'>Confirm</p>
+            </button>
+          </ConfirmationModal>
+        )}
+
+        {confirmSubmit && (
+          <ConfirmationModal>
+            <button
+              type='button'
+              onClick={() => setConfirmSubmit(false)}
+              className='bg-red-700 rounded-md py-2.5 w-[100px] text-white font-bold text-xs text-center'
+            >
+              Cancel
+            </button>
+
+            <button
+              type='button'
+              onClick={() => document.querySelector("form")?.requestSubmit()}
+              className={`rounded-md border-0 outline-transparent py-2.5
+           font-medium cursor-pointer text-white bg-blue-700 w-[100px]`}
+            >
+              {isUpdatePending ? (
+                <div className='w-5 h-5 border-2 border-t-2 border-[#0A140A] border-t-white rounded-full animate-spin'></div>
+              ) : (
+                <p className='text-white font-bold text-xs'>Confirm</p>
+              )}
+            </button>
+          </ConfirmationModal>
+        )}
       </form>
     </div>
   )

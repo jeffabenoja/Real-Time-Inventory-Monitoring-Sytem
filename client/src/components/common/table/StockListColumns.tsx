@@ -32,6 +32,17 @@ const StockListColumns = ({
         header: () => <span className='truncate'>{field.label}</span>,
       })
     ),
+    columnHelper.accessor("price", {
+      id: "productPrice",
+      cell: (info) => {
+        const price = info.getValue()
+        const formattedPrice =
+          price % 1 === 0 ? `${price}.00` : price.toFixed(2)
+
+        return <span>{formattedPrice}</span>
+      },
+      header: () => <span className='truncate'>Price</span>,
+    }),
     columnHelper.accessor("cost", {
       id: "productAmount",
       cell: (info) => {

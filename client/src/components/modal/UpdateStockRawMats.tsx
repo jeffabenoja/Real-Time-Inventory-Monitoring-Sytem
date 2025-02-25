@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { showToast } from "../../utils/Toast"
 import { StockInType, UpdateStockType } from "../../type/stockType"
+import ConfirmationModal from "./ConfirmationModal"
 
 interface UpdateStockProps {
   product: StockInType | null
@@ -21,6 +22,8 @@ const UpdateStockRawMats: React.FC<UpdateStockProps> = ({
     batchNo: product?.batchNo || "",
     status: product?.status || "",
   })
+  const [confirmSubmit, setConfirmSubmit] = useState<boolean>(false)
+  const [confirmCancel, setConfirmCancel] = useState<boolean>(false)
 
   const [invalidFields, setInvalidFields] = useState<string[]>([])
 
@@ -175,24 +178,67 @@ const UpdateStockRawMats: React.FC<UpdateStockProps> = ({
         <div className='flex items-center justify-end mt-4 gap-5'>
           <button
             type='button'
-            onClick={toggleModal}
+            onClick={() => setConfirmCancel(true)}
             className='bg-red-700 rounded-md py-2.5 w-[150px] text-white font-bold text-xs text-center'
           >
             Cancel
           </button>
 
           <button
-            type='submit'
+            type='button'
+            onClick={() => setConfirmSubmit(true)}
             className={`rounded-md border-0 outline-transparent py-2.5
            font-medium cursor-pointer text-white bg-blue-700 w-[150px]`}
           >
-            {isLoading ? (
-              <div className='w-5 h-5 border-2 border-t-2 border-[#0A140A] border-t-white rounded-full animate-spin'></div>
-            ) : (
-              <p className='text-white font-bold text-xs'>Update</p>
-            )}
+            <p className='text-white font-bold text-xs'>Update</p>
           </button>
         </div>
+
+        {confirmCancel && (
+          <ConfirmationModal>
+            <button
+              type='button'
+              onClick={() => setConfirmCancel(false)}
+              className='bg-red-700 rounded-md py-2.5 w-[100px] text-white font-bold text-xs text-center'
+            >
+              Cancel
+            </button>
+
+            <button
+              type='button'
+              onClick={toggleModal}
+              className={`rounded-md border-0 outline-transparent py-2.5
+           font-medium cursor-pointer text-white bg-blue-700 w-[100px]`}
+            >
+              <p className='text-white font-bold text-xs'>Confirm</p>
+            </button>
+          </ConfirmationModal>
+        )}
+
+        {confirmSubmit && (
+          <ConfirmationModal>
+            <button
+              type='button'
+              onClick={() => setConfirmSubmit(false)}
+              className='bg-red-700 rounded-md py-2.5 w-[100px] text-white font-bold text-xs text-center'
+            >
+              Cancel
+            </button>
+
+            <button
+              type='button'
+              onClick={() => document.querySelector("form")?.requestSubmit()}
+              className={`rounded-md border-0 outline-transparent py-2.5
+           font-medium cursor-pointer text-white bg-blue-700 w-[100px]`}
+            >
+              {isLoading ? (
+                <div className='w-5 h-5 border-2 border-t-2 border-[#0A140A] border-t-white rounded-full animate-spin'></div>
+              ) : (
+                <p className='text-white font-bold text-xs'>Confirm</p>
+              )}
+            </button>
+          </ConfirmationModal>
+        )}
       </form>
     </div>
   )

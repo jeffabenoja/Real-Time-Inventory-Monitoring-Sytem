@@ -11,6 +11,7 @@ import DisplaySalesOrderItems from "./DisplaySalesOrderItems"
 import { User } from "../../type/userType"
 import { useSelector } from "react-redux"
 import useCreateSalesOrder from "../../hooks/sales/useCreateSalesOrder"
+import ConfirmationModal from "../modal/ConfirmationModal"
 
 interface UserAuthenticationType {
   auth: {
@@ -48,7 +49,8 @@ const SalesOrderComponent: React.FC<SalesOrderProps> = ({ close }) => {
     `${new Date().toISOString().split("T")[0]}`
   )
   const { createSalesOrder, isPending } = useCreateSalesOrder()
-
+  const [confirmSubmit, setConfirmSubmit] = useState<boolean>(false)
+  const [confirmCancel, setConfirmCancel] = useState<boolean>(false)
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
 
@@ -336,23 +338,69 @@ const SalesOrderComponent: React.FC<SalesOrderProps> = ({ close }) => {
             <div className='flex items-center justify-end mt-4 gap-5'>
               <button
                 type='button'
-                onClick={close}
+                onClick={() => setConfirmCancel(true)}
                 className='bg-red-700 rounded-md py-2.5 w-[150px] text-white font-bold text-xs text-center'
               >
                 Cancel
               </button>
 
               <button
-                type='submit'
-                className='bg-blue-700 rounded-md py-2.5 w-[150px]'
+                type='button'
+                onClick={() => setConfirmSubmit(true)}
+                className={`rounded-md border-0 outline-transparent py-2.5
+           font-medium cursor-pointer text-white bg-blue-700 w-[150px]`}
               >
-                {isPending ? (
-                  <div className='w-5 h-5 border-2 border-t-2 border-[#0A140A] border-t-white rounded-full animate-spin'></div>
-                ) : (
-                  <p className='text-white font-bold text-xs'>Submit</p>
-                )}
+                <p className='text-white font-bold text-xs'>Submit</p>
               </button>
             </div>
+
+            {confirmCancel && (
+              <ConfirmationModal>
+                <button
+                  type='button'
+                  onClick={() => setConfirmCancel(false)}
+                  className='bg-red-700 rounded-md py-2.5 w-[100px] text-white font-bold text-xs text-center'
+                >
+                  Cancel
+                </button>
+
+                <button
+                  type='button'
+                  onClick={close}
+                  className={`rounded-md border-0 outline-transparent py-2.5
+           font-medium cursor-pointer text-white bg-blue-700 w-[100px]`}
+                >
+                  <p className='text-white font-bold text-xs'>Confirm</p>
+                </button>
+              </ConfirmationModal>
+            )}
+
+            {confirmSubmit && (
+              <ConfirmationModal>
+                <button
+                  type='button'
+                  onClick={() => setConfirmSubmit(false)}
+                  className='bg-red-700 rounded-md py-2.5 w-[100px] text-white font-bold text-xs text-center'
+                >
+                  Cancel
+                </button>
+
+                <button
+                  type='button'
+                  onClick={() =>
+                    document.querySelector("form")?.requestSubmit()
+                  }
+                  className={`rounded-md border-0 outline-transparent py-2.5
+           font-medium cursor-pointer text-white bg-blue-700 w-[100px]`}
+                >
+                  {isPending ? (
+                    <div className='w-5 h-5 border-2 border-t-2 border-[#0A140A] border-t-white rounded-full animate-spin'></div>
+                  ) : (
+                    <p className='text-white font-bold text-xs'>Confirm</p>
+                  )}
+                </button>
+              </ConfirmationModal>
+            )}
           </div>
         </div>
       </form>

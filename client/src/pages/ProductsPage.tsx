@@ -118,7 +118,6 @@ const ProductsPage = () => {
           view={true}
           toolTip='Inventory List'
           handleAdd={handleModalAdd}
-          handleUpdate={handleUpdate}
           handleView={handleModalViewInventory}
         />
       )}
@@ -151,7 +150,7 @@ const ProductsPage = () => {
           toggleModal={handleUpdateStockToggle}
           classes='h-[480px] md:p-8 w-[343px] md:w-[970px]'
         >
-          <ViewAssembleTable itemId={itemId} />
+          <ViewAssembleTable itemId={itemId} close={handleUpdateStockToggle} />
         </CustomModal>
       )}
 
@@ -162,11 +161,11 @@ const ProductsPage = () => {
       )}
 
       {isOpenInventory && (
-        <CustomModal
-          toggleModal={handleModalViewInventory}
-          classes='h-[480px] md:p-8 w-[343px] md:w-[970px]'
-        >
-          <InventoryTable category='Finished Goods' />
+        <CustomModal classes='md:h-[480px] md:p-8 w-full h-full md:w-[970px]'>
+          <InventoryTable
+            category='Finished Goods'
+            close={handleModalViewInventory}
+          />
         </CustomModal>
       )}
     </>

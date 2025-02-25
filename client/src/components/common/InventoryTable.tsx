@@ -5,6 +5,7 @@ import { FaExclamationTriangle } from "react-icons/fa"
 import { useQuery } from "@tanstack/react-query"
 import { getInventoryByCategory } from "../../api/services/inventory"
 import { InventoryPerCategory } from "../../type/stockType"
+import { IoIosClose } from "react-icons/io"
 
 const fields = [
   { key: "item.code", label: "Product Code", classes: "uppercase" },
@@ -33,14 +34,18 @@ const Columns = ({
 
     columnHelper.accessor("currentStock", {
       cell: (info) => (
-        <span className={`${fieldsCategory.classes}`}>{info.getValue()}</span>
+        <span className={`${fieldsCategory.classes}`}>
+          {info.getValue().toFixed(2)}
+        </span>
       ),
       header: () => <span className='truncate'>Current Stock</span>,
     }),
 
     columnHelper.accessor(fieldsCategory.key, {
       cell: (info) => (
-        <span className={`${fieldsCategory.classes}`}>{info.getValue()}</span>
+        <span className={`${fieldsCategory.classes}`}>
+          {info.getValue().toFixed(2)}
+        </span>
       ),
       header: () => <span className='truncate'>{fieldsCategory.label}</span>,
     }),
@@ -49,9 +54,10 @@ const Columns = ({
 
 interface InventoryTableProps {
   category: string
+  close: () => void
 }
 
-const InventoryTable = ({ category }: InventoryTableProps) => {
+const InventoryTable = ({ category, close }: InventoryTableProps) => {
   const {
     data: inventoryData = [],
     isLoading,
@@ -95,29 +101,41 @@ const InventoryTable = ({ category }: InventoryTableProps) => {
       {isLoading ? (
         <Spinner />
       ) : (
-        <>
+        <div className='flex flex-col gap-2 h-full'>
           {category === "Finished Goods" ? (
-            <h1 className='font-bold text-xl pb-2 border-b border-[#14aff1]'>
-              Inventory for Finished Products
-            </h1>
+            <div className='flex gap-2 justify-between items-center border-b border-[#14aff1]'>
+              <h1 className='font-bold'>Inventory for Finished Products</h1>
+              <IoIosClose
+                className=' cursor-pointer'
+                size={30}
+                onClick={close}
+              />
+            </div>
           ) : (
-            <h1 className='font-bold text-xl pb-2 border-b border-[#14aff1]'>
-              Inventory for Raw Materials
-            </h1>
+            <div className='flex gap-2 justify-between items-center border-b border-[#14aff1]'>
+              <h1 className='font-bold'>Inventory for Raw Materials</h1>
+              <IoIosClose
+                className=' cursor-pointer'
+                size={30}
+                onClick={close}
+              />
+            </div>
           )}
 
-          <Table
-            data={adjustedInventoryData}
-            columns={columns}
-            search={true}
-            withImport={false}
-            withExport={true}
-            withSubmit={false}
-            withCancel={false}
-            add={false}
-            view={false}
-          />
-        </>
+          <div className='flex-1 overflow-hidden overflow-y-auto scrollbar'>
+            <Table
+              data={adjustedInventoryData}
+              columns={columns}
+              search={true}
+              withImport={false}
+              withExport={true}
+              withSubmit={false}
+              withCancel={false}
+              add={false}
+              view={false}
+            />
+          </div>
+        </div>
       )}
     </>
   )
