@@ -8,6 +8,7 @@ import {
   ADD_STOCK_FOR_FINISHED_GOODS,
   GET_ASSEMBLE_LIST_PER_ITEM,
   UPDATE_ASSEMBLE_STOCK,
+  GET_STOCKIN_BY_DATE_RANGE,
 } from "../urls/stockUrls"
 import {
   StockInType,
@@ -64,6 +65,17 @@ export const addStockForFinishedGoods = async ({
 export const getStockList = async (): Promise<StockListType[]> => {
   const response = await apiClient.get(GET_ALL_STOCK_LIST)
 
+  return response.data
+}
+
+export const getStockListByDateRange = async ({
+  from,
+  to,
+}: {
+  from: string
+  to: string
+}): Promise<StockListType[]> => {
+  const response = await apiClient.get(GET_STOCKIN_BY_DATE_RANGE(from, to))
   return response.data
 }
 

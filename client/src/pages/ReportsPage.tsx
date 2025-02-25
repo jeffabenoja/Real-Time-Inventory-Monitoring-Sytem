@@ -5,11 +5,11 @@ import Papa from "papaparse"
 import { getItemList } from "../api/services/item"
 import { getUserList } from "../api/services/admin"
 import usePageTitle from "../hooks/usePageTitle"
-import { getStockList, getAssembleList } from "../api/services/stock"
+import { getStockListByDateRange, getAssembleList } from "../api/services/stock"
 import { getCustomerList } from "../api/services/customer"
 import { getInventoryList } from "../api/services/inventory"
 import { getUserGroupList } from "../api/services/admin"
-import { getSalesOrderList } from "../api/services/sales"
+import { getSalesOrderListByDateRange } from "../api/services/sales"
 import { FaChevronUp, FaChevronDown } from "react-icons/fa"
 import { showToast } from "../utils/Toast"
 
@@ -31,8 +31,8 @@ const ReportsPage = () => {
     itemList: "ITEM LIST",
     userList: "USER LIST",
     stockList: "STOCK-IN LIST",
-    assembleList: "CUSTOMER LIST",
-    customerList: "ASSEMBLE LIST",
+    assembleList: "ASSEMBLE LIST",
+    customerList: "CUSTOMER LIST",
     inventoryList: "INVENTORY LIST",
     userGroupList: "USER GROUP LIST",
     salesOrderList: "SALES ORDER LIST",
@@ -60,60 +60,149 @@ const ReportsPage = () => {
   const reports = {
     itemList: getItemList,
     userList: getUserList,
-    stockList: getStockList,
     assembleList: getAssembleList,
     customerList: getCustomerList,
     inventoryList: getInventoryList,
     userGroupList: getUserGroupList,
-    salesOrderList: getSalesOrderList,
   }
 
   const handleGenerateReport = async () => {
     const reportFunction = reports[selectedReport as keyof typeof reports]
 
-    if (!reportFunction) {
-      console.log(selectedReport)
+    if (!reportFunction && selectedReport === "Select a report") {
+      showToast.error("Please select a report type")
       return
     }
 
     setIsLoading(true)
 
     try {
-      const response = await reportFunction()
+      if (selectedReport === "stockList") {
+        if (!isRangeChecked) {
+          showToast.error("Please select a date range")
+          setIsLoading(false)
+          return
+        }
 
-      const flattenData = response.map((item: any) => flattenObject(item))
-
-      const allDynamicKeys: any[] = [
-        ...new Set(
-          flattenData.flatMap((item: any) =>
-            Object.keys(item).filter((key: string) =>
-              key.startsWith("details_")
-            )
-          )
-        ),
-      ]
-
-      const adjustedFlattenData = flattenData.map((item: any) => {
-        allDynamicKeys.forEach((key: string) => {
-          if (!(key in item)) {
-            item[key] = null
-          }
+        const response = await getStockListByDateRange({
+          from: startDate,
+          to: endDate,
         })
-        return item
-      })
 
-      const csv = Papa.unparse(adjustedFlattenData, {
-        header: true,
-      })
+        const flattenData = response.map((item: any) => flattenObject(item))
 
-      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" })
-      const url = URL.createObjectURL(blob)
-      const link = document.createElement("a")
-      link.href = url
-      link.download = "report.csv"
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
+        const allDynamicKeys: any[] = [
+          ...new Set(
+            flattenData.flatMap((item: any) =>
+              Object.keys(item).filter((key: string) =>
+                key.startsWith("details_")
+              )
+            )
+          ),
+        ]
+
+        const adjustedFlattenData = flattenData.map((item: any) => {
+          allDynamicKeys.forEach((key: string) => {
+            if (!(key in item)) {
+              item[key] = null
+            }
+          })
+          return item
+        })
+
+        const csv = Papa.unparse(adjustedFlattenData, {
+          header: true,
+        })
+
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" })
+        const url = URL.createObjectURL(blob)
+        const link = document.createElement("a")
+        link.href = url
+        link.download = "report.csv"
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+      } else if (selectedReport === "salesOrderList") {
+        if (!isRangeChecked) {
+          showToast.error("Please select a date range")
+          setIsLoading(false)
+          return
+        }
+
+        const response = await getSalesOrderListByDateRange({
+          from: startDate,
+          to: endDate,
+        })
+
+        const flattenData = response.map((item: any) => flattenObject(item))
+
+        const allDynamicKeys: any[] = [
+          ...new Set(
+            flattenData.flatMap((item: any) =>
+              Object.keys(item).filter((key: string) =>
+                key.startsWith("details_")
+              )
+            )
+          ),
+        ]
+
+        const adjustedFlattenData = flattenData.map((item: any) => {
+          allDynamicKeys.forEach((key: string) => {
+            if (!(key in item)) {
+              item[key] = null
+            }
+          })
+          return item
+        })
+
+        const csv = Papa.unparse(adjustedFlattenData, {
+          header: true,
+        })
+
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" })
+        const url = URL.createObjectURL(blob)
+        const link = document.createElement("a")
+        link.href = url
+        link.download = "report.csv"
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+      } else {
+        const response = await reportFunction()
+        const flattenData = response.map((item: any) => flattenObject(item))
+
+        const allDynamicKeys: any[] = [
+          ...new Set(
+            flattenData.flatMap((item: any) =>
+              Object.keys(item).filter((key: string) =>
+                key.startsWith("details_")
+              )
+            )
+          ),
+        ]
+
+        const adjustedFlattenData = flattenData.map((item: any) => {
+          allDynamicKeys.forEach((key: string) => {
+            if (!(key in item)) {
+              item[key] = null
+            }
+          })
+          return item
+        })
+
+        const csv = Papa.unparse(adjustedFlattenData, {
+          header: true,
+        })
+
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" })
+        const url = URL.createObjectURL(blob)
+        const link = document.createElement("a")
+        link.href = url
+        link.download = "report.csv"
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+      }
     } catch (error) {
       showToast.error("Error generating reports")
     }
@@ -137,7 +226,10 @@ const ReportsPage = () => {
                 className='w-full p-2 rounded-md border cursor-pointer outline-transparent bg-transparent text-xs
           focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary flex items-center justify-between'
               >
-                <span>{selectedReport || "Select a report"}</span>
+                <span>
+                  {options[selectedReport as keyof typeof options] ||
+                    "Select a report"}
+                </span>
                 {isOpen ? <FaChevronUp /> : <FaChevronDown />}
               </div>
 
@@ -161,62 +253,67 @@ const ReportsPage = () => {
               )}
             </div>
           </div>
-          <div className='flex flex-col gap-3'>
-            <div className='flex items-center justify-between gap-2'>
-              <p className='text-base px-2'>Date Range</p>
-              <div className='flex items-center gap-6'>
-                <label
-                  htmlFor='default-toggle'
-                  className='inline-flex relative items-center cursor-pointer'
-                >
-                  <input
-                    type='checkbox'
-                    id='default-toggle'
-                    className='sr-only peer'
-                    onChange={handleRangeToggle}
-                  />
-                  <div className="w-[40px] h-[20px] bg-gray-200 peer-focus:outline-none dark:peer-focus:ring-primary-400 rounded-full peer peer-checked:after:translate-x-[18px] peer-checked:after:border-white after:content-[''] after:absolute after:top-[3px] after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-[14px] after:h-[14px] after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
-                </label>
-              </div>
-            </div>
 
-            {isRangeChecked && (
-              <div className='flex flex-col md:flex-row md:items-center md:justify-between gap-2.5 md:gap-5'>
-                <div className='flex flex-col gap-2 flex-1'>
-                  <label htmlFor='startDate' className='text-sm px-2'>
-                    Start Date
+          {(selectedReport === "stockList" ||
+            selectedReport === "salesOrderList") && (
+            <div className='flex flex-col gap-3'>
+              <div className='flex items-center justify-between gap-2'>
+                <p className='text-base px-2'>Date Range</p>
+                <div className='flex items-center gap-6'>
+                  <label
+                    htmlFor='default-toggle'
+                    className='inline-flex relative items-center cursor-pointer'
+                  >
+                    <input
+                      type='checkbox'
+                      id='default-toggle'
+                      className='sr-only peer'
+                      onChange={handleRangeToggle}
+                    />
+                    <div className="w-[40px] h-[20px] bg-gray-200 peer-focus:outline-none dark:peer-focus:ring-primary-400 rounded-full peer peer-checked:after:translate-x-[18px] peer-checked:after:border-white after:content-[''] after:absolute after:top-[3px] after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-[14px] after:h-[14px] after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
                   </label>
-                  <input
-                    id='startDate'
-                    type='date'
-                    name='startDate'
-                    onChange={handleStartDateChange}
-                    value={startDate}
-                    autoComplete='off'
-                    max={new Date().toISOString().split("T")[0]}
-                    className='w-full py-2 px-4 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent placeholder:text-sm
-              focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary'
-                  />
-                </div>
-                <div className='flex flex-col gap-2 flex-1'>
-                  <label htmlFor='endDate' className='text-sm px-2'>
-                    End Date
-                  </label>
-                  <input
-                    id='endDate'
-                    type='date'
-                    name='endDate'
-                    onChange={handleEndDateChange}
-                    value={endDate}
-                    autoComplete='off'
-                    max={new Date().toISOString().split("T")[0]}
-                    className='w-full py-2 px-4 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent placeholder:text-sm
-              focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary'
-                  />
                 </div>
               </div>
-            )}
-          </div>
+
+              {isRangeChecked && (
+                <div className='flex flex-col md:flex-row md:items-center md:justify-between gap-2.5 md:gap-5'>
+                  <div className='flex flex-col gap-2 flex-1'>
+                    <label htmlFor='startDate' className='text-sm px-2'>
+                      Start Date
+                    </label>
+                    <input
+                      id='startDate'
+                      type='date'
+                      name='startDate'
+                      onChange={handleStartDateChange}
+                      value={startDate}
+                      autoComplete='off'
+                      max={new Date().toISOString().split("T")[0]}
+                      className='w-full py-2 px-4 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent placeholder:text-sm
+              focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary'
+                    />
+                  </div>
+                  <div className='flex flex-col gap-2 flex-1'>
+                    <label htmlFor='endDate' className='text-sm px-2'>
+                      End Date
+                    </label>
+                    <input
+                      id='endDate'
+                      type='date'
+                      name='endDate'
+                      onChange={handleEndDateChange}
+                      value={endDate}
+                      autoComplete='off'
+                      max={new Date().toISOString().split("T")[0]}
+                      className='w-full py-2 px-4 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent placeholder:text-sm
+              focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary'
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
           <div className='flex items-center justify-end'>
             <button
               onClick={handleGenerateReport}
