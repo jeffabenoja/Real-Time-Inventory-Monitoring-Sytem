@@ -11,11 +11,13 @@ export interface TableProps {
   materials?: boolean
   add: boolean
   view: boolean
+  filter?: boolean
   toolTip?: string
   openModal?: () => void
   handleExport?: () => void
   handleAdd?: () => void
   handleView?: () => void
+  handleFilter?: () => void
   handleImport?: () => void
   handleUpdate?: (row: any) => void
   handleSubmit?: (data: any) => void

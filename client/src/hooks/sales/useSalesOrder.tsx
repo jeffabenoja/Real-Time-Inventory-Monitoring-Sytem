@@ -1,22 +1,17 @@
 import { SalesOrderType } from "../../type/salesType"
-import { getSalesOrderList} from "../../api/services/sales"
-import { useQuery} from "@tanstack/react-query"
+import { getSalesOrderListByDateRange } from "../../api/services/sales"
+import { useQuery } from "@tanstack/react-query"
 
-
-const useSalesOrder = () => {
-
+const useSalesOrder = ({ from, to }: { from: string; to: string }) => {
   const { data, isLoading, isError } = useQuery<SalesOrderType[]>({
-    queryKey: ["salesOrder"],
-    queryFn: getSalesOrderList,
+    queryKey: ["salesOrder", from, to], 
+    queryFn: () => getSalesOrderListByDateRange({ from, to }),
   })
-
- 
 
   return {
     data,
     isLoading,
     isError,
-   
   }
 }
 

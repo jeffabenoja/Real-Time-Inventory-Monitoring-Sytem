@@ -43,15 +43,15 @@ const ProductColumns = ({
       },
       header: () => <span className='truncate'>Price</span>,
     }),
-    columnHelper.accessor("cost", {
-      id: "productCost",
+    columnHelper.accessor("averageCost", {
+      id: "productAverageCost",
       cell: (info) => {
         const cost = info.getValue()
         const formattedPrice = cost % 1 === 0 ? `${cost}.00` : cost.toFixed(2)
 
         return <span>{formattedPrice}</span>
       },
-      header: () => <span className='truncate'>Cost</span>,
+      header: () => <span className='truncate'>Average Cost</span>,
     }),
     // Add the actions column
     columnHelper.accessor("actions", {

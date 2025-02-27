@@ -12,9 +12,9 @@ const useUpdateSalesOrder = () => {
       queryClient.invalidateQueries({ queryKey: ["salesOrder"] })
       showToast.success("Successfully updated new order")
     },
-    onError: () => {
-      let message = "Error updating order"
-
+    onError: (error) => {
+      const message =
+        error instanceof Error ? error.message : "Error updating sales order"
       showToast.error(message)
     },
   })

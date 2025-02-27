@@ -14,6 +14,7 @@ import { IoEyeOutline } from "react-icons/io5"
 import { CiExport, CiImport } from "react-icons/ci"
 import { FaChevronUp, FaChevronDown } from "react-icons/fa"
 import { LuArrowUpDown } from "react-icons/lu"
+import { CiFilter } from "react-icons/ci"
 import Tooltip from "../Tooltip"
 import {
   FiChevronsLeft,
@@ -36,7 +37,9 @@ const Table: React.FC<TableProps> = ({
   materials,
   add,
   toolTip,
+  filter,
   view,
+  handleFilter,
   handleAdd,
   handleImport,
   handleUpdate,
@@ -48,7 +51,9 @@ const Table: React.FC<TableProps> = ({
   const [isOpenExport, setIsOpenExport] = useState<boolean>(false)
   const [globalFilter, setGlobalFilter] = useState<string>("")
   const [rowSelection, setRowSelection] = useState({})
-  const [sortingArrow, setSortingArrow] = useState<SortingState>([])
+  const [sortingArrow, setSortingArrow] = useState<SortingState>(
+    sorting ? sorting : []
+  )
 
   const table = useReactTable({
     data: data || [],
@@ -62,7 +67,6 @@ const Table: React.FC<TableProps> = ({
       pagination: {
         pageSize: 10,
       },
-      sorting: sorting,
     },
     getCoreRowModel: getCoreRowModel(),
     onSortingChange: setSortingArrow,
@@ -182,6 +186,12 @@ const Table: React.FC<TableProps> = ({
                 onClick={handleView}
               />
             </Tooltip>
+          </div>
+        )}
+
+        {filter && (
+          <div className='ml-2'>
+            <Buttons label={"Filter"} Icon={CiFilter} onClick={handleFilter} />
           </div>
         )}
 

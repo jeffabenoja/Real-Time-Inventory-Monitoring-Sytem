@@ -13,6 +13,7 @@ import SalesOrderComponent from "../components/common/SalesOrderComponent"
 import ViewSalesOrder from "../components/modal/ViewSalesOrder"
 import { CiEdit } from "react-icons/ci"
 import UpdateSalesOrder from "../components/modal/UpdateSalesOrder"
+import { showToast } from "../utils/Toast"
 
 const fields = [
   { key: "salesorderNo", label: "Order Number", classes: "uppercase" },
@@ -108,14 +109,62 @@ const Columns = ({
 
 const SalesPage = () => {
   usePageTitle("Sales")
-  const { data, isLoading, isError } = useSalesOrder()
+
+  const currentDate = new Date()
+  const currentYear = currentDate.getFullYear()
+  const previousYear = currentYear - 1
+
+  const [startDate, setStartDate] = useState<string>(`${previousYear}-01-01`)
+  const [endDate, setEndDate] = useState<string>(`${currentYear}-12-31`)
+
+  const [dateRange, setDateRange] = useState<{ from: string; to: string }>({
+    from: `${previousYear}-01-01`,
+    to: `${currentYear}-12-31`,
+  })
+  const { data, isLoading, isError } = useSalesOrder({
+    from: dateRange.from,
+    to: dateRange.to,
+  })
   const [openModal, setOpenModal] = useState<boolean>()
+  const [isRangeChecked, setIsRangeChecked] = useState<boolean>(false)
   const [openSalesOrderModal, setOpenSalesOrderModal] = useState<boolean>()
   const [openViewSalesOrder, setOpenViewOrderModal] = useState<boolean>()
+  const [openFilterModal, setOpenFilterModal] = useState<boolean>()
   const [salesOrderDetails, setSalesOrderDetails] = useState<SalesOrderType>()
 
+  const handleStartDateChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setStartDate(event.target.value)
+  }
+
+  const handleCloseDateRangeModal = () => {
+    handlefilterModalToggle()
+    handleRangeToggle()
+  }
+
+  const handleEndDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEndDate(event.target.value)
+  }
   const handleSalesOrderModalToggle = () => {
     setOpenSalesOrderModal((prev) => !prev)
+  }
+
+  const handleRangeToggle = () => {
+    setIsRangeChecked((prev) => !prev)
+  }
+
+  const handlefilterModalToggle = () => {
+    setOpenFilterModal((prev) => !prev)
+  }
+
+  const handleGenerateDateRange = () => {
+    if (!isRangeChecked) {
+      showToast.error("Please select a date range")
+    } else {
+      setDateRange({ from: startDate, to: endDate })
+      handleCloseDateRangeModal()
+    }
   }
 
   const handleOpenModalToggle = () => {
@@ -169,10 +218,12 @@ const SalesPage = () => {
             },
           ]}
           search={true}
+          filter={true}
           withImport={false}
           withExport={true}
           add={true}
           view={false}
+          handleFilter={handlefilterModalToggle}
           handleAdd={handleSalesOrderModalToggle}
         />
       )}
@@ -201,6 +252,88 @@ const SalesPage = () => {
             row={salesOrderDetails}
             close={handleViewSalesOrderToggle}
           />
+        </CustomModal>
+      )}
+
+      {openFilterModal && (
+        <CustomModal>
+          <div className='flex flex-col gap-3'>
+            <div className='flex items-center justify-between gap-2'>
+              <p className='text-base px-2'>Date Range</p>
+              <div className='flex items-center gap-6'>
+                <label
+                  htmlFor='default-toggle'
+                  className='inline-flex relative items-center cursor-pointer'
+                >
+                  <input
+                    type='checkbox'
+                    id='default-toggle'
+                    className='sr-only peer'
+                    onChange={handleRangeToggle}
+                  />
+                  <div className="w-[40px] h-[20px] bg-gray-200 peer-focus:outline-none dark:peer-focus:ring-primary-400 rounded-full peer peer-checked:after:translate-x-[18px] peer-checked:after:border-white after:content-[''] after:absolute after:top-[3px] after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-[14px] after:h-[14px] after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+                </label>
+              </div>
+            </div>
+
+            {isRangeChecked && (
+              <div className='flex flex-col md:flex-row md:items-center md:justify-between gap-2.5 md:gap-5'>
+                <div className='flex flex-col gap-2 flex-1'>
+                  <label htmlFor='startDate' className='text-sm px-2'>
+                    Start Date
+                  </label>
+                  <input
+                    id='startDate'
+                    type='date'
+                    name='startDate'
+                    onChange={handleStartDateChange}
+                    value={startDate}
+                    autoComplete='off'
+                    max={new Date().toISOString().split("T")[0]}
+                    className='w-full py-2 px-4 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent placeholder:text-sm
+        focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary'
+                  />
+                </div>
+                <div className='flex flex-col gap-2 flex-1'>
+                  <label htmlFor='endDate' className='text-sm px-2'>
+                    End Date
+                  </label>
+                  <input
+                    id='endDate'
+                    type='date'
+                    name='endDate'
+                    onChange={handleEndDateChange}
+                    value={endDate}
+                    autoComplete='off'
+                    max={new Date().toISOString().split("T")[0]}
+                    className='w-full py-2 px-4 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent placeholder:text-sm
+        focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary'
+                  />
+                </div>
+              </div>
+            )}
+            <div className='flex items-center justify-end gap-2.5'>
+              <button
+                onClick={handleCloseDateRangeModal}
+                type='button'
+                className='bg-red-700 rounded-md px-6 py-2.5 text-white font-bold'
+              >
+                <span>Cancel</span>
+              </button>
+
+              <button
+                onClick={handleGenerateDateRange}
+                type='button'
+                className='bg-primary rounded-md px-6 py-2.5 text-white font-bold'
+              >
+                {isLoading ? (
+                  <div className='w-5 h-5 border-2 border-t-2 border-[#14aff1] border-t-white rounded-full animate-spin'></div>
+                ) : (
+                  <span>Generate</span>
+                )}
+              </button>
+            </div>
+          </div>
         </CustomModal>
       )}
     </>

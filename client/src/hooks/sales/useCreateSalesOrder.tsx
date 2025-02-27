@@ -12,9 +12,9 @@ const useCreateSalesOrder = () => {
       queryClient.invalidateQueries({ queryKey: ["salesOrder"] })
       showToast.success("Successfully created new order")
     },
-    onError: () => {
-      let message = "Error creating new order"
-
+    onError: (error) => {
+      const message =
+        error instanceof Error ? error.message : "Error creating new order"
       showToast.error(message)
     },
   })

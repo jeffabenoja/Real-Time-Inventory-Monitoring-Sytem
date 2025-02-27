@@ -22,7 +22,7 @@ export const useStockInList = (id: string) => {
     },
     onError: (error) => {
       const message =
-        error instanceof Error ? error.message : "Error adding new item"
+        error instanceof Error ? error.message : "Error updating transaction"
       showToast.error(message)
     },
   })

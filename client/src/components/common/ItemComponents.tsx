@@ -18,7 +18,6 @@ const fields = [
   { key: "brand", label: "Brand", classes: "uppercase" },
   { key: "unit", label: "Unit", classes: "lowercase" },
   { key: "reorderPoint", label: "Stock Level" },
-
   { key: "status", label: "Status", classes: "uppercase" },
 ]
 
@@ -64,9 +63,8 @@ const Columns = ({
     columnHelper.accessor("cost", {
       id: "productAmount",
       cell: (info) => {
-        const price = info.getValue()
-        const formattedPrice =
-          price % 1 === 0 ? `${price}.00` : price.toFixed(2)
+        const cost = info.getValue()
+        const formattedPrice = cost % 1 === 0 ? `${cost}.00` : cost.toFixed(2)
 
         return <span>{formattedPrice}</span>
       },
@@ -105,7 +103,7 @@ const ItemColumns = ({
           e: React.ChangeEvent<HTMLInputElement>
         ) => {
           const value = e.target.value
-          quantityRefs.current[row.original.rawMaterial.code] = value // Store the value in ref
+          quantityRefs.current[row.original.rawMaterial.code] = value
         }
 
         const handleBlur = () => {
@@ -199,6 +197,14 @@ const ItemComponents = () => {
     }, 0)
     .toFixed(2)
 
+  const totalCost = rawMaterials
+    .reduce((acc, material) => {
+      const cost = material?.rawMaterial?.cost ?? 0
+      const quantity = Number(material?.quantity) || 0
+      return acc + cost * quantity
+    }, 0)
+    .toFixed(2)
+
   const handleSubmit = (products: ItemType[]) => {
     setRawMaterials((prevProduct) => {
       const updatedProductItems = [
@@ -288,19 +294,13 @@ const ItemComponents = () => {
       return
     }
 
-    const totalCost = rawMaterials.reduce((acc, material) => {
-      const cost = material?.rawMaterial?.cost ?? 0
-      const quantity = Number(material?.quantity) || 0
-      return acc + cost * quantity
-    }, 0)
-
     const { cost, price, ...rest } = productData
 
     const updateProductComponent = {
       finishProduct: {
         ...rest,
         price: parseFloat(totalPrice),
-        cost: totalCost,
+        cost: parseFloat(totalCost),
       },
       components: rawMaterials.map((material) => ({
         rawMaterial: {
@@ -457,7 +457,7 @@ const ItemComponents = () => {
                 htmlFor='price'
                 className='text-sm w-[125px] md:w-[60px] xl:w-[125px]'
               >
-                Price:
+                Total Price:
               </label>
               <div className='flex-1'>
                 <input
@@ -468,6 +468,30 @@ const ItemComponents = () => {
                   name='price'
                   autoComplete='off'
                   value={totalPrice}
+                  readOnly
+                  disabled={true}
+                  className={`w-full p-2 rounded-md border outline-transparent bg-transparent text-xs
+              focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
+                />
+              </div>
+            </div>
+
+            <div className='flex items-center gap-2'>
+              <label
+                htmlFor='cost'
+                className='text-sm w-[125px] md:w-[60px] xl:w-[125px]'
+              >
+                Total Cost:
+              </label>
+              <div className='flex-1'>
+                <input
+                  type='number'
+                  step='0.01'
+                  min='0.01'
+                  id='cost'
+                  name='cost'
+                  autoComplete='off'
+                  value={totalCost}
                   readOnly
                   disabled={true}
                   className={`w-full p-2 rounded-md border outline-transparent bg-transparent text-xs

@@ -13,6 +13,7 @@ export const useUpdateAssemble = () => {
       showToast.success("Successfully updated assemble transaction")
     },
     onError: (error) => {
+      console.log(error)
       const message =
         error instanceof Error ? error.message : "Error updating transaction"
       showToast.error(message)

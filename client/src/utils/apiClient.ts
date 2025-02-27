@@ -12,12 +12,10 @@ apiClient.interceptors.request.use(
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
-
     if (error.response) {
+      console.log(error.response.data)
       return Promise.reject(
-        new Error(
-          `${error.response.data?.message || error.response.statusText}`
-        )
+        new Error(`${error.response.data || error.response.statusText}`)
       )
     } else if (error.request) {
       return Promise.reject(new Error("Network error, please try again later."))

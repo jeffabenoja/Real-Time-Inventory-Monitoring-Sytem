@@ -7,6 +7,7 @@ export interface ItemType {
   reorderPoint?: number
   price?: number
   cost?: number
+  averageCost?: number
   status?: "ACTIVE" | "INACTIVE"
   id?: string
 }

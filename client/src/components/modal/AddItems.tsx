@@ -81,6 +81,8 @@ const AddItems: React.FC<AddItemsProps> = ({
     if (isStocklist) {
       requiredFields.push("price")
       requiredFields.push("cost")
+    } else {
+      requiredFields.push("price")
     }
 
     if (productData) {
@@ -286,7 +288,7 @@ const AddItems: React.FC<AddItemsProps> = ({
           </div>
         </div>
 
-        {isStocklist && (
+        {isStocklist ? (
           <div className='w-full flex justify-between'>
             <div className='flex flex-col gap-2'>
               <label htmlFor='price' className='text-sm'>
@@ -328,6 +330,26 @@ const AddItems: React.FC<AddItemsProps> = ({
               />
             </div>
           </div>
+        ) : (
+          <div className='flex flex-col gap-2'>
+            <label htmlFor='price' className='text-sm'>
+              Selling Price
+            </label>
+            <input
+              type='number'
+              step='0.01'
+              min='0.01'
+              id='price'
+              name='price'
+              autoComplete='off'
+              value={product.price}
+              onChange={handleChange}
+              className={`${
+                invalidFields.includes("price") && "border-primary"
+              } w-[120px] md:w-[180px] py-1 pl-4 pr-1 border  border-opacity-25 rounded-md outline-transparent bg-transparent
+          focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
+            />
+          </div>
         )}
 
         {productData && (
@@ -365,7 +387,7 @@ const AddItems: React.FC<AddItemsProps> = ({
            font-medium cursor-pointer text-white bg-blue-700 w-[150px]`}
           >
             <p className='text-white font-bold text-xs'>
-              {title ? "Submit" : "Update"}
+              {!productData ? "Submit" : "Update"}
             </p>
           </button>
         </div>
