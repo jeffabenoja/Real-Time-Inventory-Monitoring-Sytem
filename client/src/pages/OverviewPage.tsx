@@ -1,91 +1,24 @@
-// import Table from "../components/common/Table"
-// import { createColumnHelper } from "@tanstack/react-table"
-// import { CiUser } from "react-icons/ci"
-// import { MdOutlineEmail } from "react-icons/md"
-// import Spinner from "../components/common/Spinner"
-// import { useQuery } from "@tanstack/react-query"
 import usePageTitle from "../hooks/usePageTitle"
 import PageTitle from "../components/common/utils/PageTitle"
-
-// const columnHelper = createColumnHelper<any>()
-
-// const columns = [
-//   columnHelper.accessor("id", {
-//     cell: (info) => info.getValue(),
-//     header: () => (
-//       <span className='flex items-center truncate'>
-//         <CiUser size={12} className='mr-1 hidden lg:block' />
-//         Id
-//       </span>
-//     ),
-//   }),
-
-//   columnHelper.accessor("postId", {
-//     cell: (info) => info.getValue(),
-//     header: () => (
-//       <span className='flex items-center truncate'>
-//         <CiUser size={12} className='mr-1 hidden lg:block' />
-//         Post ID
-//       </span>
-//     ),
-//   }),
-
-//   columnHelper.accessor("name", {
-//     cell: (info) => info.getValue(),
-//     header: () => (
-//       <span className='flex items-center truncate'>
-//         <CiUser size={12} className='mr-1 hidden lg:block' />
-//         Name
-//       </span>
-//     ),
-//   }),
-
-//   columnHelper.accessor("email", {
-//     cell: (info) => (
-//       <span className='italic text-primary'>{info.getValue()}</span>
-//     ),
-//     header: () => (
-//       <span className='flex items-center truncate'>
-//         <MdOutlineEmail size={14} className='mr-1 hidden lg:block' />
-//         Email
-//       </span>
-//     ),
-//   }),
-// ]
+import CardExpensesRawMaterials from "../components/overview/CardExpensesRawMaterials"
+import CardSalesSummary from "../components/overview/CardSalesSummary"
 
 const OverviewPage = () => {
-  // const { data, isLoading } = useQuery({
-  //   queryKey: ["comments"],
-  //   queryFn: async () => {
-  //     const response = await fetch(
-  //       "https://jsonplaceholder.typicode.com/comments"
-  //     )
-  //     if (!response.ok) {
-  //       throw new Error("Failed to fetch users")
-  //     }
-  //     return response.json()
-  //   },
-  // })
-
   usePageTitle("OverView")
-
   return (
     <>
       <PageTitle>Overview Page</PageTitle>
 
-      {/* {isLoading ? (
-        <Spinner />
-      ) : (
-        <Table
-          data={data}
-          columns={columns}
-          search={true}
-          withImport={true}
-          withExport={true}
-          add={true}
-          view={true}
-        />
-      )} */}
+      <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 xl:overflow-auto gap-10 custom-grid-rows scrollbar px-2'>
+        {/* 2021 Data  */}
+        <CardSalesSummary />
+        <CardExpensesRawMaterials />
+        <div className='flex flex-col justify-between row-span-2 xl:row-span-3 col-span-1 md:col-span-2 xl:col-span-1 shadow-md rounded-2xl bg-gray-500'></div>
+        <div className='row-span-3 shadow-md rounded-2xl flex flex-col justify-between bg-gray-500'></div>
+        <div className='row-span-3  bg-gray-500 ' />
+        <div className='md:row-span-1 xl:row-span-3 bg-gray-500' />
+        <div className='md:row-span-1 xl:row-span-3 bg-gray-500' />
+      </div>
     </>
   )
 }
