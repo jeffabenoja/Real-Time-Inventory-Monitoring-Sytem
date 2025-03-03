@@ -44,7 +44,7 @@ const getMonthName = (dateString: string) => {
 
 const getLast3Months = () => {
   const months = []
-  const today = new Date("2021-12-31")
+  const today = new Date("2024-12-31")
   for (let i = 0; i < 3; i++) {
     const month = new Date(today)
     month.setMonth(today.getMonth() - i)
@@ -62,8 +62,8 @@ const CardSalesSummary = () => {
     queryKey: ["Stock", "Raw Mats", "Sales"],
     queryFn: () =>
       getSalesOrderListByDateRange({
-        from: `2021-01-01`,
-        to: `2021-12-31`,
+        from: `2024-01-01`,
+        to: `2024-12-31`,
       }),
   })
 

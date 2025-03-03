@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
-import { getStockListByDateRange } from "../../api/services/stock"
-import { StockListType } from "../../type/stockType"
+import { getSalesOrderListByDateRange } from "../../api/services/sales"
+import { SalesOrderType } from "../../type/salesType"
 import Spinner from "../common/utils/Spinner"
 import {
   Bar,
@@ -31,7 +31,6 @@ const getMonthName = (dateString: string) => {
   return months[date.getMonth()]
 }
 
-
 // const getLast3Months = () => {
 //   const months = []
 //   const today = new Date()
@@ -45,7 +44,7 @@ const getMonthName = (dateString: string) => {
 
 const getLast3Months = () => {
   const months = []
-  const today = new Date("2021-12-31") 
+  const today = new Date("2024-12-31")
   for (let i = 0; i < 3; i++) {
     const month = new Date(today)
     month.setMonth(today.getMonth() - i)
@@ -54,22 +53,19 @@ const getLast3Months = () => {
   return months.reverse()
 }
 
-
 const CardExpensesRawMaterials = () => {
   //   const currentDate = new Date()
   //   const currentYear = currentDate.getFullYear()
   //   const previousYear = currentYear - 1
 
-  const { data: transactions = [], isLoading } = useQuery<StockListType[]>({
+  const { data: transactions = [], isLoading } = useQuery<SalesOrderType[]>({
     queryKey: ["Stock", "Raw Mats", "Expenses"],
     queryFn: () =>
-      getStockListByDateRange({
-        from: `2021-01-01`,
-        to: `2021-12-31`,
+      getSalesOrderListByDateRange({
+        from: `2024-01-01`,
+        to: `2024-12-31`,
       }),
   })
-
-  
 
   //   const filteredTransactions = transactions.filter((transaction) => {
   //     const transactionDate = new Date(transaction.transactionDate)
@@ -77,14 +73,20 @@ const CardExpensesRawMaterials = () => {
   //   })
 
   const groupedByMonth = transactions.reduce((acc: any, curr: any) => {
-    const monthName = getMonthName(curr.transactionDate)
-    const expense = curr.item?.cost * curr.quantity
+    const monthName = getMonthName(curr.orderDate)
+
+    const totalAmount = Array.isArray(curr.details)
+      ? curr.details.reduce(
+          (sum: number, item: any) => sum + item.item.averageCost,
+          0
+        )
+      : 0
 
     if (!acc[monthName]) {
       acc[monthName] = 0
     }
 
-    acc[monthName] += expense
+    acc[monthName] += totalAmount
 
     return acc
   }, {})
