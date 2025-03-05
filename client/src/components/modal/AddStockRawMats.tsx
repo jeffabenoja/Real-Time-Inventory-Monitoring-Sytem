@@ -75,6 +75,12 @@ const AddStocksRawMats: React.FC<AddStockProps> = ({
       return
     }
 
+    if (stock.quantity < 0) {
+      setInvalidFields((prev) => [...prev, "quantity"])
+      showToast.error("Quantity value is not valid.")
+      return
+    }
+
     const usercode = user.usercode
     const token = user.password!
 
