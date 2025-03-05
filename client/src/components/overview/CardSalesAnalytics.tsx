@@ -13,15 +13,15 @@ type CardSalesAnalyticsProps = {
 
 const CardSalesAnalytics = ({ salesData }: CardSalesAnalyticsProps) => {
   return (
-    <div className='row-span-3 xl:row-span-6 bg-gray-white shadow-md rounded-2xl bg-[#FAFAFA]'>
+    <div className='row-span-3 xl:row-span-6 bg-gray-white shadow-md rounded-2xl bg-[#FAFAFA] flex gap-2 flex-col'>
       <div>
-        <h2 className='text-lg font-semibold mb-2 px-7 pt-5'>
+        <h2 className='text-lg font-semibold px-7 pt-5'>
           12 Months Sales Analytics Summary
         </h2>
         <hr />
       </div>
 
-      <ResponsiveContainer width='100%' height={450} className='px-7'>
+      <ResponsiveContainer width='100%' height={250} className='px-7'>
         <AreaChart
           data={salesData}
           margin={{ top: 0, right: 0, left: -10, bottom: 0 }}
@@ -58,11 +58,10 @@ const CardSalesAnalytics = ({ salesData }: CardSalesAnalyticsProps) => {
           />
 
           <Area
-            type='linear'
+            type='monotone'
             dataKey='sales'
             stroke='#3182CE'
             fill='#63B3ED'
-            dot={true}
           />
         </AreaChart>
       </ResponsiveContainer>

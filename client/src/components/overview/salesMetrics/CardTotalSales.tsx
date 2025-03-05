@@ -10,7 +10,7 @@ const CardTotalSales: React.FC<CardTotalSalesProps> = ({ totalSales }) => {
   return (
     <div className='flex justify-between items-center mb-6 px-2.5 mt-5 shadow-md rounded-md'>
       <div className='text-lg font-medium'>
-        <p className='text-xs text-gray-400'>Total Sales</p>
+        <p className='text-xs text-gray-400'>Total Number of Sales</p>
         <span className='text-2xl font-extrabold'>
           {totalSales.toLocaleString()}
         </span>

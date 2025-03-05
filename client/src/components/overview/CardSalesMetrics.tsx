@@ -6,7 +6,6 @@ import CardSalesRevenue from "./salesMetrics/CardSalesRevenue"
 import CardTotalSales from "./salesMetrics/CardTotalSales"
 import CardAveragePrice from "./salesMetrics/CardAveragePrice"
 
-// Helper function to format date to "YYYY-MM-DD"
 const formatDate = (date: Date) => {
   const year = date.getFullYear()
   const month = String(date.getMonth() + 1).padStart(2, "0")
@@ -15,14 +14,26 @@ const formatDate = (date: Date) => {
 }
 
 const CardSalesMetrics = () => {
-  const currentDate = new Date("2024-12-31")
+  const currentDate = new Date()
+
+  const startOfMonth = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    1
+  )
+
+  const endOfMonth = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth() + 1,
+    0
+  )
 
   const { data: sales = [], isLoading } = useQuery<SalesOrderType[]>({
     queryKey: ["Sales", "Metrics"],
     queryFn: () =>
       getSalesOrderListByDateRange({
-        from: "2024-12-01",
-        to: "2024-12-31",
+        from: startOfMonth.toISOString().split("T")[0],
+        to: endOfMonth.toISOString().split("T")[0],
       }),
   })
 
@@ -49,7 +60,10 @@ const CardSalesMetrics = () => {
             orderDate <= currentFormattedDate
           )
         case "monthly":
-          return orderDate >= "2024-12-01" && orderDate <= "2024-12-31"
+          return (
+            orderDate >= startOfMonth.toISOString().split("T")[0] &&
+            orderDate <= endOfMonth.toISOString().split("T")[0]
+          )
       }
     })
   }

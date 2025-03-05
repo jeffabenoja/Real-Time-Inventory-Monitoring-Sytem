@@ -8,30 +8,30 @@ import { useQuery } from "@tanstack/react-query"
 import { getSalesOrderListByDateRange } from "../api/services/sales"
 import { SalesOrderType } from "../type/salesType"
 import Spinner from "../components/common/utils/Spinner"
-import SalesCostCircle from "../components/overview/SalesCostCircle"
+import CardSalesVsCost from "../components/overview/CardSalesVsCost"
 
 const getMonthName = (dateString: string) => {
   const date = new Date(dateString)
   const months = [
-    "January",
-    "February",
-    "March",
-    "April",
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
     "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
   ]
   return months[date.getMonth()]
 }
 
 const getLast12Months = () => {
   const months = []
-  const today = new Date("2024-12-31")
+  const today = new Date()
 
   for (let i = 0; i < 12; i++) {
     const monthStart = new Date(today)
@@ -45,7 +45,7 @@ const getLast12Months = () => {
 
 const getLast6Months = () => {
   const months = []
-  const today = new Date("2024-12-31")
+  const today = new Date()
 
   for (let i = 0; i < 6; i++) {
     const monthStart = new Date(today)
@@ -59,7 +59,7 @@ const getLast6Months = () => {
 
 const OverviewPage = () => {
   usePageTitle("OverView")
-  const currentDate = new Date(`2024-12-31`)
+  const currentDate = new Date()
   const currentYear = currentDate.getFullYear()
   const previousYear = currentYear - 1
 
@@ -125,7 +125,7 @@ const OverviewPage = () => {
     }
   })
 
-  const groupedByMonthSales6MonthsExpenses = filteredTransactions6Months.reduce(
+  const groupedByMonth6MonthsCost = filteredTransactions6Months.reduce(
     (acc: any, curr: any) => {
       const monthName = getMonthName(curr.orderDate)
       const totalAmount = Array.isArray(curr.details)
@@ -145,12 +145,12 @@ const OverviewPage = () => {
     {}
   )
 
-  const salesData6MonthsExpenses = last6MonthsDate.map((monthStart) => {
+  const costData6Months = last6MonthsDate.map((monthStart) => {
     const monthName = getMonthName(monthStart.toISOString())
 
     return {
       month: monthName,
-      cost: groupedByMonthSales6MonthsExpenses[monthName] || 0,
+      cost: groupedByMonth6MonthsCost[monthName] || 0,
     }
   })
 
@@ -180,16 +180,6 @@ const OverviewPage = () => {
     }
   })
 
-  const totalSales = salesData.reduce((acc, curr) => acc + curr.sales, 0)
-  const totalCost = salesData6MonthsExpenses.reduce(
-    (acc, curr) => acc + curr.cost,
-    0
-  )
-
-  const salesPercentage = (totalSales / (totalSales + totalCost)) * 100
-
-  const costPercentage = (totalCost / (totalSales + totalCost)) * 100
-
   if (isLoading) {
     return <Spinner />
   }
@@ -199,10 +189,7 @@ const OverviewPage = () => {
       <PageTitle>Overview Page</PageTitle>
       <div className='grid grid-cols-1 md:grid-cols-2 gap-10 custom-grid-rows'>
         <CardSalesMetrics />
-        <SalesCostCircle
-          salesPercentage={salesPercentage}
-          costPercentage={costPercentage}
-        />
+        <CardSalesVsCost filteredTransactions={filteredTransactions} />
         <div className='row-span-2 shadow-md rounded-2xl flex flex-col justify-between bg-gray-500 items-center'>
           <h1 className='text-white font-bold'>ARIMA METRICS</h1>
         </div>
@@ -211,7 +198,7 @@ const OverviewPage = () => {
         </div>
 
         <CardSalesSummary salesData={salesData6Months} />
-        <CardExpensesRawMaterials salesData={salesData6MonthsExpenses} />
+        <CardExpensesRawMaterials salesData={costData6Months} />
       </div>
       <CardSalesAnalytics salesData={salesData} />
     </div>
