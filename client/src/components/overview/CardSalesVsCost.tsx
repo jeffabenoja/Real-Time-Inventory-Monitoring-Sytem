@@ -342,42 +342,6 @@ const CardSalesVsCost: React.FC<SalesCostCircleProps> = ({
             </text>
           </svg>
         </div>
-
-        <div className='flex flex-col gap-2.5'>
-          <div className='flex flex-col gap-2.5 p-2.5 shadow-md rounded-md'>
-            <p className='text-sm text-gray-400 font-medium'>Amounts</p>
-            <span className='text-sm  text-green-500 font-medium'>
-              Total Sales:{" "}
-              {new Intl.NumberFormat("en-PH", {
-                style: "currency",
-                currency: "PHP",
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              }).format(totalSales)}
-            </span>
-            <span className='text-sm  text-red-500 font-medium'>
-              Total Costs:{" "}
-              {new Intl.NumberFormat("en-PH", {
-                style: "currency",
-                currency: "PHP",
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              }).format(totalCost)}
-            </span>
-          </div>
-
-          <div className='p-2.5 shadow-md rounded-md'>
-            <div className='flex flex-col gap-2.5'>
-              <p className='text-sm text-gray-400 font-medium'>Percentages</p>
-              <span className='text-sm text-green-500 font-medium'>
-                Sales: {salesPercentage.toFixed(2)}%
-              </span>
-              <span className='text-sm text-red-500 font-medium'>
-                Costs: {costPercentage.toFixed(2)}%
-              </span>
-            </div>
-          </div>
-        </div>
       </div>
 
       {timeframe === "yearly" && (
