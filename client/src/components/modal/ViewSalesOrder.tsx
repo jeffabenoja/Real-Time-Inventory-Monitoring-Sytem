@@ -2,6 +2,7 @@ import { SalesOrderType } from "../../type/salesType"
 import Table from "../common/table/Table"
 import { createColumnHelper } from "@tanstack/react-table"
 import { IoIosArrowRoundBack } from "react-icons/io"
+import EscapeKeyListener from "../../utils/EscapeKeyListener"
 
 const itemFields = [
   { key: "item.code", label: "Product Code", classes: "uppercase" },
@@ -45,6 +46,7 @@ const ViewSalesOrder: React.FC<ViewSalesOrderProps> = ({ row, close }) => {
 
   return (
     <div className='max-w-full mx-auto'>
+      <EscapeKeyListener onEscape={close} />
       <div className='flex gap-2 md:justify-between items-center mb-2'>
         <IoIosArrowRoundBack
           className='md:hidden cursor-pointer'

@@ -144,6 +144,7 @@ const UpdateSalesOrder: React.FC<UpdateSalesOrderProps> = ({ row, close }) => {
   const { updateSalesOrder, isUpdatePending } = useUpdateSalesOrder()
   const [confirmSubmit, setConfirmSubmit] = useState<boolean>(false)
   const [confirmCancel, setConfirmCancel] = useState<boolean>(false)
+
   const [orderDate, setOrderDate] = useState(row?.orderDate)
   const [remarks, setRemarks] = useState(row?.remarks || "")
   const [status, setStatus] = useState(row?.status)

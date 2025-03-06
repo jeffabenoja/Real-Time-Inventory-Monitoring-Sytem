@@ -5,6 +5,7 @@ import { useAddStock } from "../../hooks/stock/useAddStock"
 import { useSelector } from "react-redux"
 import { User } from "../../type/userType"
 import ConfirmationModal from "./ConfirmationModal"
+import EscapeKeyListener from "../../utils/EscapeKeyListener"
 
 interface AddStockProps {
   productCode?: string
@@ -91,6 +92,7 @@ const AddStocksRawMats: React.FC<AddStockProps> = ({
 
   return (
     <div className='flex flex-col gap-6'>
+      <EscapeKeyListener onEscape={toggleModal} />
       <h3 className='border-b border-[#14aff1] pb-1'>
         Add Stock for {productCode} - {productName}
       </h3>

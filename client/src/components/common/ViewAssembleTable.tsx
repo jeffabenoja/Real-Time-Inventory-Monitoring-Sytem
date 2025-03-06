@@ -38,16 +38,6 @@ const Columns = ({
   const columnHelper = createColumnHelper<any>()
 
   return [
-    ...fields.map((field) =>
-      columnHelper.accessor(field.key, {
-        cell: (info) => {
-          const value = info.getValue()
-          return <span className={`${field.classes}`}>{value ?? "-"}</span>
-        },
-        header: () => <span className='truncate'>{field.label}</span>,
-      })
-    ),
-
     // Add the actions column
     columnHelper.accessor("actions", {
       id: "actions",
@@ -69,6 +59,15 @@ const Columns = ({
       ),
       header: () => <span className='text-center truncate'>Actions</span>,
     }),
+    ...fields.map((field) =>
+      columnHelper.accessor(field.key, {
+        cell: (info) => {
+          const value = info.getValue()
+          return <span className={`${field.classes}`}>{value ?? "-"}</span>
+        },
+        header: () => <span className='truncate'>{field.label}</span>,
+      })
+    ),
   ]
 }
 

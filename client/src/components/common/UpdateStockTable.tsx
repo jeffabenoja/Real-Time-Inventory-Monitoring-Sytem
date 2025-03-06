@@ -10,6 +10,7 @@ import UpdateStockRawMats from "../modal/UpdateStockRawMats"
 import { CiEdit } from "react-icons/ci"
 import Tooltip from "./Tooltip"
 import { IoIosClose } from "react-icons/io"
+
 const fields = [
   { key: "transactionNo", label: "Transaction Number", classes: "uppercase" },
   { key: "batchNo", label: "Batch Number", classes: "uppercase" },
@@ -33,15 +34,6 @@ const Columns = ({
   const columnHelper = createColumnHelper<any>()
 
   return [
-    ...fields.map((field) =>
-      columnHelper.accessor(field.key, {
-        cell: (info) => (
-          <span className={`${field.classes}`}>{info.getValue()}</span>
-        ),
-        header: () => <span className='truncate'>{field.label}</span>,
-      })
-    ),
-
     // Add the actions column
     columnHelper.accessor("actions", {
       id: "actions",
@@ -63,6 +55,14 @@ const Columns = ({
       ),
       header: () => <span className='text-center truncate'>Actions</span>,
     }),
+    ...fields.map((field) =>
+      columnHelper.accessor(field.key, {
+        cell: (info) => (
+          <span className={`${field.classes}`}>{info.getValue()}</span>
+        ),
+        header: () => <span className='truncate'>{field.label}</span>,
+      })
+    ),
   ]
 }
 

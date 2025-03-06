@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import { showToast } from "../../utils/Toast"
 import { ItemType } from "../../type/itemType"
 import ConfirmationModal from "./ConfirmationModal"
+import EscapeKeyListener from "../../utils/EscapeKeyListener"
 
 interface AddItemsProps {
   title?: string
@@ -151,6 +152,7 @@ const AddItems: React.FC<AddItemsProps> = ({
 
   return (
     <div className='flex flex-col gap-6'>
+      <EscapeKeyListener onEscape={toggleModal} />
       <h3 className=' border-b border-[#14aff1] pb-1'>
         {!productData
           ? title

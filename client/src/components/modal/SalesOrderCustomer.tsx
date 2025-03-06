@@ -7,6 +7,7 @@ import Spinner from "../common/utils/Spinner"
 import { useState } from "react"
 import CustomModal from "../common/utils/CustomModal"
 import CreateNewCustomer from "./CreateNewCustomer"
+
 const customerFields = [
   { key: "name", label: "Customer Name", classes: "capitalize" },
   { key: "address", label: "Address", classes: "capitalize" },
@@ -76,29 +77,31 @@ const SalesOrderCustomer: React.FC<CustomerSalesProps> = ({
     )
   }
 
+  if (isLoading) {
+    return <Spinner />
+  }
+
   return (
     <>
       <h1 className='text-md mb-1'>Customer</h1>
-      <div className='border-t border-[#14aff1] pt-2'>
-        {isLoading ? (
-          <Spinner />
-        ) : (
-          <Table
-            data={customerData}
-            columns={customerColumn}
-            search={true}
-            withImport={false}
-            withExport={true}
-            withSubmit={true}
-            withCancel={true}
-            add={true}
-            view={false}
-            handleSubmit={onSubmit}
-            handleAdd={handleToggleAdd}
-            toggleModal={toggleModal}
-          />
-        )}
+
+      <div className='overflow-hidden overflow-y-auto scrollbar border-[#14aff1] pt-2 border-t'>
+        <Table
+          data={customerData}
+          columns={customerColumn}
+          search={true}
+          withImport={false}
+          withExport={true}
+          withSubmit={true}
+          withCancel={true}
+          add={true}
+          view={false}
+          handleSubmit={onSubmit}
+          handleAdd={handleToggleAdd}
+          toggleModal={toggleModal}
+        />
       </div>
+
       {openModal && (
         <CustomModal toggleModal={handleToggleAdd} classes='h-[360px]'>
           <CreateNewCustomer close={handleToggleAdd} />

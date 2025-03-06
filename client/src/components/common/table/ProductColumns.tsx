@@ -56,60 +56,64 @@ const ProductColumns = ({
     // Add the actions column
     columnHelper.accessor("actions", {
       id: "actions",
-      cell: (info) => (
-        <div className='flex gap-2 items-center justify-center w-[150px] lg:w-full'>
-          {/* View Button */}
-          <Tooltip text='View Stock'>
-            <button
-              onClick={(e) => {
-                e.stopPropagation()
-                onView(info.row.original)
-              }}
-              className='lg:py-2 lg:px-4 p-2 bg-gray-200 hover:bg-gray-300 hover:text-primary rounded-md shadow-md'
-            >
-              <IoEyeOutline size={20} />
-            </button>
-          </Tooltip>
-          {/* Add Button */}
-          <Tooltip text='Add Stock'>
-            <button
-              onClick={(e) => {
-                e.stopPropagation()
-                onAdd(info.row.original)
-              }}
-              className='lg:py-2 lg:px-4 p-2 bg-gray-200 hover:bg-gray-300 hover:text-primary rounded-md shadow-md'
-            >
-              <IoIosAdd size={20} />
-            </button>
-          </Tooltip>
+      cell: (info) => {
+        return (
+          <div className='flex gap-2 items-center justify-center w-[150px] lg:w-full relative'>
+            {/* View Button */}
 
-          {/* Update Button */}
-          <Tooltip text='Update Product'>
-            <button
-              onClick={(e) => {
-                e.stopPropagation()
-                onUpdate(info.row.original)
-              }}
-              className='lg:py-2 lg:px-4 p-2 bg-gray-200 hover:bg-gray-300 hover:text-blue-700 rounded-md shadow-md'
-            >
-              <CiEdit size={20} />
-            </button>
-          </Tooltip>
+            <Tooltip text='View Stock'>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onView(info.row.original)
+                }}
+                className='lg:py-2 lg:px-4 p-2 bg-gray-200 hover:bg-gray-300 hover:text-primary rounded-md shadow-md'
+              >
+                <IoEyeOutline size={20} />
+              </button>
+            </Tooltip>
+            {/* Add Button */}
+            <Tooltip text='Add Stock'>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onAdd(info.row.original)
+                }}
+                className='lg:py-2 lg:px-4 p-2 bg-gray-200 hover:bg-gray-300 hover:text-primary rounded-md shadow-md'
+              >
+                <IoIosAdd size={20} />
+              </button>
+            </Tooltip>
 
-          <Tooltip text='Stock Approval'>
-            <button
-              onClick={(e) => {
-                e.stopPropagation()
-                onApproval(info.row.original)
-              }}
-              className='lg:py-2 lg:px-4 p-2 bg-gray-200 hover:bg-gray-300 hover:text-blue-700 rounded-md shadow-md'
-            >
-              <MdOutlineInventory size={20} />
-            </button>
-          </Tooltip>
-        </div>
-      ),
-      header: () => <span className='text-center truncate'>Actions</span>,
+            {/* Update Button */}
+            <Tooltip text='Update Product'>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onUpdate(info.row.original)
+                }}
+                className='lg:py-2 lg:px-4 p-2 bg-gray-200 hover:bg-gray-300 hover:text-blue-700 rounded-md shadow-md'
+              >
+                <CiEdit size={20} />
+              </button>
+            </Tooltip>
+
+            <Tooltip text='Stock Approval'>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onApproval(info.row.original)
+                }}
+                className='lg:py-2 lg:px-4 p-2 bg-gray-200 hover:bg-gray-300 hover:text-blue-700 rounded-md shadow-md'
+              >
+                <MdOutlineInventory size={20} />
+              </button>
+            </Tooltip>
+          </div>
+        )
+      },
+
+      header: () => <span className='text-center truncat'>Actions</span>,
     }),
   ]
 }

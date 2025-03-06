@@ -6,6 +6,7 @@ import { AssembleStock } from "../../type/stockType"
 import { useSelector } from "react-redux"
 import { User } from "../../type/userType"
 import ConfirmationModal from "./ConfirmationModal"
+import EscapeKeyListener from "../../utils/EscapeKeyListener"
 
 interface AddStockProps {
   product: ItemType | null
@@ -119,6 +120,7 @@ const AddStocksFinishedProduct: React.FC<AddStockProps> = ({
 
   return (
     <div className='flex flex-col gap-6'>
+      <EscapeKeyListener onEscape={toggleModal} />
       <h3 className='border-b border-[#14aff1]  pb-1 font-bold uppercase'>
         {product?.code}
       </h3>

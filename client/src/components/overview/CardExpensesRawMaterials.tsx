@@ -20,7 +20,7 @@ const CardExpensesRawMaterials = ({
       <>
         <div>
           <h2 className='text-lg font-semibold mb-2 px-7 pt-5'>
-            6 Months Cost Sales Summary
+            Costs Summary for the Past 6 Months
           </h2>
           <hr />
         </div>
