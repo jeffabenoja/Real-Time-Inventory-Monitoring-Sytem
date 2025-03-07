@@ -14,6 +14,8 @@ import ViewSalesOrder from "../components/modal/ViewSalesOrder"
 import { CiEdit } from "react-icons/ci"
 import UpdateSalesOrder from "../components/modal/UpdateSalesOrder"
 import { showToast } from "../utils/Toast"
+import { IoPrintOutline } from "react-icons/io5"
+import { useNavigate } from "react-router-dom"
 
 const fields = [
   { key: "salesorderNo", label: "Order Number", classes: "uppercase" },
@@ -25,10 +27,12 @@ const Columns = ({
   fields,
   onView,
   onUpdate,
+  onPrint,
 }: {
   fields: { key: string; label: string; classes?: string }[]
   onView: (item: SalesOrderType) => void
   onUpdate: (item: SalesOrderType) => void
+  onPrint: (item: SalesOrderType) => void
 }) => {
   const columnHelper = createColumnHelper<any>()
 
@@ -100,6 +104,15 @@ const Columns = ({
           >
             <CiEdit size={20} />
           </button>
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              onPrint(info.row.original)
+            }}
+            className='lg:py-2 lg:px-4 p-2 bg-gray-200 hover:bg-gray-300 hover:text-blue-700 rounded-md shadow-md'
+          >
+            <IoPrintOutline size={20} />
+          </button>
         </div>
       ),
       header: () => <span className='text-center truncate'>Actions</span>,
@@ -109,6 +122,7 @@ const Columns = ({
 
 const SalesPage = () => {
   usePageTitle("Sales")
+  const navigate = useNavigate()
 
   const currentDate = new Date()
   const currentYear = currentDate.getFullYear()
@@ -185,10 +199,15 @@ const SalesPage = () => {
     setSalesOrderDetails(row)
   }
 
+  const handlePrintSalesOrder = (row: SalesOrderType) => {
+    navigate(`/dashboard/sales-order/pdf/${row.salesorderNo}`)
+  }
+
   const columns = Columns({
     fields,
     onView: handleViewSalesOrder,
     onUpdate: handleUpdate,
+    onPrint: handlePrintSalesOrder,
   })
   if (isError) {
     return (

@@ -23,6 +23,7 @@ import AdminRoute from "./components/route/AdminRoute"
 import ItemComponents from "./components/common/ItemComponents"
 import { useSelector } from "react-redux"
 import { RootState } from "./store"
+import SalesOrderPdf from "./components/salesOrderPdf/SalesOrderPdf"
 
 const App = () => {
   const user = useSelector((state: RootState) => state.auth.user)
@@ -55,6 +56,7 @@ const App = () => {
               <Route path='overview' element={<OverviewPage />} />
               <Route path='products' element={<ProductsPage />} />
               <Route path='sales' element={<SalesPage />} />
+              <Route path='sales-order/pdf/:id' element={<SalesOrderPdf />} />
               <Route path='stocklist' element={<StocklistPage />} />
               <Route path='reports' element={<ReportsPage />} />
 

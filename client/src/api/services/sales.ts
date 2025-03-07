@@ -4,6 +4,7 @@ import {
   CREATE_SALES_ORDER,
   UPDATE_SALES_ORDER,
   GET_SALESORDER_BY_DATE_RANGE,
+  GET_SALES_ORDER_PER_SALESNUMBER,
 } from "../urls/salesOrderUrls"
 import { SalesOrderType, SalesOrderCreateType } from "../../type/salesType"
 
@@ -13,6 +14,15 @@ interface CreateSalesOrderTypeWithAuth {
   token: string
 }
 
+export const getSalesOrderPerNumber = async (
+  salesNumber: string
+): Promise<SalesOrderType> => {
+  const response = await apiClient.get(
+    GET_SALES_ORDER_PER_SALESNUMBER(salesNumber)
+  )
+
+  return response.data
+}
 export const getSalesOrderList = async (): Promise<SalesOrderType[]> => {
   const response = await apiClient.get(GET_SALES_ORDER)
 
