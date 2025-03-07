@@ -3,7 +3,6 @@ import { Page, Text, View, Document, PDFViewer } from "@react-pdf/renderer"
 import { SalesOrderType } from "../../type/salesType"
 import { toWords } from "number-to-words"
 
-// Utility function for accounting formatting
 const formatCurrency = (value: number) => {
   return value.toLocaleString("en-PH", {
     minimumFractionDigits: 2,
@@ -49,26 +48,24 @@ const SalesOrderPdfComponent: React.FC<SalesOrderPdfProps> = ({ row }) => {
   const formattedVatAmount = formatCurrency(vatAmount)
   const formattedNetAmount = formatCurrency(netAmount)
 
-  // Utility function to convert number to words with cents
+
   const convertNetAmountToWords = (netAmount: number) => {
     console.log(netAmount)
-    // Ensure netAmount is a number and fix decimal places
+    
     const numericAmount = parseFloat(netAmount.toString())
 
-    // Check if the conversion to number was successful
+
     if (isNaN(numericAmount)) {
-      return "Invalid amount" // Return a fallback message in case it's not a valid number
+      return "Invalid amount" 
     }
 
-    // Ensure we have two decimal places
+    
     const [wholePart, decimalPart] = numericAmount.toFixed(2).split(".")
 
-    // Convert the whole part (pesos) to words
     const wholePartInWords = toWords(wholePart)
       .replace(/[^a-zA-Z ]/g, "")
       .replace(/\s+/g, " ")
 
-    // Convert the decimal part (cents) to words
     const decimalPartInWords = toWords(decimalPart)
       .replace(/[^a-zA-Z ]/g, "")
       .replace(/\s+/g, " ")
