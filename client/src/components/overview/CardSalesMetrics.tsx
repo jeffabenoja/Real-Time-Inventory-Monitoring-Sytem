@@ -1,5 +1,3 @@
-import { useQuery } from "@tanstack/react-query"
-import { getSalesOrderListByDateRange } from "../../api/services/sales"
 import { SalesOrderType } from "../../type/salesType"
 import { useState, useMemo } from "react"
 import CardSalesRevenue from "./salesMetrics/CardSalesRevenue"
@@ -13,31 +11,25 @@ const formatDate = (date: Date) => {
   return `${year}-${month}-${day}`
 }
 
-const CardSalesMetrics = () => {
+interface CardSalesMetricsProps {
+  sales: SalesOrderType[]
+}
+
+const getCurrentMonthRange = () => {
+  const today = new Date()
+  const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1)
+  const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0)
+
+  console.log(endOfMonth)
+
+  return { startOfMonth, endOfMonth }
+}
+
+const CardSalesMetrics: React.FC<CardSalesMetricsProps> = ({ sales }) => {
   const currentDate = new Date()
-
-  const startOfMonth = new Date(
-    currentDate.getFullYear(),
-    currentDate.getMonth(),
-    1
-  )
-
-  const endOfMonth = new Date(
-    currentDate.getFullYear(),
-    currentDate.getMonth() + 1,
-    0
-  )
-
-  const { data: sales = [], isLoading } = useQuery<SalesOrderType[]>({
-    queryKey: ["Sales", "Metrics"],
-    queryFn: () =>
-      getSalesOrderListByDateRange({
-        from: startOfMonth.toISOString().split("T")[0],
-        to: endOfMonth.toISOString().split("T")[0],
-      }),
-  })
-
   const [timeframe, setTimeframe] = useState("monthly")
+
+  const { startOfMonth, endOfMonth } = getCurrentMonthRange()
 
   const filterSalesByTimeframe = (
     sales: SalesOrderType[],
@@ -108,35 +100,29 @@ const CardSalesMetrics = () => {
 
   return (
     <div className='flex flex-col justify-between row-span-2 shadow-md rounded-2xl bg-[#FAFAFA] px-5 '>
-      {isLoading ? (
-        <div className='m-5'>Loading...</div>
-      ) : (
-        <>
-          <div className='flex justify-between items-center px-2.5 pt-5 mb-2'>
-            <h2 className='text-lg font-semibold '>Sales Metrics</h2>
-            <select
-              className='shadow-sm border border-gray-300 p-2 rounded'
-              value={timeframe}
-              onChange={(e) => {
-                setTimeframe(e.target.value)
-              }}
-            >
-              <option value='daily'>Daily</option>
-              <option value='weekly'>Weekly</option>
-              <option value='monthly'>Monthly</option>
-            </select>
-          </div>
-          <hr />
-          <div className='flex justify-between items-center gap-2.5'>
-            <CardSalesRevenue
-              totalValueSum={totalValueSum}
-              averageChangePercentage={averageChangePercentage}
-            />
-            <CardAveragePrice averageItemPrice={averageItemPrice} />
-            <CardTotalSales totalSales={totalSales} />
-          </div>
-        </>
-      )}
+      <div className='flex justify-between items-center px-2.5 pt-5 mb-2'>
+        <h2 className='text-lg font-semibold '>Sales Metrics</h2>
+        <select
+          className='shadow-sm border border-gray-300 p-2 rounded'
+          value={timeframe}
+          onChange={(e) => {
+            setTimeframe(e.target.value)
+          }}
+        >
+          <option value='daily'>Daily</option>
+          <option value='weekly'>Weekly</option>
+          <option value='monthly'>Monthly</option>
+        </select>
+      </div>
+      <hr />
+      <div className='flex justify-between items-center gap-2.5'>
+        <CardSalesRevenue
+          totalValueSum={totalValueSum}
+          averageChangePercentage={averageChangePercentage}
+        />
+        <CardAveragePrice averageItemPrice={averageItemPrice} />
+        <CardTotalSales totalSales={totalSales} />
+      </div>
     </div>
   )
 }

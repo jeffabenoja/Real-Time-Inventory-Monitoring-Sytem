@@ -57,6 +57,20 @@ const getLast6Months = () => {
   return months.reverse()
 }
 
+const getLastYearMonths = () => {
+  const currentDate = new Date()
+  const currentYear = currentDate.getFullYear()
+  const previousYear = currentYear - 1
+  const months = []
+
+  for (let i = 0; i < 12; i++) {
+    const monthStart = new Date(previousYear, i, 1)
+    months.push(monthStart)
+  }
+
+  return months
+}
+
 const OverviewPage = () => {
   usePageTitle("OverView")
   const currentDate = new Date()
@@ -74,6 +88,7 @@ const OverviewPage = () => {
 
   const last12MonthsDate = getLast12Months()
   const last6MonthsDate = getLast6Months()
+  const lastYearMonths = getLastYearMonths()
 
   const filteredTransactions = transactions.filter((transaction) => {
     const transactionDate = new Date(transaction.orderDate)
@@ -171,7 +186,7 @@ const OverviewPage = () => {
     {}
   )
 
-  const salesData = last12MonthsDate.map((monthStart) => {
+  const salesData = lastYearMonths.map((monthStart) => {
     const monthName = getMonthName(monthStart.toISOString())
 
     return {
@@ -188,7 +203,7 @@ const OverviewPage = () => {
     <div className='flex flex-col gap-10'>
       <PageTitle>Overview Page</PageTitle>
       <div className='grid grid-cols-1 md:grid-cols-2 gap-10 custom-grid-rows'>
-        <CardSalesMetrics />
+        <CardSalesMetrics sales={transactions} />
         <CardSalesVsCost filteredTransactions={filteredTransactions} />
         <div className='row-span-2 shadow-md rounded-2xl flex flex-col justify-between bg-gray-500 items-center'>
           <h1 className='text-white font-bold'>ARIMA METRICS</h1>
