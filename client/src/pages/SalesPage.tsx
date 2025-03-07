@@ -132,7 +132,7 @@ const SalesPage = () => {
   const [endDate, setEndDate] = useState<string>(`${currentYear}-12-31`)
 
   const [dateRange, setDateRange] = useState<{ from: string; to: string }>({
-    from: `${previousYear}-01-01`,
+    from: `${currentYear}-01-01`,
     to: `${currentYear}-12-31`,
   })
   const { data, isLoading, isError } = useSalesOrder({
