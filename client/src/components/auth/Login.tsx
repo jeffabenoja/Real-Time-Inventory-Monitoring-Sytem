@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { UserLogin } from "../../type/userType";
 import { useLoginUser } from "../../hooks/user/useLoginUser";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import banner from "../../assets/banner.jpg";
 
 const Login = () => {
@@ -12,6 +13,7 @@ const Login = () => {
     usercode: "",
     password: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
   const { mutate: loginUser, isPending, error } = useLoginUser();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,7 +25,6 @@ const Login = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
     loginUser(login);
   };
 
@@ -65,20 +66,27 @@ const Login = () => {
                 onChange={handleChange}
               />
             </div>
-            <div className="flex flex-col mb-2">
+            <div className="flex flex-col mb-2 relative">
               <label htmlFor="password" className="text-sm">
                 Password
               </label>
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 id="password"
                 name="password"
-                className="text-base p-2 border border-gray-500 focus:border-sky-500 focus-visible:outline-none rounded"
+                className="text-base p-2 border border-gray-500 focus:border-sky-500 focus-visible:outline-none rounded pr-10"
                 required
                 autoComplete="off"
                 value={login.password}
                 onChange={handleChange}
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-2 top-8 text-primary"
+              >
+                {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+              </button>
             </div>
             <div className="text-right">
               <span className="text-sm font-bold cursor-pointer hover:text-primary">
@@ -86,8 +94,7 @@ const Login = () => {
               </span>
             </div>
             <button
-              className="text-xl w-full my-5 rounded bg-primary p-2
-           font-medium cursor-pointer text-white hover:bg-secondary"
+              className="text-xl w-full my-5 rounded bg-primary p-2 font-medium cursor-pointer text-white hover:bg-secondary"
               type="submit"
             >
               {!isPending ? "Sign In" : "Loading..."}
