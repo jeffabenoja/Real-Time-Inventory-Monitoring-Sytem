@@ -1,29 +1,29 @@
 import React, { useState } from "react"
 import { showToast } from "../../utils/Toast"
 import { StockInType } from "../../type/stockType"
+import ConfirmationModal from "./ConfirmationModal"
+import EscapeKeyListener from "../../utils/EscapeKeyListener"
 import { useAddStock } from "../../hooks/stock/useAddStock"
 import { useSelector } from "react-redux"
 import { User } from "../../type/userType"
-import ConfirmationModal from "./ConfirmationModal"
-import EscapeKeyListener from "../../utils/EscapeKeyListener"
 
 interface AddStockProps {
   productCode?: string
   productName?: string
   toggleModal: () => void
 }
-
 interface UserAuthenticationType {
   auth: {
     user: User
   }
 }
 
-const AddStocksRawMats: React.FC<AddStockProps> = ({
+const StockOutRawMats: React.FC<AddStockProps> = ({
   productName,
   productCode,
   toggleModal,
 }) => {
+  const { user } = useSelector((state: UserAuthenticationType) => state.auth)
   const [stock, setStock] = useState<StockInType>({
     transactionDate: `${new Date().toISOString().split("T")[0]}`,
     remarks: "",
@@ -34,13 +34,12 @@ const AddStocksRawMats: React.FC<AddStockProps> = ({
     batchNo: "",
   })
 
-  const { user } = useSelector((state: UserAuthenticationType) => state.auth)
-
-  const { addStock, isPending } = useAddStock()
   const [confirmSubmit, setConfirmSubmit] = useState<boolean>(false)
   const [confirmCancel, setConfirmCancel] = useState<boolean>(false)
 
   const [invalidFields, setInvalidFields] = useState<string[]>([])
+
+  const { stockOut, stockOutPending } = useAddStock()
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -85,8 +84,7 @@ const AddStocksRawMats: React.FC<AddStockProps> = ({
     const usercode = user.usercode
     const token = user.password!
 
-    addStock({ stock, usercode, token })
-
+    stockOut({ stock, usercode, token })
     toggleModal()
   }
 
@@ -94,7 +92,7 @@ const AddStocksRawMats: React.FC<AddStockProps> = ({
     <div className='flex flex-col gap-6'>
       <EscapeKeyListener onEscape={toggleModal} />
       <h3 className='border-b border-[#14aff1] pb-1'>
-        Add Stock for {productCode} - {productName}
+        Remove Stock for {productCode} - {productName}
       </h3>
       <div className='flex flex-col gap-2'>
         <p className='text-sm font-bold'>Product Name</p>
@@ -241,7 +239,7 @@ const AddStocksRawMats: React.FC<AddStockProps> = ({
               className={`rounded-md border-0 outline-transparent py-2.5
            font-medium cursor-pointer text-white bg-blue-700 w-[100px]`}
             >
-              {isPending ? (
+              {stockOutPending ? (
                 <div className='w-5 h-5 border-2 border-t-2 border-[#0A140A] border-t-white rounded-full animate-spin'></div>
               ) : (
                 <p className='text-white font-bold text-xs'>Confirm</p>
@@ -254,4 +252,4 @@ const AddStocksRawMats: React.FC<AddStockProps> = ({
   )
 }
 
-export default AddStocksRawMats
+export default StockOutRawMats

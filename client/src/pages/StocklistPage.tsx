@@ -6,7 +6,8 @@ import { ItemType } from "../type/itemType"
 import { useState } from "react"
 import CustomModal from "../components/common/utils/CustomModal"
 import AddItems from "../components/modal/AddItems"
-import AddStocksRawMats from "../components/modal/AddStockRawMats"
+
+import StockRawMatsModal from "../components/modal/StockRawMatsModal"
 import { useItemMaterials } from "../hooks/items/useItemMaterials"
 import { FaExclamationTriangle } from "react-icons/fa"
 import CSVUploader from "../components/modal/CsvUploader"
@@ -170,10 +171,10 @@ const StocklistPage = () => {
       {/* Stocking functionality  */}
       {isAddStock && (
         <CustomModal>
-          <AddStocksRawMats
+          <StockRawMatsModal
             productCode={productData?.code || ""}
             productName={productData?.description || ""}
-            toggleModal={handleAddStockToggle}
+            close={handleAddStockToggle}
           />
         </CustomModal>
       )}

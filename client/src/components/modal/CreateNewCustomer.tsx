@@ -15,7 +15,7 @@ const CreateNewCustomer: React.FC<NewCustomerProps> = ({ close }) => {
     contactPerson: "",
     contactNumber: "",
     address: "",
-    status: "DRAFT",
+    status: "ACTIVE",
   })
 
   const handleChange = (
@@ -123,23 +123,15 @@ const CreateNewCustomer: React.FC<NewCustomerProps> = ({ close }) => {
           />
         </div>
         <div className='flex gap-2 flex-col'>
-          <label htmlFor='status' className='text-sm '>
-            Status:
-          </label>
+          <p className='text-sm '>Status:</p>
 
-          <select
-            id='status'
-            name='status'
-            value={customer.status}
-            onChange={handleChange}
-            className={`${
-              invalidFields.includes("status") && "border-red-900"
-            } w-full p-2 rounded-md border cursor-pointer outline-transparent bg-transparent text-xs
+          <span
+            className='w-full p-2 rounded-md border cursor-pointer outline-transparent bg-transparent text-xs
       focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
+         '
           >
-            <option value='CANCEL'>DRAFT</option>
-            <option value='ACTIVE'>ACTIVE</option>
-          </select>
+            {customer.status}
+          </span>
         </div>
         <div className='flex items-center justify-end mt-4 gap-5'>
           <button

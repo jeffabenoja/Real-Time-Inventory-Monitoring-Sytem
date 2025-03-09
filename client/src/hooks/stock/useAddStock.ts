@@ -1,5 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { addStock, addStockForFinishedGoods } from "../../api/services/stock"
+import {
+  addStock,
+  addStockForFinishedGoods,
+  stockOuts,
+} from "../../api/services/stock"
 import { showToast } from "../../utils/Toast"
 
 // Type Guard to check if error is an AxiosError
@@ -35,10 +39,26 @@ export const useAddStock = () => {
     },
   })
 
+  const stockOutMutation = useMutation({
+    mutationFn: stockOuts,
+    onSuccess: () => {
+      // Refetch the list of items
+      queryClient.invalidateQueries({ queryKey: ["StockOut", "Raw Mats"] })
+      showToast.success("Successfully removed this item")
+    },
+    onError: () => {
+      let message = "Error removing this item"
+
+      showToast.error(message)
+    },
+  })
+
   return {
     addStock: stockMutation.mutate,
     isPending: stockMutation.isPending,
     addStockFinishGoods: addStockMutation.mutate,
     isPendingFinishedGoods: addStockMutation.isPending,
+    stockOut: stockOutMutation.mutate,
+    stockOutPending: stockOutMutation.isPending,
   }
 }

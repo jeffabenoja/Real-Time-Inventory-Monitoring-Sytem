@@ -16,6 +16,7 @@ import UpdateSalesOrder from "../components/modal/UpdateSalesOrder"
 import { showToast } from "../utils/Toast"
 import { IoPrintOutline } from "react-icons/io5"
 import { useNavigate } from "react-router-dom"
+import Tooltip from "../components/common/Tooltip"
 
 const fields = [
   { key: "salesorderNo", label: "Order Number", classes: "uppercase" },
@@ -86,33 +87,39 @@ const Columns = ({
       cell: (info) => (
         <div className='flex gap-2 items-center justify-center w-[150px] lg:w-full'>
           {/* Add Button */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              onView(info.row.original)
-            }}
-            className='lg:py-2 lg:px-4 p-2 bg-gray-200 hover:bg-gray-300 hover:text-primary rounded-md shadow-md'
-          >
-            <IoEyeOutline size={20} />
-          </button>
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              onUpdate(info.row.original)
-            }}
-            className='lg:py-2 lg:px-4 p-2 bg-gray-200 hover:bg-gray-300 hover:text-blue-700 rounded-md shadow-md'
-          >
-            <CiEdit size={20} />
-          </button>
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              onPrint(info.row.original)
-            }}
-            className='lg:py-2 lg:px-4 p-2 bg-gray-200 hover:bg-gray-300 hover:text-blue-700 rounded-md shadow-md'
-          >
-            <IoPrintOutline size={20} />
-          </button>
+          <Tooltip text='View Order'>
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                onView(info.row.original)
+              }}
+              className='lg:py-2 lg:px-4 p-2 bg-gray-200 hover:bg-gray-300 hover:text-primary rounded-md shadow-md'
+            >
+              <IoEyeOutline size={20} />
+            </button>
+          </Tooltip>
+          <Tooltip text='Update Order'>
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                onUpdate(info.row.original)
+              }}
+              className='lg:py-2 lg:px-4 p-2 bg-gray-200 hover:bg-gray-300 hover:text-blue-700 rounded-md shadow-md'
+            >
+              <CiEdit size={20} />
+            </button>
+          </Tooltip>
+          <Tooltip text='Print Order'>
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                onPrint(info.row.original)
+              }}
+              className='lg:py-2 lg:px-4 p-2 bg-gray-200 hover:bg-gray-300 hover:text-blue-700 rounded-md shadow-md'
+            >
+              <IoPrintOutline size={20} />
+            </button>
+          </Tooltip>
         </div>
       ),
       header: () => <span className='text-center truncate'>Actions</span>,

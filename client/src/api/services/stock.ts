@@ -4,11 +4,14 @@ import {
   GET_STOCK_LIST,
   GET_ALL_STOCK_LIST,
   UPDATE_STOCK,
+  UPDATE_STOCKOUT,
   GET_ASSEMBLE_LIST,
   ADD_STOCK_FOR_FINISHED_GOODS,
   GET_ASSEMBLE_LIST_PER_ITEM,
   UPDATE_ASSEMBLE_STOCK,
   GET_STOCKIN_BY_DATE_RANGE,
+  STOCKOUT,
+  GET_STOCKIOUT_BY_DATE_RANGE,
 } from "../urls/stockUrls"
 import {
   StockInType,
@@ -16,6 +19,7 @@ import {
   AssembleStock,
   UpdateStockType,
   AssembleUpdateStock,
+  StockOutType,
 } from "../../type/stockType"
 
 interface AddStockType {
@@ -30,8 +34,29 @@ interface AddAssembleStockType {
   token: string
 }
 
+interface StockOutTypeProps {
+  stock: StockOutType
+  usercode: string
+  token: string
+}
+
 export const addStock = async ({ stock, usercode, token }: AddStockType) => {
   const response = await apiClient.post(ADD_STOCK, stock, {
+    headers: {
+      usercode: usercode,
+      token: token,
+      "Content-Type": "application/json",
+    },
+  })
+
+  return response.data
+}
+export const stockOuts = async ({
+  stock,
+  usercode,
+  token,
+}: StockOutTypeProps) => {
+  const response = await apiClient.post(STOCKOUT, stock, {
     headers: {
       usercode: usercode,
       token: token,
@@ -79,6 +104,17 @@ export const getStockListByDateRange = async ({
   return response.data
 }
 
+export const getStockOutList = async ({
+  from,
+  to,
+}: {
+  from: string
+  to: string
+}): Promise<StockListType[]> => {
+  const response = await apiClient.get(GET_STOCKIOUT_BY_DATE_RANGE(from, to))
+  return response.data
+}
+
 export const getStockListPerItem = async (
   id: string
 ): Promise<StockListType[]> => {
@@ -107,6 +143,19 @@ export const updateStock = async (item: UpdateStockType) => {
   }
 
   const response = await apiClient.put(UPDATE_STOCK(item.transactionNo), item)
+
+  return response.data
+}
+
+export const updateStockOut = async (item: UpdateStockType) => {
+  if (!item.transactionNo) {
+    throw new Error("Transaction number is required")
+  }
+
+  const response = await apiClient.put(
+    UPDATE_STOCKOUT(item.transactionNo),
+    item
+  )
 
   return response.data
 }

@@ -76,13 +76,13 @@ export default function UserGroups() {
     fields,
     onUpdate: handleUpdateGroup,
     onDelete: handleDeletGroup,
-    entity: "Group"
+    entity: "Group",
   })
 
   const { data, isFetching } = useQuery({
     queryFn: getUserGroupList,
     queryKey: ["admin", "getUserGroups"],
-    refetchOnWindowFocus: false
+    refetchOnWindowFocus: false,
   })
 
   let tableData = useSelector((state: RootState) => state.admin.userGroup)

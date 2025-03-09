@@ -61,7 +61,7 @@ const ProductColumns = ({
           <div className='flex gap-2 items-center justify-center w-[150px] lg:w-full relative'>
             {/* View Button */}
 
-            <Tooltip text='View Stock'>
+            <Tooltip text='View'>
               <button
                 onClick={(e) => {
                   e.stopPropagation()
@@ -73,7 +73,7 @@ const ProductColumns = ({
               </button>
             </Tooltip>
             {/* Add Button */}
-            <Tooltip text='Add Stock'>
+            <Tooltip text='Add'>
               <button
                 onClick={(e) => {
                   e.stopPropagation()
@@ -86,7 +86,7 @@ const ProductColumns = ({
             </Tooltip>
 
             {/* Update Button */}
-            <Tooltip text='Update Product'>
+            <Tooltip text='Update'>
               <button
                 onClick={(e) => {
                   e.stopPropagation()
@@ -98,7 +98,7 @@ const ProductColumns = ({
               </button>
             </Tooltip>
 
-            <Tooltip text='Stock Approval'>
+            <Tooltip text='Approval'>
               <button
                 onClick={(e) => {
                   e.stopPropagation()
