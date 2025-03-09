@@ -31,7 +31,9 @@ const App = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>
-        <Route path='/login' element={<Login />} />
+        <Route path='/login' element={<Login />}>
+          <Route path='password-reset'/>
+        </Route>
         <Route
           path='/'
           element={

@@ -45,7 +45,7 @@ const schema = z.object({
   password: z
     .string()
     .nonempty('Required Field')
-    .min(8, "Must be at least 8 characters")
+    .min(6, "Must be at least 6 characters")
     .refine((val) => /^\S+$/.test(val), {
       message: "No whitespace allowed",
     }),

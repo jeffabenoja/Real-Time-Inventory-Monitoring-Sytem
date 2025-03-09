@@ -22,7 +22,7 @@ export default function Header({ toggleNotif, iconRef, handleSidebar }: Props) {
           <h2 className="text-base flex items-center gap-1 lg:hidden text-primary cursor-pointer font-heading" onClick={logoHandler} >
             E&L DELICATESSEN
           </h2>
-          <div className="flex gap-2 items-center">
+          <div className="flex gap-5 items-center">
             <div className="md:hidden cursor-pointer">
               <NavLink to="user/predictions" className="relative">
                 <RiRobot2Line size={30} />
