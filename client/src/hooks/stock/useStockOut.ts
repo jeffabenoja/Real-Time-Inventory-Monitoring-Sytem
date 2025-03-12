@@ -1,23 +1,19 @@
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query"
-import { updateStockOut, getStockOutList } from "../../api/services/stock"
+import { updateStockOut, getStockListPerItem } from "../../api/services/stock"
 import { showToast } from "../../utils/Toast"
 import { StockListType } from "../../type/stockType"
 
 interface StockOutProps {
-  from: string
-  to: string
+  id: string
 }
 
-export const useStockOut = ({ from, to }: StockOutProps) => {
+export const useStockOut = ({ id }: StockOutProps) => {
   const queryClient = useQueryClient()
 
   const { data, isLoading, isError } = useQuery<StockListType[]>({
     queryKey: ["StockOut", "Raw Mats"],
-    queryFn: () =>
-      getStockOutList({
-        from: from,
-        to: to,
-      }),
+    queryFn: () => getStockListPerItem(id),
+    enabled: !!id,
   })
 
   const stockMutation = useMutation({

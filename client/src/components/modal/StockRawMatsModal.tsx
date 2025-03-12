@@ -6,12 +6,14 @@ import StockOutRawMats from "./StockOutRawMats"
 import StockOutTable from "../common/StockOutTable"
 
 interface StockRawMatsProps {
+  productId: string
   productCode: string
   productName: string
   close: () => void
 }
 
 const StockRawMatsModal: React.FC<StockRawMatsProps> = ({
+  productId,
   productCode,
   productName,
   close,
@@ -85,7 +87,7 @@ const StockRawMatsModal: React.FC<StockRawMatsProps> = ({
 
       {viewApproval && (
         <CustomModal classes='md:h-[480px] md:p-8 w-full h-full md:w-[970px]'>
-          <StockOutTable close={close} />
+          <StockOutTable productId={productId || ""} close={close} />
         </CustomModal>
       )}
     </>

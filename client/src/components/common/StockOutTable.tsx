@@ -63,13 +63,13 @@ const Columns = ({
 }
 
 interface StockOutTableProps {
+  productId: string
   close: () => void
 }
 
-const StockOutTable = ({ close }: StockOutTableProps) => {
-  const currentDate = new Date()
-  const currentYear = currentDate.getFullYear()
-  const previousYear = currentYear - 1
+const StockOutTable = ({ productId, close }: StockOutTableProps) => {
+  const [productData, setProductData] = useState<StockListType | null>(null)
+  const [isOpenUpdate, setIsOpenUpdate] = useState<boolean>(false)
 
   const {
     data: stockOut = [],
@@ -77,10 +77,7 @@ const StockOutTable = ({ close }: StockOutTableProps) => {
     isError,
     updateStockOut,
     isPending,
-  } = useStockOut({ from: `${previousYear}-01-01`, to: `${currentYear}-12-31` })
-
-  const [productData, setProductData] = useState<StockListType | null>(null)
-  const [isOpenUpdate, setIsOpenUpdate] = useState<boolean>(false)
+  } = useStockOut({ id: productId })
 
   if (isError) {
     return (
@@ -127,7 +124,7 @@ const StockOutTable = ({ close }: StockOutTableProps) => {
         <div className='flex flex-col gap-2 h-full'>
           <div className='flex gap-2 justify-between items-center border-b border-[#14aff1]'>
             <h1 className='font-bold text-xl'>
-              Stock Out Approval
+              Stock Out Approval{" "}
               <span className='uppercase text-[#14aff1]'>
                 {stockOut[0]?.item?.code}
               </span>

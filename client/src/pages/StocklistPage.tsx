@@ -172,6 +172,7 @@ const StocklistPage = () => {
       {isAddStock && (
         <CustomModal>
           <StockRawMatsModal
+            productId={productData?.id || ""}
             productCode={productData?.code || ""}
             productName={productData?.description || ""}
             close={handleAddStockToggle}

@@ -11,6 +11,7 @@ import {
   UPDATE_ASSEMBLE_STOCK,
   GET_STOCKIN_BY_DATE_RANGE,
   STOCKOUT,
+  GET_STOCKOUT_PER_ITEM,
   GET_STOCKIOUT_BY_DATE_RANGE,
 } from "../urls/stockUrls"
 import {
@@ -112,6 +113,11 @@ export const getStockOutList = async ({
   to: string
 }): Promise<StockListType[]> => {
   const response = await apiClient.get(GET_STOCKIOUT_BY_DATE_RANGE(from, to))
+  return response.data
+}
+
+export const getStockOutPerItem = async (id: string) => {
+  const response = await apiClient.get(GET_STOCKOUT_PER_ITEM(id))
   return response.data
 }
 
