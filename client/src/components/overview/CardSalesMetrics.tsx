@@ -20,9 +20,27 @@ const getCurrentMonthRange = () => {
   const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1)
   const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0)
 
-  console.log(endOfMonth)
-
   return { startOfMonth, endOfMonth }
+}
+
+const getPreviousMonthRange = () => {
+  const today = new Date()
+  const previousMonthStart = new Date(
+    today.getFullYear(),
+    today.getMonth() - 1,
+    1
+  )
+  const previousMonthEnd = new Date(today.getFullYear(), today.getMonth(), 0)
+
+  return { startOfMonth: previousMonthStart, endOfMonth: previousMonthEnd }
+}
+
+const calculateSalesRevenuePercentage = (
+  currentRevenue: number,
+  previousRevenue: number
+) => {
+  if (previousRevenue === 0) return 0
+  return ((currentRevenue - previousRevenue) / previousRevenue) * 100
 }
 
 const CardSalesMetrics: React.FC<CardSalesMetricsProps> = ({ sales }) => {
@@ -30,6 +48,42 @@ const CardSalesMetrics: React.FC<CardSalesMetricsProps> = ({ sales }) => {
   const [timeframe, setTimeframe] = useState("monthly")
 
   const { startOfMonth, endOfMonth } = getCurrentMonthRange()
+
+  const filterSalesByTimeframePreviousMonth = (
+    sales: SalesOrderType[],
+    timeframe: string
+  ) => {
+    const previousStart = getPreviousMonthRange().startOfMonth
+    const previousEnd = getPreviousMonthRange().endOfMonth
+
+    return sales.filter((sale) => {
+      const orderDate = formatDate(new Date(sale.orderDate))
+
+      switch (timeframe) {
+        case "daily":
+          const yesterday = new Date(currentDate)
+          yesterday.setDate(currentDate.getDate() - 1)
+          const yesterdayFormatted = formatDate(yesterday)
+          return orderDate === yesterdayFormatted
+        case "weekly":
+          const sevenDaysAgo = new Date(currentDate)
+          sevenDaysAgo.setDate(currentDate.getDate() - 7)
+          const sevenDaysAgoFormatted = formatDate(sevenDaysAgo)
+          const fourteenDaysAgo = new Date(currentDate)
+          fourteenDaysAgo.setDate(currentDate.getDate() - 14)
+          const fourteenDaysAgoFormatted = formatDate(fourteenDaysAgo)
+          return (
+            orderDate >= fourteenDaysAgoFormatted &&
+            orderDate <= sevenDaysAgoFormatted
+          )
+        case "monthly":
+          return (
+            orderDate >= previousStart.toISOString().split("T")[0] &&
+            orderDate <= previousEnd.toISOString().split("T")[0]
+          )
+      }
+    })
+  }
 
   const filterSalesByTimeframe = (
     sales: SalesOrderType[],
@@ -64,13 +118,33 @@ const CardSalesMetrics: React.FC<CardSalesMetricsProps> = ({ sales }) => {
     return filterSalesByTimeframe(sales, timeframe)
   }, [sales, timeframe])
 
-  const averageChangePercentage =
-    filteredSales.reduce((acc: number, curr: any) => {
+  const filteredSalesPreviousMonth = useMemo(() => {
+    return filterSalesByTimeframePreviousMonth(sales, timeframe)
+  }, [sales, timeframe])
+
+  const currentRevenue = filteredSales.reduce((acc: number, curr: any) => {
+    const totalAmount = Array.isArray(curr.details)
+      ? curr.details.reduce((sum: number, item: any) => sum + item.amount, 0)
+      : 0
+    return acc + totalAmount
+  }, 0)
+
+  const previousRevenue = filteredSalesPreviousMonth.reduce(
+    (acc: number, curr: any) => {
       const totalAmount = Array.isArray(curr.details)
         ? curr.details.reduce((sum: number, item: any) => sum + item.amount, 0)
         : 0
       return acc + totalAmount
-    }, 0) / filteredSales.length || 0
+    },
+    0
+  )
+
+  const revenuePercentageChange = calculateSalesRevenuePercentage(
+    currentRevenue,
+    previousRevenue
+  )
+
+  console.log(currentRevenue, previousRevenue)
 
   const totalValueSum =
     filteredSales.reduce((acc: number, curr: any) => {
@@ -118,7 +192,7 @@ const CardSalesMetrics: React.FC<CardSalesMetricsProps> = ({ sales }) => {
       <div className='flex justify-between items-center gap-2.5'>
         <CardSalesRevenue
           totalValueSum={totalValueSum}
-          averageChangePercentage={averageChangePercentage}
+          averageChangePercentage={revenuePercentageChange}
         />
         <CardAveragePrice averageItemPrice={averageItemPrice} />
         <CardTotalSales totalSales={totalSales} />

@@ -16,7 +16,7 @@ const CardSalesAnalytics = ({ salesData }: CardSalesAnalyticsProps) => {
     <div className='row-span-3 xl:row-span-6 bg-gray-white shadow-md rounded-2xl bg-[#FAFAFA] flex gap-2 flex-col'>
       <div>
         <h2 className='text-lg font-semibold px-7 pt-5'>
-          12 Months Sales Analytics Summary
+          Last Year Sales Analytics Summary
         </h2>
         <hr />
       </div>
