@@ -144,8 +144,6 @@ const CardSalesMetrics: React.FC<CardSalesMetricsProps> = ({ sales }) => {
     previousRevenue
   )
 
-  console.log(currentRevenue, previousRevenue)
-
   const totalValueSum =
     filteredSales.reduce((acc: number, curr: any) => {
       const totalAmount = Array.isArray(curr.details)

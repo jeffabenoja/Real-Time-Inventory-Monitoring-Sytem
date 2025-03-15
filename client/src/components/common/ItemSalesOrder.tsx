@@ -12,7 +12,6 @@ const itemFields = [
   { key: "item.category", label: "Category", classes: "capitalize" },
   { key: "item.brand", label: "Brand", classes: "uppercase" },
   { key: "item.unit", label: "Unit", classes: "lowercase" },
-  { key: "item.price", label: "Price" },
 ]
 
 const Columns = ({
@@ -43,6 +42,28 @@ const Columns = ({
         header: () => <span className='truncate'>{field.label}</span>,
       })
     ),
+
+    columnHelper.accessor("currentStock", {
+      id: "currentStock",
+      cell: ({ row }) => {
+        const { inQuantity, outQuantity } = row.original
+        const currentStock = (inQuantity || 0) - (outQuantity || 0)
+        return <span>{currentStock}</span>
+      },
+      header: () => <span className='truncate'>Current Stock</span>,
+    }),
+
+    columnHelper.accessor("item.price", {
+      id: "productPrice",
+      cell: (info) => {
+        const price = info.getValue()
+        const formattedPrice =
+          price % 1 === 0 ? `${price}.00` : price.toFixed(2)
+
+        return <span>{formattedPrice}</span>
+      },
+      header: () => <span className='truncate'>Price</span>,
+    }),
   ]
 }
 

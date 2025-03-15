@@ -1,6 +1,5 @@
 import PageTitle from "./utils/PageTitle"
-import { useItemMaterials } from "../../hooks/items/useItemMaterials"
-import { ItemType, ComponentsMaterials } from "../../type/itemType"
+import { ItemType } from "../../type/itemType"
 import { useState, useRef } from "react"
 import Table from "./table/Table"
 import CustomModal from "./utils/CustomModal"
@@ -10,15 +9,17 @@ import { Link, useNavigate } from "react-router-dom"
 import { showToast } from "../../utils/Toast"
 import { useItemComponents } from "../../hooks/items/useItemComponents"
 import ConfirmationModal from "../modal/ConfirmationModal"
+import { RootState } from "../../store"
+import { useSelector } from "react-redux"
 
 const fields = [
-  { key: "code", label: "Product Code", classes: "uppercase" },
-  { key: "description", label: "Product Name", classes: "capitalize" },
-  { key: "category", label: "Category", classes: "capitalize" },
-  { key: "brand", label: "Brand", classes: "uppercase" },
-  { key: "unit", label: "Unit", classes: "lowercase" },
-  { key: "reorderPoint", label: "Stock Level" },
-  { key: "status", label: "Status", classes: "uppercase" },
+  { key: "item.code", label: "Product Code", classes: "uppercase" },
+  { key: "item.description", label: "Product Name", classes: "capitalize" },
+  { key: "item.category", label: "Category", classes: "capitalize" },
+  { key: "item.brand", label: "Brand", classes: "uppercase" },
+  { key: "item.unit", label: "Unit", classes: "lowercase" },
+  { key: "item.reorderPoint", label: "Stock Level" },
+  { key: "item.status", label: "Status", classes: "uppercase" },
 ]
 
 const Columns = ({
@@ -49,7 +50,20 @@ const Columns = ({
         header: () => <span className='truncate'>{field.label}</span>,
       })
     ),
-    columnHelper.accessor("price", {
+    columnHelper.accessor("currentStock", {
+      id: "currentStock",
+      cell: ({ row }) => {
+        const { inQuantity, outQuantity } = row.original
+
+        const currentStock = inQuantity - outQuantity || 0
+
+        const formattedCurrentStock = currentStock.toFixed(2)
+
+        return <span>{formattedCurrentStock}</span>
+      },
+      header: () => <span className='truncate'>Current Stock</span>,
+    }),
+    columnHelper.accessor("item.price", {
       id: "productPrice",
       cell: (info) => {
         const price = info.getValue()
@@ -60,7 +74,7 @@ const Columns = ({
       },
       header: () => <span className='truncate'>Price</span>,
     }),
-    columnHelper.accessor("cost", {
+    columnHelper.accessor("item.cost", {
       id: "productAmount",
       cell: (info) => {
         const cost = info.getValue()
@@ -95,22 +109,41 @@ const ItemColumns = ({
         header: () => <span className='truncate'>{field.label}</span>,
       })
     ),
+    columnHelper.accessor(`currentStock`, {
+      cell: (info) => <span>{info.getValue().toFixed(2)}</span>,
+      header: () => <span className='truncate'>Current Stock</span>,
+    }),
     columnHelper.accessor("quantity", {
       id: "qty",
       header: () => <span className='truncate'>Used Quantity</span>,
       cell: ({ row }) => {
+        const [quantity, setQuantity] = useState(row.original.quantity || 1)
+        const currentStock = row.original.currentStock || 0
+        const [isQuantityValid, setIsQuantityValid] = useState(true)
+        const [currentValue, setCurrentValue] = useState(quantity)
         const handleQuantityChange = (
           e: React.ChangeEvent<HTMLInputElement>
         ) => {
           const value = e.target.value
-          quantityRefs.current[row.original.rawMaterial.code] = value
+          setQuantity(value)
+          if (value > currentStock) {
+            setIsQuantityValid(false)
+            setCurrentValue(value)
+          } else {
+            setIsQuantityValid(true)
+          }
+          quantityRefs.current[row.original.rawMaterial.item.code] = value
         }
 
         const handleBlur = () => {
           const value =
-            quantityRefs.current[row.original.rawMaterial.code] || ""
-          onQuantityChange(row.original.rawMaterial.code, value)
+            quantityRefs.current[row.original.rawMaterial.item.code] || ""
+          onQuantityChange(row.original.rawMaterial.item.code, value)
         }
+
+        const borderClass = isQuantityValid
+          ? "border-gray-900 border-opacity-25 focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary"
+          : "border-red-900 focus:border-red-900 focus:outline-none active:border-red-900 active:outline-none hover:border-red-900"
 
         return (
           <input
@@ -121,7 +154,11 @@ const ItemColumns = ({
             defaultValue={row.original.quantity}
             onChange={handleQuantityChange}
             onBlur={handleBlur}
-            className={`w-[100px] py-1 pl-4 pr-1 border border-gray-900 border-opacity-25 rounded-md outline-transparent bg-transparent focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
+            className={` ${
+              currentValue > currentStock
+                ? "border-red-900 focus:border-red-900 focus:outline-none active:border-red-900 active:outline-none hover:border-red-900"
+                : ""
+            } w-[100px] py-1 pl-4 pr-1 border ${borderClass} rounded-md outline-transparent bg-transparent `}
           />
         )
       },
@@ -133,7 +170,7 @@ const ItemColumns = ({
         <div className='flex gap-2 items-center justify-center'>
           <button
             className='px-4 py-2 hover:text-primary'
-            onClick={() => onRemove(row.original.rawMaterial.code)}
+            onClick={() => onRemove(row.original.rawMaterial.item.code)}
           >
             <IoIosClose size={20} />
           </button>
@@ -144,12 +181,14 @@ const ItemColumns = ({
 }
 
 const ItemComponents = () => {
-  const { data } = useItemMaterials()
+  const inventoryData = useSelector(
+    (state: RootState) => state.inventory.inventory
+  )
   const { createItem, isPending } = useItemComponents()
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
   const [confirmSubmit, setConfirmSubmit] = useState<boolean>(false)
   const [confirmCancel, setConfirmCancel] = useState<boolean>(false)
-  const [rawMaterials, setRawMaterials] = useState<ComponentsMaterials[]>([])
+  const [rawMaterials, setRawMaterials] = useState<any[]>([])
   const [invalidFields, setInvalidFields] = useState<string[]>([])
   const [productData, setProductData] = useState<ItemType>({
     code: "",
@@ -171,13 +210,13 @@ const ItemComponents = () => {
     fields,
     onRemove: (productId) => {
       setRawMaterials((prevProduct) =>
-        prevProduct.filter((p) => p.rawMaterial.code !== productId)
+        prevProduct.filter((p) => p.rawMaterial.item.code !== productId)
       )
     },
     onQuantityChange: (productCode, quantity) => {
       setRawMaterials((prevProduct) =>
         prevProduct.map((item) =>
-          item.rawMaterial.code === productCode
+          item.rawMaterial.item.code === productCode
             ? { ...item, quantity: quantity }
             : item
         )
@@ -191,7 +230,7 @@ const ItemComponents = () => {
 
   const totalPrice = rawMaterials
     .reduce((acc, material) => {
-      const price = material?.rawMaterial?.price ?? 0
+      const price = material?.rawMaterial?.item.price ?? 0
       const quantity = Number(material?.quantity) || 0
       return acc + price * quantity
     }, 0)
@@ -199,13 +238,13 @@ const ItemComponents = () => {
 
   const totalCost = rawMaterials
     .reduce((acc, material) => {
-      const cost = material?.rawMaterial?.cost ?? 0
+      const cost = material?.rawMaterial?.item.cost ?? 0
       const quantity = Number(material?.quantity) || 0
       return acc + cost * quantity
     }, 0)
     .toFixed(2)
 
-  const handleSubmit = (products: ItemType[]) => {
+  const handleSubmit = (products: any[]) => {
     setRawMaterials((prevProduct) => {
       const updatedProductItems = [
         ...prevProduct,
@@ -219,6 +258,7 @@ const ItemComponents = () => {
           })
           .map((product) => ({
             rawMaterial: { ...product },
+            currentStock: product.inQuantity - product.outQuantity,
             quantity: "1",
           })),
       ]
@@ -304,7 +344,7 @@ const ItemComponents = () => {
       },
       components: rawMaterials.map((material) => ({
         rawMaterial: {
-          ...material.rawMaterial,
+          ...material.rawMaterial.item,
         },
         quantity: material.quantity,
       })),
@@ -312,6 +352,10 @@ const ItemComponents = () => {
     createItem(updateProductComponent)
     navigate("/dashboard/products")
   }
+
+  const data = inventoryData.filter((item) =>
+    ["Raw Mats", "raw mats"].includes(item.item.category.toLowerCase())
+  )
 
   return (
     <>

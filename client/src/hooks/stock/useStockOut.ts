@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query"
-import { updateStockOut, getStockListPerItem } from "../../api/services/stock"
+import { updateStockOut, getStockOutPerItem } from "../../api/services/stock"
 import { showToast } from "../../utils/Toast"
 import { StockListType } from "../../type/stockType"
 
@@ -12,7 +12,7 @@ export const useStockOut = ({ id }: StockOutProps) => {
 
   const { data, isLoading, isError } = useQuery<StockListType[]>({
     queryKey: ["StockOut", "Raw Mats"],
-    queryFn: () => getStockListPerItem(id),
+    queryFn: () => getStockOutPerItem(id),
     enabled: !!id,
   })
 
@@ -20,7 +20,9 @@ export const useStockOut = ({ id }: StockOutProps) => {
     mutationFn: updateStockOut,
     onSuccess: () => {
       // Refetch the list of items
+      
       queryClient.invalidateQueries({ queryKey: ["StockOut", "Raw Mats"] })
+      
       showToast.success("Successfully updated stockout status")
     },
     onError: () => {
@@ -34,5 +36,6 @@ export const useStockOut = ({ id }: StockOutProps) => {
     isError,
     updateStockOut: stockMutation.mutate,
     isPending: stockMutation.isPending,
+    isSuccess: stockMutation.isSuccess,
   }
 }

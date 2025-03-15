@@ -303,9 +303,9 @@ const CardSalesVsCost: React.FC<SalesCostCircleProps> = ({
             <defs>
               <linearGradient id='gradient'>
                 {/* Red for 0% to 50% */}
-                <stop offset={`${gradientStart}%`} stop-color='#8b5cf6' />
+                <stop offset={`${gradientStart}%`} stopColor='#8b5cf6' />
                 {/* Green for 50% to 100% */}
-                <stop offset={`${gradientEnd}%`} stop-color='#3b82f6' />
+                <stop offset={`${gradientEnd}%`} stopColor='#3b82f6' />
               </linearGradient>
             </defs>
 

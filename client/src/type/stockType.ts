@@ -7,6 +7,7 @@ export interface StockInType {
   item: {
     code: string
     description?: string
+    id?:string
   }
   quantity: number
   batchNo: string

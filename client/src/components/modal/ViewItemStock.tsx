@@ -32,7 +32,7 @@ const ViewItemStock: React.FC<AddStockProps> = ({ product }) => {
   }
 
   const itemData = Array.isArray(data) ? data[0] : data
-
+  const formatQuantity = (quantity: number) => quantity.toFixed(2)
   return (
     <>
       {isLoading || !isFetched || product?.id !== itemData.item.id ? (
@@ -68,7 +68,9 @@ const ViewItemStock: React.FC<AddStockProps> = ({ product }) => {
                 type='text'
                 name='onQuantity'
                 readOnly
-                value={itemData?.inQuantity - itemData?.outQuantity}
+                value={formatQuantity(
+                  itemData?.inQuantity - itemData?.outQuantity
+                )}
                 autoComplete='off'
                 className='w-[120px] md:w-[150px] py-1 pl-4 pr-1 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary'
               />
@@ -84,7 +86,7 @@ const ViewItemStock: React.FC<AddStockProps> = ({ product }) => {
                 autoComplete='off'
                 readOnly
                 name='outQuantity'
-                value={itemData?.outQuantity}
+                value={formatQuantity(itemData?.outQuantity)}
                 className='w-[120px] md:w-[150px] py-1 pl-4 pr-1 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary'
               />
             </div>

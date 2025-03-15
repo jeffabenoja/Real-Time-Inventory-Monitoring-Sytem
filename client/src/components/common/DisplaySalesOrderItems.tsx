@@ -3,6 +3,7 @@ import { useRef } from "react"
 import { createColumnHelper } from "@tanstack/react-table"
 import { IoIosClose } from "react-icons/io"
 import { DetailsProduct } from "./SalesOrderComponent"
+import { useState } from "react"
 
 const productFields = [
   { key: "item.code", label: "Product Code", classes: "uppercase" },
@@ -10,6 +11,7 @@ const productFields = [
   { key: "item.category", label: "Category", classes: "capitalize" },
   { key: "item.brand", label: "Brand", classes: "uppercase" },
   { key: "item.unit", label: "Unit", classes: "lowercase" },
+  { key: "currentStock", label: "Current Stock" },
 ]
 
 const ProductItem = ({
@@ -37,15 +39,29 @@ const ProductItem = ({
         header: () => <span className='truncate'>{field.label}</span>,
       })
     ),
+
     columnHelper.accessor("quantity", {
       id: "qty",
       header: () => <span className='truncate'>Quantity</span>,
       cell: ({ row }) => {
         const productCode = row.original.item.code
+        const currentStock = row.original.currentStock || 0
+        const [quantity, setQuantity] = useState(
+          row.original.orderQuantity || 1
+        )
+        const [isQuantityValid, setIsQuantityValid] = useState(true)
+        const [currentValue, setCurrentValue] = useState(quantity)
         const handleQuantityChange = (
           e: React.ChangeEvent<HTMLInputElement>
         ) => {
           const value = e.target.value
+          setQuantity(value)
+          if (value > currentStock) {
+            setIsQuantityValid(false)
+            setCurrentValue(value)
+          } else {
+            setIsQuantityValid(true)
+          }
           priceRefs.current[productCode] = value
         }
 
@@ -55,6 +71,10 @@ const ProductItem = ({
           onQuantityChange(productCode, value)
         }
 
+        const borderClass = isQuantityValid
+          ? "border-gray-900 border-opacity-25 focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary"
+          : "border-red-900 focus:border-red-900 focus:outline-none active:border-red-900 active:outline-none hover:border-red-900"
+
         return (
           <input
             type='number'
@@ -62,10 +82,14 @@ const ProductItem = ({
             autoComplete='off'
             min={1}
             name='qty'
-            defaultValue={row.original.orderQuantity}
+            value={quantity}
             onChange={handleQuantityChange}
             onBlur={handleBlur}
-            className='w-[100px] py-1 pl-4 pr-1 border border-gray-900 border-opacity-25 rounded-md outline-transparent bg-transparent focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary'
+            className={` ${
+              currentValue > currentStock
+                ? "border-red-900 focus:border-red-900 focus:outline-none active:border-red-900 active:outline-none hover:border-red-900"
+                : ""
+            } w-[100px] py-1 pl-4 pr-1 border ${borderClass} rounded-md outline-transparent bg-transparent `}
           />
         )
       },

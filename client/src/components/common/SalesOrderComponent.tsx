@@ -23,6 +23,7 @@ export interface DetailsProduct {
   id?: string
   item: ItemType
   orderQuantity: string
+  currentStock: number
   itemPrice: any
   amount?: any
 }
@@ -83,6 +84,7 @@ const SalesOrderComponent: React.FC<SalesOrderProps> = ({ close }) => {
           })
           .map((product) => ({
             item: { ...product.item },
+            currentStock: product.inQuantity - product.outQuantity,
             orderQuantity: "1",
             itemPrice: product.item.price,
           })),
@@ -178,6 +180,10 @@ const SalesOrderComponent: React.FC<SalesOrderProps> = ({ close }) => {
       showToast.error("Unauthorized user to create orders")
     }
   }
+
+  const invalidQuantityItems = productItems.some(
+    (item) => parseInt(item.orderQuantity) > item.currentStock
+  )
 
   return (
     <div className='max-w-full mx-auto'>
@@ -376,7 +382,7 @@ const SalesOrderComponent: React.FC<SalesOrderProps> = ({ close }) => {
             )}
 
             {confirmSubmit && (
-              <ConfirmationModal>
+              <ConfirmationModal option={invalidQuantityItems}>
                 <button
                   type='button'
                   onClick={() => setConfirmSubmit(false)}

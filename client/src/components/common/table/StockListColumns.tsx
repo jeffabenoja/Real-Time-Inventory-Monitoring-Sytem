@@ -5,8 +5,9 @@ import { IoEyeOutline } from "react-icons/io5"
 import { ItemType } from "../../../type/itemType"
 import { MdOutlineInventory } from "react-icons/md"
 import Tooltip from "../Tooltip"
+import { useSelector } from "react-redux"
+import { RootState } from "../../../store"
 
-// Define a reusable function to generate columns
 const StockListColumns = ({
   fields,
   onUpdate,
@@ -21,7 +22,9 @@ const StockListColumns = ({
   onApproval: (item: ItemType) => void
 }) => {
   const columnHelper = createColumnHelper<any>()
-
+  let inventoryData = useSelector(
+    (state: RootState) => state.inventory.inventory
+  )
   return [
     // Dynamically generate columns based on fields
     ...fields.map((field) =>
@@ -32,6 +35,31 @@ const StockListColumns = ({
         header: () => <span className='truncate'>{field.label}</span>,
       })
     ),
+
+    columnHelper.accessor("id", {
+      id: "productId",
+      cell: (info) => {
+        const id = info.getValue()
+
+        const inventoryItem = inventoryData.find(
+          (item: any) => item.item.id === id
+        )
+
+        const inQuantity = inventoryItem
+          ? Number(inventoryItem.inQuantity) || 0
+          : 0
+        const outQuantity = inventoryItem
+          ? Number(inventoryItem.outQuantity) || 0
+          : 0
+
+        const currentStock = inQuantity - outQuantity
+
+        const formattedCurrentStock = currentStock.toFixed(2)
+
+        return <span>{formattedCurrentStock}</span>
+      },
+      header: () => <span className='truncate'>Current Stock</span>,
+    }),
 
     columnHelper.accessor("price", {
       id: "productPrice",
@@ -44,6 +72,7 @@ const StockListColumns = ({
       },
       header: () => <span className='truncate'>Price</span>,
     }),
+
     columnHelper.accessor("cost", {
       id: "productAmount",
       cell: (info) => {
@@ -55,6 +84,7 @@ const StockListColumns = ({
       },
       header: () => <span className='truncate'>Cost</span>,
     }),
+
     // Add the actions column
     columnHelper.accessor("actions", {
       id: "actions",
