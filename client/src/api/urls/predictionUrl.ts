@@ -1,0 +1,1 @@
+export const PREDICT = `https://ml.el-delicatessen.com/api/predict/`

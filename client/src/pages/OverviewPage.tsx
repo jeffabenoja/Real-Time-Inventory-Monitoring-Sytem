@@ -9,6 +9,7 @@ import { getSalesOrderListByDateRange } from "../api/services/sales"
 import { SalesOrderType } from "../type/salesType"
 import Spinner from "../components/common/utils/Spinner"
 import CardSalesVsCost from "../components/overview/CardSalesVsCost"
+import { getPredictions } from "../api/services/prediction"
 
 const getMonthName = (dateString: string) => {
   const date = new Date(dateString)
@@ -76,6 +77,23 @@ const OverviewPage = () => {
   const currentDate = new Date()
   const currentYear = currentDate.getFullYear()
   const previousYear = currentYear - 1
+
+  const { data: predictions, isFetching: gettingPredections } = useQuery({
+    queryKey: ["Prediction"],
+    queryFn: () =>
+      getPredictions(),
+    refetchOnWindowFocus: false,
+    select: (data) => {
+      const forecastsOnly: Record<string, any> = {};
+      for (const key in data) {
+        const item = data[key];
+        if (typeof item === "object" && item.forecast) {
+          forecastsOnly[key] = item.forecast;
+        }
+      }
+      return forecastsOnly;
+    }  
+  });
 
   const { data: transactions = [], isLoading } = useQuery<SalesOrderType[]>({
     queryKey: ["Sales"],
@@ -197,6 +215,10 @@ const OverviewPage = () => {
 
   if (isLoading) {
     return <Spinner />
+  }
+
+  if(!gettingPredections){
+    console.log(predictions)
   }
 
   return (
