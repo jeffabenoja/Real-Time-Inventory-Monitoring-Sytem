@@ -14,6 +14,7 @@ import UpdateStockTable from "../components/common/UpdateStockTable"
 import ViewItemStock from "../components/modal/ViewItemStock"
 import InventoryTable from "../components/common/InventoryTable"
 import usePageTitle from "../hooks/usePageTitle"
+import ApprovalTalbe from "../components/common/ApprovalTable"
 
 const fields = [
   { key: "code", label: "Product Code", classes: "uppercase" },
@@ -34,6 +35,7 @@ const StocklistPage = () => {
   const [isAddStock, setIsAddStock] = useState<boolean>(false)
   const [isUpdateStock, setIsUpdateStock] = useState<boolean>(false)
   const [isViewItemInventory, setIsViewItemInventory] = useState<boolean>(false)
+  const [approval, setApproval] = useState<boolean>(false)
   const [productData, setProductData] = useState<ItemType | null>(null)
   const [itemId, setItemId] = useState<string>("")
 
@@ -83,6 +85,10 @@ const StocklistPage = () => {
     setProductData(item)
   }
 
+  const handleApprovalToggle = () => {
+    setApproval((prev) => !prev)
+  }
+
   const handleViewStockToggle = () => {
     setIsViewItemInventory((prev) => !prev)
   }
@@ -130,10 +136,12 @@ const StocklistPage = () => {
           withExport={true}
           add={true}
           view={true}
+          approval={true}
           toolTip='Inventory List'
           handleAdd={handleModalAdd}
           handleImport={handleModalImport}
           handleView={handleModalViewInventory}
+          handleApproval={handleApprovalToggle}
         />
       )}
       {isOpenAdd && (
@@ -199,6 +207,11 @@ const StocklistPage = () => {
             category='Raw Mats'
             close={handleModalViewInventory}
           />
+        </CustomModal>
+      )}
+      {approval && (
+        <CustomModal classes='md:h-[480px] md:p-8 w-full h-full md:w-[970px]'>
+          <ApprovalTalbe close={handleApprovalToggle} />
         </CustomModal>
       )}
     </>

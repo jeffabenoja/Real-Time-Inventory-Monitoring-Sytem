@@ -17,6 +17,7 @@ import { showToast } from "../utils/Toast"
 import { IoPrintOutline } from "react-icons/io5"
 import { useNavigate } from "react-router-dom"
 import Tooltip from "../components/common/Tooltip"
+import SalesApprovalTable from "../components/common/SalesApprovalTable"
 
 const fields = [
   { key: "salesorderNo", label: "Order Number", classes: "uppercase" },
@@ -146,12 +147,15 @@ const SalesPage = () => {
     from: dateRange.from,
     to: dateRange.to,
   })
+
+  const salesData = data?.filter((pending) => pending.status === "COMPLETED")
   const [openModal, setOpenModal] = useState<boolean>()
   const [isRangeChecked, setIsRangeChecked] = useState<boolean>(false)
   const [openSalesOrderModal, setOpenSalesOrderModal] = useState<boolean>()
   const [openViewSalesOrder, setOpenViewOrderModal] = useState<boolean>()
   const [openFilterModal, setOpenFilterModal] = useState<boolean>()
   const [salesOrderDetails, setSalesOrderDetails] = useState<SalesOrderType>()
+  const [approval, setApproval] = useState<boolean>(false)
 
   const handleStartDateChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -206,6 +210,10 @@ const SalesPage = () => {
     setSalesOrderDetails(row)
   }
 
+  const handleApprovalToggle = () => {
+    setApproval((prev) => !prev)
+  }
+
   const handlePrintSalesOrder = (row: SalesOrderType) => {
     navigate(`/dashboard/sales-order/pdf/${row.salesorderNo}`)
   }
@@ -235,7 +243,7 @@ const SalesPage = () => {
         <Spinner />
       ) : (
         <Table
-          data={data || []}
+          data={salesData || []}
           columns={columns}
           sorting={[
             {
@@ -248,9 +256,11 @@ const SalesPage = () => {
           withImport={false}
           withExport={true}
           add={true}
+          approval={true}
           view={false}
           handleFilter={handlefilterModalToggle}
           handleAdd={handleSalesOrderModalToggle}
+          handleApproval={handleApprovalToggle}
         />
       )}
 
@@ -278,6 +288,12 @@ const SalesPage = () => {
             row={salesOrderDetails}
             close={handleViewSalesOrderToggle}
           />
+        </CustomModal>
+      )}
+
+      {approval && (
+        <CustomModal classes='md:h-[480px] md:p-8 w-full h-full md:w-[970px]'>
+          <SalesApprovalTable data={data || []} close={handleApprovalToggle} />
         </CustomModal>
       )}
 

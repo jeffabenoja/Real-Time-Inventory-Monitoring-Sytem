@@ -26,6 +26,7 @@ import Search from "./Search"
 import Buttons from "../buttons/Buttons"
 import Papa from "papaparse"
 import { flattenObject } from "../../../utils/flattenObject"
+import { MdOutlineInventory } from "react-icons/md"
 
 const Table: React.FC<TableProps> = ({
   data,
@@ -36,10 +37,12 @@ const Table: React.FC<TableProps> = ({
   withSubmit,
   materials,
   add,
+  approval,
   toolTip,
   filter,
   view,
   handleFilter,
+  handleApproval,
   handleAdd,
   handleImport,
   handleUpdate,
@@ -152,7 +155,7 @@ const Table: React.FC<TableProps> = ({
             <div className='ml-2 relative'>
               <Buttons label={"Export"} Icon={CiExport} onClick={openExport} />
               {isOpenExport && (
-                <div className='absolute z-20 top-10 left-0 bg-white shadow-lg w-[120px] rounded-md'>
+                <div className='absolute z-50 top-10 left-0 bg-white shadow-lg w-[130px] rounded-md'>
                   <p
                     className='text-xs cursor-pointer  p-2 hover:bg-gray-100'
                     onClick={() => handleExport(false)}
@@ -177,23 +180,39 @@ const Table: React.FC<TableProps> = ({
           )}
         </div>
 
-        {view && (
-          <div className='ml-2 text-cente'>
-            <Tooltip text={toolTip || ""}>
-              <Buttons
-                label={"View"}
-                Icon={IoEyeOutline}
-                onClick={handleView}
-              />
-            </Tooltip>
-          </div>
-        )}
+        <div className='inline-flex'>
+          {view && (
+            <div className='ml-2 text-cente'>
+              <Tooltip text={toolTip || ""}>
+                <Buttons
+                  label={"View"}
+                  Icon={IoEyeOutline}
+                  onClick={handleView}
+                />
+              </Tooltip>
+            </div>
+          )}
 
-        {filter && (
-          <div className='ml-2'>
-            <Buttons label={"Filter"} Icon={CiFilter} onClick={handleFilter} />
-          </div>
-        )}
+          {filter && (
+            <div className='ml-2'>
+              <Buttons
+                label={"Filter"}
+                Icon={CiFilter}
+                onClick={handleFilter}
+              />
+            </div>
+          )}
+
+          {approval && (
+            <div className='ml-2 text-cente'>
+              <Buttons
+                label={"Approval"}
+                Icon={MdOutlineInventory}
+                onClick={handleApproval}
+              />
+            </div>
+          )}
+        </div>
 
         {materials && (
           <div className='ml-2'>
