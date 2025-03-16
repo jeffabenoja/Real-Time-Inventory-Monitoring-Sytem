@@ -7,8 +7,11 @@ import {
   GET_ITEM,
   CREATE_ITEM_COMPONENTS,
   CREATE_MULTIPLE_ITEMS,
+  FETCH_ITEM_WITH_COMPONENTS
 } from "../urls/itemUrls"
 import { ItemType, ProductWithComponents } from "../../type/itemType"
+import { FetchedItem, TransformedItem } from "../../utils/transformItemWithComponents"
+import transformItemWithComponents from "../../utils/transformItemWithComponents"
 
 export const createItem = async (item: ItemType) => {
   const response = await apiClient.post(CREATE_ITEM, item)
@@ -67,3 +70,24 @@ export const createItemComponents = async (
 
   return response.data
 }
+
+export const fetchItemWithComponents = async (id: string): Promise<FetchedItem> => {
+  const response = await apiClient.get(FETCH_ITEM_WITH_COMPONENTS(id));
+
+  return response.data;
+};
+
+export const fetchMultipleItemWithComponents = async (ids: string[]): Promise<Record<string, TransformedItem>> => {
+
+  const items = await Promise.all(ids.map(id => fetchItemWithComponents(id)));
+  
+  const combinedItems = items.reduce((acc: Record<string, TransformedItem>, item, index) => {
+    const transformed = transformItemWithComponents(item);
+    if (transformed) {
+      acc[ids[index]] = transformed;
+    }
+    return acc;
+  }, {});
+  
+  return combinedItems;
+};

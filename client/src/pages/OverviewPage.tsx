@@ -10,6 +10,10 @@ import { SalesOrderType } from "../type/salesType"
 import Spinner from "../components/common/utils/Spinner"
 import CardSalesVsCost from "../components/overview/CardSalesVsCost"
 import { getPredictions } from "../api/services/prediction"
+import { fetchMultipleItemWithComponents } from "../api/services/item"
+import SalesForecastChart from "../components/overview/SalesForecastChart"
+import { aggregateForecastRevenue } from "../utils/aggregateForecastRevenue"
+import { aggregateSalesByMonth } from "../utils/aggregateSalesByMonth"
 
 const getMonthName = (dateString: string) => {
   const date = new Date(dateString)
@@ -78,22 +82,33 @@ const OverviewPage = () => {
   const currentYear = currentDate.getFullYear()
   const previousYear = currentYear - 1
 
-  const { data: predictions, isFetching: gettingPredections } = useQuery({
+  const { data: predictions, isFetching: fetchingPredections } = useQuery({
     queryKey: ["Prediction"],
     queryFn: () =>
       getPredictions(),
     refetchOnWindowFocus: false,
-    select: (data) => {
-      const forecastsOnly: Record<string, any> = {};
-      for (const key in data) {
-        const item = data[key];
-        if (typeof item === "object" && item.forecast) {
-          forecastsOnly[key] = item.forecast;
-        }
-      }
-      return forecastsOnly;
-    }  
   });
+
+  const { data: itemWithComponents, isFetching: fetchingItemWithComponents } = useQuery({
+    queryKey: ["Item", "Components", predictions],
+    queryFn: () => {
+      const itemIds = Object.keys(predictions || {});
+      console.log(itemIds)
+      return fetchMultipleItemWithComponents(itemIds);
+    },
+    refetchOnWindowFocus: false,
+    enabled: !!predictions
+  });
+
+  const { data: transactionSalesForThisYear = [], isFetching: fetchingTracsactionSalesForThisYear } = useQuery<SalesOrderType[]>({
+    queryKey: ["Sales", "VS", "PREDICTION"],
+    queryFn: () =>
+      getSalesOrderListByDateRange({
+        from: `${currentYear}-01-01`,
+        to: `${currentYear}-12-31`,
+      }),
+    refetchOnWindowFocus: false
+  })
 
   const { data: transactions = [], isLoading } = useQuery<SalesOrderType[]>({
     queryKey: ["Sales"],
@@ -217,22 +232,34 @@ const OverviewPage = () => {
     return <Spinner />
   }
 
-  if(!gettingPredections){
-    console.log(predictions)
+  if(!fetchingPredections && !fetchingItemWithComponents && !fetchingTracsactionSalesForThisYear){
+    if(predictions && itemWithComponents && transactionSalesForThisYear){
+      console.log(aggregateForecastRevenue(predictions, itemWithComponents!))
+      console.log(aggregateSalesByMonth(transactionSalesForThisYear))
+    }
   }
+
+  
+
+  const salesForecastChartLoading = !fetchingPredections && !fetchingItemWithComponents && !fetchingTracsactionSalesForThisYear
 
   return (
     <div className='flex flex-col gap-10'>
       <PageTitle>Overview Page</PageTitle>
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-10 custom-grid-rows'>
+      {/* <div className='grid grid-cols-1 md:grid-cols-2 gap-10 custom-grid-rows'> */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 auto-rows-auto">
         <CardSalesMetrics sales={transactions} />
         <CardSalesVsCost filteredTransactions={filteredTransactions} />
-        <div className='row-span-2 shadow-md rounded-2xl flex flex-col justify-between bg-gray-500 items-center'>
+        {/* <div className='row-span-2 shadow-md rounded-2xl flex flex-col justify-between bg-gray-500 items-center'>
           <h1 className='text-white font-bold'>ARIMA METRICS</h1>
-        </div>
-        <div className='row-span-2 shadow-md rounded-2xl flex flex-col justify-between bg-gray-500 items-center'>
+        </div> */}
+        <SalesForecastChart notLoading={salesForecastChartLoading} forecastData={predictions!} itemComponents={itemWithComponents!} sales={transactionSalesForThisYear} /> 
+        {/* <SalesForecastChart />  */}
+
+
+        {/* <div className='row-span-2 shadow-md rounded-2xl flex flex-col justify-between bg-gray-500 items-center'>
           <h1 className='text-white font-bold'>ARIMA METRICS</h1>
-        </div>
+        </div> */}
 
         <CardSalesSummary salesData={salesData6Months} />
         <CardExpensesRawMaterials salesData={costData6Months} />
