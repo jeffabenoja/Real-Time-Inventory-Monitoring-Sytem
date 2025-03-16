@@ -20,6 +20,7 @@ const UpdateStockRawMats: React.FC<UpdateStockProps> = ({
     remarks: product?.remarks || "",
     quantity: product?.quantity || 0,
     batchNo: product?.batchNo || "",
+    expiryDate: product?.expiryDate || "",
     status: product?.status || "",
   })
   const [confirmSubmit, setConfirmSubmit] = useState<boolean>(false)
@@ -44,7 +45,12 @@ const UpdateStockRawMats: React.FC<UpdateStockProps> = ({
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    const requiredFields: string[] = ["remarks", "quantity", "batchNo"]
+    const requiredFields: string[] = [
+      "remarks",
+      "quantity",
+      "batchNo",
+      "expiryDate",
+    ]
 
     const emptyFields = requiredFields.filter(
       (field) => !updateStock[field as keyof typeof updateStock]
@@ -103,6 +109,24 @@ const UpdateStockRawMats: React.FC<UpdateStockProps> = ({
               <option value='CANCEL'>CANCEL</option>
             </select>
           </div>
+        </div>
+
+        <div className='flex flex-col gap-2'>
+          <label htmlFor='expiryDate' className='text-sm font-bold'>
+            Expiration Date
+          </label>
+          <input
+            id='expiryDate'
+            type='date'
+            name='expiryDate'
+            onChange={handleChange}
+            value={updateStock.expiryDate}
+            autoComplete='off'
+            className={`${
+              invalidFields.includes("expiryDate") && "border-primary"
+            } cursor-pointer py-2 px-4 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent placeholder:text-sm
+              focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
+          />
         </div>
 
         <div className='flex justify-between items-center gap-2'>

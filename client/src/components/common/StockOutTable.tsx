@@ -95,9 +95,16 @@ const StockOutTable = ({ productId, close }: StockOutTableProps) => {
     return (
       <section className='text-center flex flex-col justify-center items-center h-96'>
         <FaExclamationTriangle className='text-red-900 text-6xl mb-4' />
-        <h1 className='text-6xl font-bold mb-4'>
+        <h1 className='text-2xl font-bold mb-4'>
           No Available Transaction History
         </h1>
+        <button
+          type='button'
+          onClick={close}
+          className='bg-red-700 rounded-md py-2.5 w-[150px] text-white font-bold text-xs text-center'
+        >
+          Go Back
+        </button>
       </section>
     )
   }

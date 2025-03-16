@@ -31,6 +31,7 @@ const AddStocksRawMats: React.FC<AddStockProps> = ({
       code: productCode || "",
     },
     quantity: 0,
+    expiryDate: `${new Date().toISOString().split("T")[0]}`,
     batchNo: "",
   })
 
@@ -61,6 +62,7 @@ const AddStocksRawMats: React.FC<AddStockProps> = ({
       "transactionDate",
       "remarks",
       "quantity",
+      "expiryDate",
       "batchNo",
     ]
 
@@ -128,9 +130,27 @@ const AddStocksRawMats: React.FC<AddStockProps> = ({
           />
         </div>
 
+        <div className='flex flex-col gap-2'>
+          <label htmlFor='expiryDate' className='text-sm font-bold'>
+            Expiration Date
+          </label>
+          <input
+            id='expiryDate'
+            type='date'
+            name='expiryDate'
+            onChange={handleChange}
+            value={stock.expiryDate}
+            autoComplete='off'
+            className={`${
+              invalidFields.includes("expiryDate") && "border-primary"
+            } cursor-pointer py-2 px-4 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent placeholder:text-sm
+              focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
+          />
+        </div>
+
         <div className='flex justify-between items-center gap-2'>
           <div className='flex flex-col gap-2'>
-            <label htmlFor='quantity' className='text-sm'>
+            <label htmlFor='quantity' className='text-sm font-bold'>
               Quantity
             </label>
             <input

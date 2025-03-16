@@ -7,9 +7,10 @@ export interface StockInType {
   item: {
     code: string
     description?: string
-    id?:string
+    id?: string
   }
   quantity: number
+  expiryDate?: string
   batchNo: string
   status?: string
   createdDateTime?: string
@@ -31,6 +32,7 @@ export interface UpdateStockType {
   remarks: string
   quantity: number
   batchNo: string
+  expiryDate?: string
   status?: string
 }
 
