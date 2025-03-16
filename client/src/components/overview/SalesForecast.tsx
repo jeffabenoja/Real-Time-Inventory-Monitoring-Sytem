@@ -74,7 +74,10 @@ const SalesForecastChart: React.FC<Props> = React.memo(
             />
             <Tooltip
               formatter={(value: number, name: string) => [
-                `P${value.toFixed(2)}`,
+                `P${new Intl.NumberFormat("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                }).format(value)}`,
                 name,
               ]}
             />
