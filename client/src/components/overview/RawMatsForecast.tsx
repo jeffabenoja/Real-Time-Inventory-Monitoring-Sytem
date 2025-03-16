@@ -114,7 +114,7 @@ const RawMatForecast: React.FC<Props> = React.memo(
     if(notLoading){
       content = <>
       <div className="flex justify-between items-center mb-2">
-          <h2 className="text-lg font-semibold">Raw Material Forecast</h2>
+          <h2 className="text-lg font-semibold">Resources Forecast</h2>
             <select
               id="material-select"
               value={selectedMaterial}

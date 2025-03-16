@@ -113,7 +113,7 @@ const ProductsForecastChart: React.FC<Props> = React.memo(
     if(notLoading){
       content = <>
       <div className="flex justify-between items-center mb-2">
-          <h2 className="text-lg font-semibold">Product Sales Forecast</h2>
+          <h2 className="text-lg font-semibold">Products Forecast</h2>
             <select
               id="product-select"
               value={selectedProduct}
@@ -136,7 +136,7 @@ const ProductsForecastChart: React.FC<Props> = React.memo(
             <YAxis tickFormatter={formatYAxisTick} />
             <Tooltip
               formatter={(value: number, name: string) => [
-                `P${value.toFixed(2)}`,
+                `${value.toFixed(2)} ${unit}`,
                 name,
               ]}
             />
