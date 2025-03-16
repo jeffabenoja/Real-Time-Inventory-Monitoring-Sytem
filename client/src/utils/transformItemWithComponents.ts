@@ -1,4 +1,3 @@
-// Define interfaces for the fetched data
 interface RawMaterial {
   id: number;
   code: string;
@@ -54,6 +53,8 @@ export interface TransformedItem {
     cost: number;
     averageCost: number;
     status: string;
+    quantity: number; // new property
+    unit: string;     // new property
   }[];
 }
 
@@ -77,6 +78,8 @@ export default function transformItemWithComponents(
     cost: component.rawMaterial.cost,
     averageCost: component.rawMaterial.averageCost,
     status: component.rawMaterial.status,
+    quantity: component.quantity,         // included quantity
+    unit: component.rawMaterial.unit,       // included unit
   }));
 
   return {

@@ -114,7 +114,6 @@ export default function UserForm({ close, defaultValue, userList }: Props) {
       ...data,
       status: "ACTIVE",
     };
-    console.log(user);
     if (!defaultValue) {
       await addUser(user);
     } else {

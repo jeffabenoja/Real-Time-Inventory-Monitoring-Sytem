@@ -76,9 +76,7 @@ export default function Profile() {
 
   useEffect(() => {
     if (userDetails && !userDetailsFetching) {
-      console.log("did this run")
       const formDefaultValue = transformUserDetails(userDetails)
-      console.log(formDefaultValue)
       setTransformedUser(formDefaultValue)
 
       reset(formDefaultValue)

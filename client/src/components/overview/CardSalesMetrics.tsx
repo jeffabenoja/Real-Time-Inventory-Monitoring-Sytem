@@ -187,7 +187,7 @@ const CardSalesMetrics: React.FC<CardSalesMetricsProps> = ({ sales }) => {
         </select>
       </div>
       <hr />
-      <div className='flex justify-between items-center gap-2.5'>
+      <div className='flex justify-around items-center'>
         <CardSalesRevenue
           totalValueSum={totalValueSum}
           averageChangePercentage={revenuePercentageChange}
