@@ -226,7 +226,7 @@ const SalesApprovalTable = ({ data, close }: ApprovalProps) => {
           withCancel={false}
           add={false}
           view={false}
-          sorting={[{ id: "transactionNo", desc: true }]}
+          sorting={[{ id: "salesorderNo", desc: true }]}
         />
       </div>
     </div>
