@@ -133,12 +133,19 @@ const OverviewPage = () => {
 
   const filteredTransactions = transactions.filter((transaction) => {
     const transactionDate = new Date(transaction.orderDate)
+      .toISOString()
+      .split("T")[0]
     return last12MonthsDate.some((monthStart) => {
-      return (
-        transactionDate >= monthStart &&
-        transactionDate <
-          new Date(monthStart.getFullYear(), monthStart.getMonth() + 1, 0)
+      const startOfMonth = new Date(monthStart).toISOString().split("T")[0]
+      const endOfMonth = new Date(
+        monthStart.getFullYear(),
+        monthStart.getMonth() + 1,
+        0
       )
+        .toISOString()
+        .split("T")[0]
+
+      return transactionDate >= startOfMonth && transactionDate <= endOfMonth
     })
   })
 
@@ -152,21 +159,30 @@ const OverviewPage = () => {
 
   const filteredTransactions6Months = transactions.filter((transaction) => {
     const transactionDate = new Date(transaction.orderDate)
+      .toISOString()
+      .split("T")[0]
     return last6MonthsDate.some((monthStart) => {
-      const monthEnd = new Date(
+      const startOfMonth = new Date(monthStart).toISOString().split("T")[0]
+      const endOfMonth = new Date(
         monthStart.getFullYear(),
         monthStart.getMonth() + 1,
         0
       )
-      return transactionDate >= monthStart && transactionDate < monthEnd
+        .toISOString()
+        .split("T")[0]
+
+      return transactionDate >= startOfMonth && transactionDate <= endOfMonth
     })
   })
 
   const groupedByMonthSales6Months = filteredTransactions6Months.reduce(
     (acc: any, curr: any) => {
       const monthName = getMonthName(curr.orderDate)
+
       const totalAmount = Array.isArray(curr.details)
-        ? curr.details.reduce((sum: number, item: any) => sum + item.amount, 0)
+        ? curr.details.reduce((sum: number, item: any) => {
+            return sum + item.amount
+          }, 0)
         : 0
 
       if (!acc[monthName]) {
@@ -185,8 +201,6 @@ const OverviewPage = () => {
       sales: groupedByMonthSales6Months[monthName] || 0,
     }
   })
-
-  console.log(salesData6Months)
 
   const groupedByMonth6MonthsCost = filteredTransactions6Months.reduce(
     (acc: any, curr: any) => {
