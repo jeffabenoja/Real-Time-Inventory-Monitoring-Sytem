@@ -123,7 +123,7 @@ const SalesApprovalTable = ({ data, close }: ApprovalProps) => {
   const cancelItems = approvalDataState.filter(
     (pending) => pending.status === "CANCEL"
   )
-  const handleUpdate = (updatedRow: any) => {
+  const handleUpdate = async (updatedRow: any) => {
     const updatedOrder = {
       salesorderNo: updatedRow.salesorderNo,
       orderDate: updatedRow.orderDate,
@@ -143,7 +143,7 @@ const SalesApprovalTable = ({ data, close }: ApprovalProps) => {
     }
 
     try {
-      updateSalesOrder(updatedOrder)
+      await updateSalesOrder(updatedOrder)
       const updatedApprovalData = approvalDataState.map((item) =>
         item.salesorderNo === updatedRow.salesorderNo ? updatedRow : item
       )

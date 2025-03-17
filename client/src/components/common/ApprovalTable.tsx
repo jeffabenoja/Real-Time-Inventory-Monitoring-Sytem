@@ -122,7 +122,7 @@ const ApprovalTable = ({ close }: ApprovalProps) => {
     (pending) => pending.status === "CANCEL"
   )
 
-  const handleUpdate = (updatedRow: any) => {
+  const handleUpdate = async (updatedRow: any) => {
     const stockToUpdate = {
       remarks: updatedRow.remarks,
       quantity: updatedRow.quantity,
@@ -133,7 +133,7 @@ const ApprovalTable = ({ close }: ApprovalProps) => {
     }
 
     try {
-      updateStock(stockToUpdate)
+      await updateStock(stockToUpdate)
       const updatedApprovalData = approvalDataState.map((item) =>
         item.transactionNo === updatedRow.transactionNo ? updatedRow : item
       )

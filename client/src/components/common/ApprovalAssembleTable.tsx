@@ -123,7 +123,7 @@ const ApprovalAssembleTable = ({ close }: ApprovalProps) => {
     (pending) => pending.status === "CANCEL"
   )
 
-  const handleUpdate = (updatedRow: any) => {
+  const handleUpdate = async (updatedRow: any) => {
     const stockToUpdate = {
       transactionNo: updatedRow?.transactionNo,
       remarks: updatedRow?.remarks,
@@ -133,15 +133,15 @@ const ApprovalAssembleTable = ({ close }: ApprovalProps) => {
       status: updatedRow?.status,
     }
     try {
-      updateStockAssemble(stockToUpdate)
+      await updateStockAssemble(stockToUpdate)
       const updatedApprovalData = approvalDataState.map((item) =>
         item.transactionNo === updatedRow.transactionNo ? updatedRow : item
       )
 
       setApprovalDataState(updatedApprovalData)
-      showToast.success("Successfully updated stock transaction ")
+      showToast.success("Successfully updated stock transaction")
     } catch (error) {
-      showToast.success("Eroor updating stock transaction ")
+      showToast.error("Error updating stock transaction")
     }
   }
 
