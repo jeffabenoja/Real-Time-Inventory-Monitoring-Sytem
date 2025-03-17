@@ -1,24 +1,25 @@
-import { getStockList } from "../../api/services/stock"
+import { AssembleStock } from "../../type/stockType"
 import { FaExclamationTriangle } from "react-icons/fa"
 import { useQuery } from "@tanstack/react-query"
 import Spinner from "./utils/Spinner"
 import { IoIosClose } from "react-icons/io"
 import { createColumnHelper } from "@tanstack/react-table"
 import Table from "./table/Table"
-import { StockListType } from "../../type/stockType"
 import { useState, useEffect } from "react"
 import { showToast } from "../../utils/Toast"
-import { updateStock } from "../../api/services/stock"
+import { getAssembleList } from "../../api/services/stock"
+import { updateStockAssemble } from "../../api/services/stock"
 
 const fields = [
   { key: "transactionNo", label: "Transaction Number", classes: "uppercase" },
-  { key: "expiryDate", label: "Expiry Date" },
   { key: "batchNo", label: "Batch Number", classes: "uppercase" },
-  { key: "quantity", label: "Quantity" },
-  { key: "item.code", label: "Product Code", classes: "uppercase" },
-  { key: "item.description", label: "Product Name", classes: "uppercase" },
-  { key: "issuedQuantity", label: "Issued Quantity" },
-  { key: "returnQuantity", label: "Return Quantity" },
+  { key: "assemble_quantity", label: "Quantity" },
+  { key: "finishProduct.code", label: "Product Code", classes: "uppercase" },
+  {
+    key: "finishProduct.description",
+    label: "Product Name",
+    classes: "uppercase",
+  },
 ]
 
 const Columns = ({
@@ -48,7 +49,7 @@ const Columns = ({
           if (
             row.original.status !== "DRAFT" &&
             row.original.expiryDate !== null &&
-            row.original.quantity > 0 &&
+            row.original.assemble_quantity > 0 &&
             row.original.batchNo !== ""
           ) {
             const stockToUpdate = {
@@ -92,17 +93,17 @@ const Columns = ({
 type ApprovalProps = {
   close: () => void
 }
-const ApprovalTable = ({ close }: ApprovalProps) => {
+const ApprovalAssembleTable = ({ close }: ApprovalProps) => {
   const {
     data: approvalData = [],
     isLoading,
     isError,
-  } = useQuery<StockListType[]>({
-    queryKey: ["Stock", "Raw Mats"],
-    queryFn: getStockList,
+  } = useQuery<AssembleStock[]>({
+    queryKey: ["Stock", "Assemble"],
+    queryFn: getAssembleList,
   })
 
-  const [approvalDataState, setApprovalDataState] = useState<StockListType[]>(
+  const [approvalDataState, setApprovalDataState] = useState<AssembleStock[]>(
     []
   )
 
@@ -124,16 +125,15 @@ const ApprovalTable = ({ close }: ApprovalProps) => {
 
   const handleUpdate = (updatedRow: any) => {
     const stockToUpdate = {
-      remarks: updatedRow.remarks,
-      quantity: updatedRow.quantity,
-      batchNo: updatedRow.batchNo,
-      expiryDate: updatedRow.expiryDate,
-      status: updatedRow.status,
-      transactionNo: updatedRow.transactionNo,
+      transactionNo: updatedRow?.transactionNo,
+      remarks: updatedRow?.remarks,
+      finishProduct: updatedRow?.finishProduct,
+      assemble_quantity: updatedRow?.assemble_quantity,
+      batchNo: updatedRow?.batchNo,
+      status: updatedRow?.status,
     }
-
     try {
-      updateStock(stockToUpdate)
+      updateStockAssemble(stockToUpdate)
       const updatedApprovalData = approvalDataState.map((item) =>
         item.transactionNo === updatedRow.transactionNo ? updatedRow : item
       )
@@ -256,4 +256,4 @@ const ApprovalTable = ({ close }: ApprovalProps) => {
   )
 }
 
-export default ApprovalTable
+export default ApprovalAssembleTable

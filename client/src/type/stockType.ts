@@ -11,6 +11,8 @@ export interface StockInType {
   }
   quantity: number
   expiryDate?: string
+  returnQuantity?: number
+  issuedQuantity?: number
   batchNo: string
   status?: string
   createdDateTime?: string

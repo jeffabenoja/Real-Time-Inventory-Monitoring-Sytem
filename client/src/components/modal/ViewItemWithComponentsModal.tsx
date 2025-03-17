@@ -1,16 +1,15 @@
-import PageTitle from "./utils/PageTitle"
-import { ItemType } from "../../type/itemType"
-import { useState, useRef } from "react"
-import Table from "./table/Table"
-import CustomModal from "./utils/CustomModal"
+import { useItemWithComponents } from "../../hooks/items/useItemWithComponent"
+import { useState, useRef, useEffect } from "react"
+import Table from "../common/table/Table"
+import CustomModal from "../common/utils/CustomModal"
 import { IoIosClose } from "react-icons/io"
 import { createColumnHelper } from "@tanstack/react-table"
-import { Link, useNavigate } from "react-router-dom"
 import { showToast } from "../../utils/Toast"
-import { useItemComponents } from "../../hooks/items/useItemComponents"
 import ConfirmationModal from "../modal/ConfirmationModal"
 import { RootState } from "../../store"
 import { useSelector } from "react-redux"
+import { FaExclamationTriangle } from "react-icons/fa"
+import Spinner from "../common/utils/Spinner"
 
 const fields = [
   { key: "item.code", label: "Product Code", classes: "uppercase" },
@@ -20,6 +19,19 @@ const fields = [
   { key: "item.unit", label: "Unit", classes: "lowercase" },
   { key: "item.reorderPoint", label: "Stock Level" },
   { key: "item.status", label: "Status", classes: "uppercase" },
+]
+
+const fieldsRawMats = [
+  { key: "code", label: "Product Code", classes: "uppercase" },
+  {
+    key: "description",
+    label: "Product Name",
+    classes: "capitalize",
+  },
+  { key: "category", label: "Category", classes: "capitalize" },
+  { key: "brand", label: "Brand", classes: "uppercase" },
+  { key: "unit", label: "Unit", classes: "lowercase" },
+  { key: "status", label: "Status", classes: "uppercase" },
 ]
 
 const Columns = ({
@@ -86,57 +98,44 @@ const Columns = ({
     }),
   ]
 }
+
 const ItemColumns = ({
-  fields,
+  fieldsRawMats,
   onRemove,
   onQuantityChange,
 }: {
-  fields: { key: string; label: string; classes?: string }[]
+  fieldsRawMats: { key: string; label: string; classes?: string }[]
   onRemove: (productId: string) => void
   onQuantityChange: (productId: string, quantity: string) => void
 }) => {
   const columnHelper = createColumnHelper<any>()
 
-  // Track quantity as a ref to avoid re-rendering on each keystroke
   const quantityRefs = useRef<{ [key: string]: string }>({})
 
   return [
-    ...fields.map((field) =>
-      columnHelper.accessor(`rawMaterial.${field.key}`, {
+    ...fieldsRawMats.map((fields) =>
+      columnHelper.accessor(`rawMaterial.${fields.key}`, {
         cell: (info) => (
-          <span className={`${field.classes}`}>{info.getValue()}</span>
+          <span className={`${fields.classes}`}>{info.getValue()}</span>
         ),
-        header: () => <span className='truncate'>{field.label}</span>,
+        header: () => <span className='truncate'>{fields.label}</span>,
       })
     ),
-    columnHelper.accessor(`currentStock`, {
-      cell: (info) => <span>{info.getValue().toFixed(2)}</span>,
-      header: () => <span className='truncate'>Current Stock</span>,
-    }),
+
     columnHelper.accessor("quantity", {
       id: "qty",
       header: () => <span className='truncate'>Used Quantity</span>,
       cell: ({ row }) => {
-        const [quantity, setQuantity] = useState(row.original.quantity || 1)
-        const currentStock = row.original.currentStock || 0
-        const [isQuantityValid, setIsQuantityValid] = useState(true)
-        const [currentValue, setCurrentValue] = useState(quantity)
         const handleQuantityChange = (
           e: React.ChangeEvent<HTMLInputElement>
         ) => {
           const value = e.target.value
-          setQuantity(value)
-          if (value > currentStock) {
-            setIsQuantityValid(false)
-            setCurrentValue(value)
-          } else {
-            setIsQuantityValid(true)
-          }
-          quantityRefs.current[row.original.rawMaterial.item.code] = value
+          quantityRefs.current[row.original.rawMaterial.code] = value
         }
 
         const handleBlur = () => {
           const value = quantityRefs.current[row.original.rawMaterial.code]
+          console.log(value)
           if (!value) {
             onQuantityChange(
               row.original.rawMaterial.code,
@@ -147,10 +146,6 @@ const ItemColumns = ({
           }
         }
 
-        const borderClass = isQuantityValid
-          ? "border-gray-900 border-opacity-25 focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary"
-          : "border-red-900 focus:border-red-900 focus:outline-none active:border-red-900 active:outline-none hover:border-red-900"
-
         return (
           <input
             type='text'
@@ -160,11 +155,7 @@ const ItemColumns = ({
             defaultValue={row.original.quantity}
             onChange={handleQuantityChange}
             onBlur={handleBlur}
-            className={` ${
-              currentValue > currentStock
-                ? "border-red-900 focus:border-red-900 focus:outline-none active:border-red-900 active:outline-none hover:border-red-900"
-                : ""
-            } w-[100px] py-1 pl-4 pr-1 border ${borderClass} rounded-md outline-transparent bg-transparent `}
+            className={`  w-[100px] py-1 pl-4 pr-1 border border-gray-900 border-opacity-25 focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary rounded-md outline-transparent bg-transparent `}
           />
         )
       },
@@ -176,7 +167,7 @@ const ItemColumns = ({
         <div className='flex gap-2 items-center justify-center'>
           <button
             className='px-4 py-2 hover:text-primary'
-            onClick={() => onRemove(row.original.rawMaterial.item.code)}
+            onClick={() => onRemove(row.original.rawMaterial.code)}
           >
             <IoIosClose size={20} />
           </button>
@@ -186,43 +177,60 @@ const ItemColumns = ({
   ]
 }
 
-const ItemComponents = () => {
+interface ViewItemWithComponentsProps {
+  id: string
+  close: () => void
+}
+
+const ViewItemWithComponents: React.FC<ViewItemWithComponentsProps> = ({
+  id,
+  close,
+}) => {
   const inventoryData = useSelector(
     (state: RootState) => state.inventory.inventory
   )
-  const { createItem, isPending } = useItemComponents()
+
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
   const [confirmSubmit, setConfirmSubmit] = useState<boolean>(false)
   const [confirmCancel, setConfirmCancel] = useState<boolean>(false)
   const [rawMaterials, setRawMaterials] = useState<any[]>([])
-  const [invalidFields, setInvalidFields] = useState<string[]>([])
-  const [productData, setProductData] = useState<ItemType>({
-    code: "",
-    description: "",
-    category: "Finished Goods",
-    brand: "N/A",
-    unit: "pcs",
-    reorderPoint: 1,
-    price: 0,
-    cost: 0,
-  })
-  const navigate = useNavigate()
+
+  const {
+    data: productData,
+    isLoading,
+    isError,
+    updateItem,
+    isPending,
+  } = useItemWithComponents(id)
+
+  const validProductData =
+    productData && "finishProduct" in productData ? productData : null
+  const validcomponents =
+    productData && "components" in productData ? productData.components : null
+
+  useEffect(() => {
+    if (validcomponents) {
+      setRawMaterials(validcomponents)
+    }
+  }, [validcomponents])
+
+  const finishProduct = validProductData?.finishProduct
 
   const columns = Columns({
     fields,
   })
 
   const rawMaterialsColumns = ItemColumns({
-    fields,
+    fieldsRawMats,
     onRemove: (productId) => {
       setRawMaterials((prevProduct) =>
-        prevProduct.filter((p) => p.rawMaterial.item.code !== productId)
+        prevProduct.filter((p) => p.rawMaterial.code !== productId)
       )
     },
     onQuantityChange: (productCode, quantity) => {
       setRawMaterials((prevProduct) =>
         prevProduct.map((item) =>
-          item.rawMaterial.item.code === productCode
+          item.rawMaterial.code === productCode
             ? { ...item, quantity: quantity }
             : item
         )
@@ -236,7 +244,7 @@ const ItemComponents = () => {
 
   const totalPrice = rawMaterials
     .reduce((acc, material) => {
-      const price = material?.rawMaterial?.item.price ?? 0
+      const price = material?.rawMaterial?.price ?? 0
       const quantity = Number(material?.quantity) || 0
       return acc + price * quantity
     }, 0)
@@ -244,7 +252,7 @@ const ItemComponents = () => {
 
   const totalCost = rawMaterials
     .reduce((acc, material) => {
-      const cost = material?.rawMaterial?.item.cost ?? 0
+      const cost = material?.rawMaterial?.cost ?? 0
       const quantity = Number(material?.quantity) || 0
       return acc + cost * quantity
     }, 0)
@@ -274,49 +282,8 @@ const ItemComponents = () => {
     handleModalToggle()
   }
 
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
-    const { name, value } = e.target
-    setProductData((prevProduct) => ({
-      ...prevProduct,
-      [name]: value,
-    }))
-
-    setInvalidFields((prev) => prev.filter((field) => field !== name))
-  }
-
   const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const requiredFields: string[] = [
-      "code",
-      "description",
-      "unit",
-      "reorderPoint",
-    ]
-
-    const emptyFields = requiredFields.filter(
-      (field) => !productData[field as keyof ItemType]
-    )
-
-    if (emptyFields.length > 0) {
-      setInvalidFields(emptyFields)
-      showToast.error("Please fill out all required fields.")
-      return
-    }
-
-    if (
-      productData.unit.toLowerCase() !== "kg" &&
-      productData.unit.toLowerCase() !== "pcs" &&
-      productData.unit.toLowerCase() !== "pack" &&
-      productData.unit.toLowerCase() !== "liters"
-    ) {
-      setInvalidFields((prev) => [...prev, "unit"])
-      showToast.error("Invalid unit type")
-      return
-    }
 
     const invalidRawMaterials = rawMaterials.map((material) => ({
       quantity: material.quantity,
@@ -327,7 +294,6 @@ const ItemComponents = () => {
       return
     }
 
-    // Check if any quantity is empty or 0
     const invalidQuantity = invalidRawMaterials.some(
       (material) =>
         material.quantity === "" ||
@@ -340,36 +306,50 @@ const ItemComponents = () => {
       return
     }
 
-    const { cost, price, ...rest } = productData
-
     const updateProductComponent = {
-      finishProduct: {
-        ...rest,
-        price: parseFloat(totalPrice),
-        cost: parseFloat(totalCost),
-      },
       components: rawMaterials.map((material) => ({
         rawMaterial: {
-          ...material.rawMaterial.item,
+          code: material.rawMaterial.code,
         },
         quantity: material.quantity,
       })),
     }
-    createItem(updateProductComponent)
-    navigate("/dashboard/products")
+
+    updateItem({ id, updateProductComponent })
+    close()
   }
 
   const data = inventoryData.filter((item) =>
     ["Raw Mats", "raw mats"].includes(item.item.category.toLowerCase())
   )
 
-  return (
-    <>
-      <div className='hidden md:block'>
-        <PageTitle>Create Finished Product</PageTitle>
-      </div>
-      <h1 className='md:hidden'>Create Finished Product</h1>
+  if (isError) {
+    return (
+      <section className='text-center flex flex-col justify-center items-center h-96'>
+        <FaExclamationTriangle className='text-red-900 text-6xl mb-4' />
+        <h1 className='text-2xl font-bold mb-4'>
+          Error fetching data! Please try again later.
+        </h1>
+        <button
+          type='button'
+          onClick={close}
+          className='bg-red-700 rounded-md py-2.5 w-[150px] text-white font-bold text-xs text-center'
+        >
+          Go Back
+        </button>
+      </section>
+    )
+  }
 
+  if (isLoading) {
+    return <Spinner />
+  }
+
+  return (
+    <div className='h-full'>
+      <div className='flex-1 flex items-center justify-end cursor-pointer'>
+        <IoIosClose size={20} onClick={close} />
+      </div>
       <form className='flex flex-col' onSubmit={handleOnSubmit}>
         <div className='pt-4 px-2 border-t border-[#14aff1] flex flex-col gap-5'>
           <div className='flex flex-col md:flex-row gap-5 md:items-center '>
@@ -382,12 +362,10 @@ const ItemComponents = () => {
                   id='productCode'
                   type='text'
                   name='code'
-                  value={productData.code}
-                  onChange={handleChange}
+                  value={finishProduct?.code || ""}
+                  readOnly
                   autoComplete='off'
-                  className={`${
-                    invalidFields.includes("code") && "border-primary"
-                  }  w-full p-2 rounded-md border outline-transparent bg-transparent text-xs
+                  className={` w-full p-2 rounded-md border outline-transparent bg-transparent text-xs
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
                 />
               </div>
@@ -404,12 +382,10 @@ const ItemComponents = () => {
                   id='description'
                   type='text'
                   name='description'
-                  value={productData.description}
-                  onChange={handleChange}
+                  value={finishProduct?.description || ""}
                   autoComplete='off'
-                  className={`${
-                    invalidFields.includes("description") && "border-primary"
-                  } w-full p-2 rounded-md border outline-transparent bg-transparent text-xs
+                  readOnly
+                  className={`w-full p-2 rounded-md border outline-transparent bg-transparent text-xs
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
                 />
               </div>
@@ -426,11 +402,9 @@ const ItemComponents = () => {
                   id='category'
                   type='text'
                   name='category'
-                  value={productData.category}
+                  value={finishProduct?.category || ""}
                   readOnly
-                  className={`${
-                    invalidFields.includes("category") && "border-primary"
-                  } w-full p-2 rounded-md border outline-transparent bg-transparent text-xs
+                  className={`w-full p-2 rounded-md border outline-transparent bg-transparent text-xs
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
                 />
               </div>
@@ -440,21 +414,14 @@ const ItemComponents = () => {
                 Unit:
               </label>
               <div className='flex-1'>
-                <select
+                <input
                   id='unit'
                   name='unit'
-                  value={productData.unit}
-                  onChange={handleChange}
-                  className={`${
-                    invalidFields.includes("unit") && "border-red-900"
-                  } w-full p-2 rounded-md border outline-transparent bg-transparent text-xs
+                  value={finishProduct?.unit || ""}
+                  readOnly
+                  className={`w-full p-2 rounded-md border outline-transparent bg-transparent text-xs
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
-                >
-                  <option value='kg'>KG</option>
-                  <option value='pcs'>PCS</option>
-                  <option value='pack'>PACK</option>
-                  <option value='liters'>LITERS</option>
-                </select>
+                />
               </div>
             </div>
           </div>
@@ -469,13 +436,11 @@ const ItemComponents = () => {
                   id='brand'
                   type='text'
                   name='brand'
-                  value={productData.brand}
-                  onChange={handleChange}
+                  value={finishProduct?.brand || ""}
+                  readOnly
                   placeholder='e.g. ITEM101'
                   autoComplete='off'
-                  className={`${
-                    invalidFields.includes("brand") && "border-primary"
-                  } w-full p-2 rounded-md border outline-transparent bg-transparent text-xs
+                  className={` w-full p-2 rounded-md border outline-transparent bg-transparent text-xs
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
                 />
               </div>
@@ -493,11 +458,9 @@ const ItemComponents = () => {
                   id='reorderPoint'
                   autoComplete='off'
                   name='reorderPoint'
-                  value={productData.reorderPoint}
-                  onChange={handleChange}
-                  className={`${
-                    invalidFields.includes("reorderPoint") && "border-primary"
-                  }  w-full p-2 rounded-md border outline-transparent bg-transparent text-xs
+                  value={finishProduct?.reorderPoint || ""}
+                  readOnly
+                  className={` w-full p-2 rounded-md border outline-transparent bg-transparent text-xs
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
                 />
               </div>
@@ -552,16 +515,16 @@ const ItemComponents = () => {
           </div>
         </div>
 
-        <div className='mt-4'>
+        <div className='mt-2'>
           <div className='flex justify-between items-center'>
             {isOpenModal && (
               <CustomModal
-                classes='h-[480px] md:p-8 w-[343px] md:w-[1200px]'
+                classes='h-[410px] md:p-8 w-[343px] md:w-[900px]'
                 toggleModal={handleModalToggle}
               >
                 {/* Material Items Table */}
                 <>
-                  <PageTitle>Material List</PageTitle>
+                  <h1 className='mb-2'>Select Item Materials</h1>
                   <hr style={{ borderColor: "#14aff1" }} />
                   <Table
                     data={data || []}
@@ -582,7 +545,7 @@ const ItemComponents = () => {
           </div>
 
           {rawMaterials && (
-            <div className='h-[410px] overflow-y-auto scrollbar '>
+            <div className='h-[230px] overflow-y-auto scrollbar '>
               {/* Display Material Items */}
               <Table
                 data={rawMaterials}
@@ -629,15 +592,14 @@ const ItemComponents = () => {
                 Cancel
               </button>
 
-              <Link to={"/dashboard/products"}>
-                <button
-                  type='button'
-                  className={`rounded-md border-0 outline-transparent py-2.5
+              <button
+                type='button'
+                onClick={close}
+                className={`rounded-md border-0 outline-transparent py-2.5
            font-medium cursor-pointer text-white bg-blue-700 w-[100px]`}
-                >
-                  <p className='text-white font-bold text-xs'>Confirm</p>
-                </button>
-              </Link>
+              >
+                <p className='text-white font-bold text-xs'>Confirm</p>
+              </button>
             </ConfirmationModal>
           )}
 
@@ -667,8 +629,8 @@ const ItemComponents = () => {
           )}
         </div>
       </form>
-    </>
+    </div>
   )
 }
 
-export default ItemComponents
+export default ViewItemWithComponents

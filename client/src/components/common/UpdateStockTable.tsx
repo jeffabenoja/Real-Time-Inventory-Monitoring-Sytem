@@ -14,6 +14,9 @@ import { IoIosClose } from "react-icons/io"
 const fields = [
   { key: "transactionNo", label: "Transaction Number", classes: "uppercase" },
   { key: "batchNo", label: "Batch Number", classes: "uppercase" },
+  { key: "expiryDate", label: "Expiry Date" },
+  { key: "issuedQuantity", label: "Issued Quantity" },
+  { key: "returnQuantity", label: "Return Quantity" },
   { key: "item.code", label: "Product Code", classes: "uppercase" },
   { key: "item.description", label: "Product Name", classes: "uppercase" },
   { key: "quantity", label: "Quantity" },

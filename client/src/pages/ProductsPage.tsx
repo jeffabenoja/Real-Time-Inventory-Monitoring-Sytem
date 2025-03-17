@@ -11,9 +11,11 @@ import { FaExclamationTriangle } from "react-icons/fa"
 import { ItemType } from "../type/itemType"
 import { Navigate } from "react-router-dom"
 import AddStocksFinishedProduct from "../components/modal/AddStockFinishedProduct"
-import ViewItemStock from "../components/modal/ViewItemStock"
+// import ViewItemStock from "../components/modal/ViewItemStock"
 import InventoryTable from "../components/common/InventoryTable"
 import ViewAssembleTable from "../components/common/ViewAssembleTable"
+import ApprovalAssembleTable from "../components/common/ApprovalAssembleTable"
+import ViewItemWithComponents from "../components/modal/ViewItemWithComponentsModal"
 
 const fields = [
   { key: "code", label: "Product Code", classes: "uppercase" },
@@ -35,6 +37,7 @@ const ProductsPage = () => {
   const [productData, setProductData] = useState<ItemType | null>(null)
   const [itemId, setItemId] = useState<string>("")
   const [isViewItemInventory, setIsViewItemInventory] = useState<boolean>(false)
+  const [approval, setApproval] = useState<boolean>(false)
   const { data, isLoading, isError, updateItem, isPendingUpdate } =
     useItemComponents()
 
@@ -50,7 +53,9 @@ const ProductsPage = () => {
     handleModalUpdate()
     setProductData(row)
   }
-
+  const handleApprovalToggle = () => {
+    setApproval((prev) => !prev)
+  }
   /* Stock functionality */
   const handleAddStockToggle = () => {
     setIsAddStock((prev) => !prev)
@@ -116,9 +121,11 @@ const ProductsPage = () => {
           withExport={true}
           add={true}
           view={true}
+          approval={true}
           toolTip='Inventory List'
           handleAdd={handleModalAdd}
           handleView={handleModalViewInventory}
+          handleApproval={handleApprovalToggle}
         />
       )}
 
@@ -155,8 +162,15 @@ const ProductsPage = () => {
       )}
 
       {isViewItemInventory && (
-        <CustomModal toggleModal={handleViewStockToggle}>
-          <ViewItemStock product={productData} />
+        <CustomModal
+          toggleModal={handleViewStockToggle}
+          classes='h-[480px] md:p-8 w-[343px] md:w-[1200px]'
+        >
+          {/* <ViewItemStock product={productData} /> */}
+          <ViewItemWithComponents
+            id={productData?.id || ""}
+            close={handleViewStockToggle}
+          />
         </CustomModal>
       )}
 
@@ -166,6 +180,12 @@ const ProductsPage = () => {
             category='Finished Goods'
             close={handleModalViewInventory}
           />
+        </CustomModal>
+      )}
+
+      {approval && (
+        <CustomModal classes='md:h-[480px] md:p-8 w-full h-full md:w-[970px]'>
+          <ApprovalAssembleTable close={handleApprovalToggle} />
         </CustomModal>
       )}
     </>

@@ -21,3 +21,4 @@ export interface ProductWithComponents {
   finishProduct: ItemType
   components: ComponentsMaterials[]
 }
+
