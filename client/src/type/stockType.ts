@@ -19,6 +19,18 @@ export interface StockInType {
   createdBy?: string
 }
 
+export interface StockOutListType {
+  transactionNo: string
+  transactionDate: string
+  remarks: string
+  stockIn: StockInType
+  quantity: number
+  batchNo: string
+  status?: string
+  createdDateTime?: string
+  createdBy?: string
+}
+
 export interface StockOutType {
   transactionDate: string
   remarks: string
@@ -36,7 +48,7 @@ export interface UpdateStockType {
   transactionNo?: string
   remarks: string
   quantity: number
-  batchNo: string
+  batchNo?: string
   expiryDate?: string
   status?: string
 }

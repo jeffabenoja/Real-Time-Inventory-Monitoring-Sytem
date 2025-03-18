@@ -53,9 +53,13 @@ const Columns = ({
     }),
     ...fields.map((field) =>
       columnHelper.accessor(field.key, {
-        cell: (info) => (
-          <span className={`${field.classes}`}>{info.getValue()}</span>
-        ),
+        cell: (info) => {
+          if (field.key === "item.code") {
+            const code = info.row.original.item?.code ?? "No code available" 
+            return <span className={`${field.classes}`}>{code}</span>
+          }
+          return <span className={`${field.classes}`}>{info.getValue()}</span>
+        },
         header: () => <span className='truncate'>{field.label}</span>,
       })
     ),

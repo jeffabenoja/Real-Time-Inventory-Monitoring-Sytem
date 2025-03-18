@@ -7,6 +7,7 @@ import {
   UPDATE_STOCKOUT,
   GET_ASSEMBLE_LIST,
   ADD_STOCK_FOR_FINISHED_GOODS,
+  GET_ALL_STOCKOUT_LIST,
   GET_ASSEMBLE_LIST_PER_ITEM,
   UPDATE_ASSEMBLE_STOCK,
   GET_STOCKIN_BY_DATE_RANGE,
@@ -18,6 +19,7 @@ import {
   StockInType,
   StockListType,
   AssembleStock,
+  StockOutListType,
   UpdateStockType,
   AssembleUpdateStock,
   StockOutType,
@@ -90,6 +92,12 @@ export const addStockForFinishedGoods = async ({
 
 export const getStockList = async (): Promise<StockListType[]> => {
   const response = await apiClient.get(GET_ALL_STOCK_LIST)
+
+  return response.data
+}
+
+export const getAllStockOutList = async (): Promise<StockOutListType[]> => {
+  const response = await apiClient.get(GET_ALL_STOCKOUT_LIST)
 
   return response.data
 }

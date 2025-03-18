@@ -185,37 +185,42 @@ const SalesApprovalTable = ({ data, close }: ApprovalProps) => {
   })
 
   return (
-    <div className='flex flex-col gap-2 h-full'>
-      <div className='flex gap-2 justify-between items-center border-b border-[#14aff1]'>
-        <h1 className='font-bold'>APPROVAL LIST</h1>
+    <div className='flex flex-col h-full'>
+      <div className='flex items-center justify-end'>
         <IoIosClose className='cursor-pointer' size={30} onClick={close} />
       </div>
 
-      <div className='flex gap-5 items-center justify-center'>
-        <label className='flex items-center cursor-pointer font-bold'>
-          <input
-            type='radio'
-            value='pending'
-            checked={selectedStatus === "pending"}
-            onChange={handleStatusChange}
-            className='mr-2 cursor-pointer'
-          />
-          Pending
-        </label>
+      <div>
+        <div className='flex justify-center items-center'>
+          <h1 className='font-bold text-center mb-2'>APPROVAL LIST</h1>
+        </div>
 
-        <label className='flex items-center cursor-pointer font-bold'>
-          <input
-            type='radio'
-            value='cancel'
-            checked={selectedStatus === "cancel"}
-            onChange={handleStatusChange}
-            className='mr-2 cursor-pointer'
-          />
-          Cancel
-        </label>
+        <div className='flex gap-5 items-center justify-center'>
+          <label className='flex items-center cursor-pointer uppercase'>
+            <input
+              type='radio'
+              value='pending'
+              checked={selectedStatus === "pending"}
+              onChange={handleStatusChange}
+              className='mr-2 cursor-pointer'
+            />
+            Pending
+          </label>
+
+          <label className='flex items-center cursor-pointer uppercase'>
+            <input
+              type='radio'
+              value='cancel'
+              checked={selectedStatus === "cancel"}
+              onChange={handleStatusChange}
+              className='mr-2 cursor-pointer'
+            />
+            Cancel
+          </label>
+        </div>
       </div>
 
-      <div className='flex-1 overflow-hidden overflow-y-auto scrollbar'>
+      <div className='flex-1 overflow-hidden overflow-y-auto scrollbar border-t border-b border-[#14aff1] py-2'>
         <Table
           data={selectedStatus === "pending" ? draftItems : cancelItems}
           columns={columns}

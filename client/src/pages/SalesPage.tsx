@@ -236,6 +236,8 @@ const SalesPage = () => {
     )
   }
 
+  console.log(salesData)
+
   return (
     <>
       <PageTitle>Sales Page</PageTitle>
