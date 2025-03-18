@@ -259,25 +259,31 @@ const ViewItemWithComponents: React.FC<ViewItemWithComponentsProps> = ({
     .toFixed(2)
 
   const handleSubmit = (products: any[]) => {
-    setRawMaterials((prevProduct) => {
-      const updatedProductItems = [
-        ...prevProduct,
-        ...products
-          .filter((product) => {
-            const isExisting = prevProduct.some(
-              (existingProduct) =>
-                existingProduct.rawMaterial.code === product.code
-            )
-            return !isExisting
-          })
-          .map((product) => ({
-            rawMaterial: { ...product },
-            currentStock: product.inQuantity - product.outQuantity,
-            quantity: "1",
-          })),
-      ]
-      return updatedProductItems
-    })
+    if (products) {
+      setRawMaterials((prevProduct) => {
+        const updatedProductItems = [
+          ...prevProduct,
+          ...products
+            .filter((product) => {
+              const isExisting = prevProduct.some(
+                (existingProduct) =>
+                  existingProduct.rawMaterial.code === product.item.code
+              )
+              if (isExisting) {
+                showToast.error("Item is already selected!")
+              }
+
+              return !isExisting
+            })
+            .map((product) => ({
+              rawMaterial: { ...product.item },
+              quantity: "1",
+            })),
+        ]
+
+        return updatedProductItems
+      })
+    }
 
     handleModalToggle()
   }
@@ -346,9 +352,9 @@ const ViewItemWithComponents: React.FC<ViewItemWithComponentsProps> = ({
   }
 
   return (
-    <div className='h-full'>
-      <div className='flex-1 flex items-center justify-end cursor-pointer'>
-        <IoIosClose size={20} onClick={close} />
+    <div className='flex flex-col h-full'>
+      <div className='flex items-center justify-end cursor-pointer'>
+        <IoIosClose size={30} onClick={close} />
       </div>
       <form className='flex flex-col' onSubmit={handleOnSubmit}>
         <div className='pt-4 px-2 border-t border-[#14aff1] flex flex-col gap-5'>
@@ -515,119 +521,113 @@ const ViewItemWithComponents: React.FC<ViewItemWithComponentsProps> = ({
           </div>
         </div>
 
-        <div className='mt-2'>
-          <div className='flex justify-between items-center'>
-            {isOpenModal && (
-              <CustomModal
-                classes='h-[410px] md:p-8 w-[343px] md:w-[900px]'
-                toggleModal={handleModalToggle}
-              >
-                {/* Material Items Table */}
-                <>
-                  <h1 className='mb-2'>Select Item Materials</h1>
-                  <hr style={{ borderColor: "#14aff1" }} />
-                  <Table
-                    data={data || []}
-                    columns={columns}
-                    search={true}
-                    withImport={false}
-                    withExport={false}
-                    withSubmit={true}
-                    withCancel={true}
-                    add={false}
-                    view={false}
-                    handleSubmit={handleSubmit}
-                    toggleModal={handleModalToggle}
-                  />
-                </>
-              </CustomModal>
-            )}
-          </div>
-
-          {rawMaterials && (
-            <div className='h-[230px] overflow-y-auto scrollbar '>
-              {/* Display Material Items */}
+        {isOpenModal && (
+          <CustomModal
+            classes='h-[410px] md:p-8 w-[343px] md:w-[900px]'
+            toggleModal={handleModalToggle}
+          >
+            <div className='flex flex-col h-full'>
+              <h1 className='mb-2'>Select Item Materials</h1>
+              <hr style={{ borderColor: "#14aff1" }} />
               <Table
-                data={rawMaterials}
-                columns={rawMaterialsColumns}
+                data={data || []}
+                columns={columns}
                 search={true}
                 withImport={false}
                 withExport={false}
-                withSubmit={false}
-                withCancel={false}
-                materials={true}
+                withSubmit={true}
+                withCancel={true}
                 add={false}
                 view={false}
+                handleSubmit={handleSubmit}
                 toggleModal={handleModalToggle}
               />
             </div>
-          )}
+          </CustomModal>
+        )}
 
-          <div className='flex items-center justify-end mt-4 gap-5'>
+        {rawMaterials && (
+          <div className='h-[225px] overflow-y-auto scrollbar mt-2 '>
+            <Table
+              data={rawMaterials}
+              columns={rawMaterialsColumns}
+              search={true}
+              withImport={false}
+              withExport={false}
+              withSubmit={false}
+              withCancel={false}
+              materials={true}
+              add={false}
+              view={false}
+              toggleModal={handleModalToggle}
+            />
+          </div>
+        )}
+
+        <div className='flex items-center justify-end mt-2 gap-5'>
+          <button
+            type='button'
+            onClick={() => setConfirmCancel(true)}
+            className='bg-red-700 rounded-md py-2.5 w-[150px] text-white font-bold text-xs text-center'
+          >
+            Cancel
+          </button>
+
+          <button
+            type='button'
+            onClick={() => setConfirmSubmit(true)}
+            className={`rounded-md border-0 outline-transparent py-2.5
+           font-medium cursor-pointer text-white bg-blue-700 w-[150px]`}
+          >
+            <p className='text-white font-bold text-xs'>Submit</p>
+          </button>
+        </div>
+
+        {confirmCancel && (
+          <ConfirmationModal>
             <button
               type='button'
-              onClick={() => setConfirmCancel(true)}
-              className='bg-red-700 rounded-md py-2.5 w-[150px] text-white font-bold text-xs text-center'
+              onClick={() => setConfirmCancel(false)}
+              className='bg-red-700 rounded-md py-2.5 w-[100px] text-white font-bold text-xs text-center'
             >
               Cancel
             </button>
 
             <button
               type='button'
-              onClick={() => setConfirmSubmit(true)}
+              onClick={close}
               className={`rounded-md border-0 outline-transparent py-2.5
-           font-medium cursor-pointer text-white bg-blue-700 w-[150px]`}
+           font-medium cursor-pointer text-white bg-blue-700 w-[100px]`}
             >
-              <p className='text-white font-bold text-xs'>Submit</p>
+              <p className='text-white font-bold text-xs'>Confirm</p>
             </button>
-          </div>
+          </ConfirmationModal>
+        )}
 
-          {confirmCancel && (
-            <ConfirmationModal>
-              <button
-                type='button'
-                onClick={() => setConfirmCancel(false)}
-                className='bg-red-700 rounded-md py-2.5 w-[100px] text-white font-bold text-xs text-center'
-              >
-                Cancel
-              </button>
+        {confirmSubmit && (
+          <ConfirmationModal>
+            <button
+              type='button'
+              onClick={() => setConfirmSubmit(false)}
+              className='bg-red-700 rounded-md py-2.5 w-[100px] text-white font-bold text-xs text-center'
+            >
+              Cancel
+            </button>
 
-              <button
-                type='button'
-                onClick={close}
-                className={`rounded-md border-0 outline-transparent py-2.5
+            <button
+              type='button'
+              onClick={() => document.querySelector("form")?.requestSubmit()}
+              className={`rounded-md border-0 outline-transparent py-2.5
            font-medium cursor-pointer text-white bg-blue-700 w-[100px]`}
-              >
+            >
+              {isPending ? (
+                <div className='flex item-center justify-center w-5 h-5 border-2 border-t-2 border-[#0A140A] border-t-white rounded-full animate-spin'></div>
+              ) : (
                 <p className='text-white font-bold text-xs'>Confirm</p>
-              </button>
-            </ConfirmationModal>
-          )}
-
-          {confirmSubmit && (
-            <ConfirmationModal>
-              <button
-                type='button'
-                onClick={() => setConfirmSubmit(false)}
-                className='bg-red-700 rounded-md py-2.5 w-[100px] text-white font-bold text-xs text-center'
-              >
-                Cancel
-              </button>
-
-              <button
-                type='button'
-                onClick={() => document.querySelector("form")?.requestSubmit()}
-                className={`rounded-md border-0 outline-transparent py-2.5
-           font-medium cursor-pointer text-white bg-blue-700 w-[100px]`}
-              >
-                {isPending ? (
-                  <div className='flex item-center justify-center w-5 h-5 border-2 border-t-2 border-[#0A140A] border-t-white rounded-full animate-spin'></div>
-                ) : (
-                  <p className='text-white font-bold text-xs'>Confirm</p>
-                )}
-              </button>
-            </ConfirmationModal>
-          )}
-        </div>
+              )}
+            </button>
+          </ConfirmationModal>
+        )}
       </form>
     </div>
   )

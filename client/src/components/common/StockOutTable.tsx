@@ -55,7 +55,7 @@ const Columns = ({
       columnHelper.accessor(field.key, {
         cell: (info) => {
           if (field.key === "item.code") {
-            const code = info.row.original.item?.code ?? "No code available" 
+            const code = info.row.original.item?.code ?? "No code available"
             return <span className={`${field.classes}`}>{code}</span>
           }
           return <span className={`${field.classes}`}>{info.getValue()}</span>
@@ -142,20 +142,19 @@ const StockOutTable = ({ productId, close }: StockOutTableProps) => {
             </h1>
             <IoIosClose className=' cursor-pointer' size={30} onClick={close} />
           </div>
-          <div className='flex-1 overflow-hidden overflow-y-auto scrollbar'>
-            <Table
-              data={stockOut}
-              columns={columns}
-              sorting={[{ id: "transactionNo", desc: true }]}
-              search={true}
-              withImport={false}
-              withExport={false}
-              withSubmit={false}
-              withCancel={false}
-              add={false}
-              view={false}
-            />
-          </div>
+
+          <Table
+            data={stockOut}
+            columns={columns}
+            sorting={[{ id: "transactionNo", desc: true }]}
+            search={true}
+            withImport={false}
+            withExport={false}
+            withSubmit={false}
+            withCancel={false}
+            add={false}
+            view={false}
+          />
         </div>
       )}
       {isOpenUpdate && (

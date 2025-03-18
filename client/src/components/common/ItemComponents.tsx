@@ -18,7 +18,15 @@ const fields = [
   { key: "item.category", label: "Category", classes: "capitalize" },
   { key: "item.brand", label: "Brand", classes: "uppercase" },
   { key: "item.unit", label: "Unit", classes: "lowercase" },
-  { key: "item.reorderPoint", label: "Stock Level" },
+  { key: "item.reorderPoint", label: "Restocking Point", classes: "uppercase" },
+  { key: "item.status", label: "Status", classes: "uppercase" },
+]
+
+const fieldsDisplay = [
+  { key: "item.code", label: "Product Code", classes: "uppercase" },
+  { key: "item.description", label: "Product Name", classes: "capitalize" },
+  { key: "item.brand", label: "Brand", classes: "uppercase" },
+  { key: "item.unit", label: "Unit", classes: "lowercase" },
   { key: "item.status", label: "Status", classes: "uppercase" },
 ]
 
@@ -87,11 +95,11 @@ const Columns = ({
   ]
 }
 const ItemColumns = ({
-  fields,
+  fieldsDisplay,
   onRemove,
   onQuantityChange,
 }: {
-  fields: { key: string; label: string; classes?: string }[]
+  fieldsDisplay: { key: string; label: string; classes?: string }[]
   onRemove: (productId: string) => void
   onQuantityChange: (productId: string, quantity: string) => void
 }) => {
@@ -101,7 +109,7 @@ const ItemColumns = ({
   const quantityRefs = useRef<{ [key: string]: string }>({})
 
   return [
-    ...fields.map((field) =>
+    ...fieldsDisplay.map((field) =>
       columnHelper.accessor(`rawMaterial.${field.key}`, {
         cell: (info) => (
           <span className={`${field.classes}`}>{info.getValue()}</span>
@@ -136,14 +144,14 @@ const ItemColumns = ({
         }
 
         const handleBlur = () => {
-          const value = quantityRefs.current[row.original.rawMaterial.code]
+          const value = quantityRefs.current[row.original.rawMaterial.item.code]
           if (!value) {
             onQuantityChange(
-              row.original.rawMaterial.code,
-              row.original.quantity
+              row.original.rawMaterial.item.code,
+              row.original.rawMaterial.quantity
             )
           } else {
-            onQuantityChange(row.original.rawMaterial.code, value)
+            onQuantityChange(row.original.rawMaterial.item.code, value)
           }
         }
 
@@ -213,7 +221,7 @@ const ItemComponents = () => {
   })
 
   const rawMaterialsColumns = ItemColumns({
-    fields,
+    fieldsDisplay,
     onRemove: (productId) => {
       setRawMaterials((prevProduct) =>
         prevProduct.filter((p) => p.rawMaterial.item.code !== productId)
@@ -258,8 +266,11 @@ const ItemComponents = () => {
           .filter((product) => {
             const isExisting = prevProduct.some(
               (existingProduct) =>
-                existingProduct.rawMaterial.code === product.code
+                existingProduct.rawMaterial.code === product.item.code
             )
+            if (isExisting) {
+              showToast.error("Item is already selected!")
+            }
             return !isExisting
           })
           .map((product) => ({
@@ -582,7 +593,7 @@ const ItemComponents = () => {
           </div>
 
           {rawMaterials && (
-            <div className='h-[410px] overflow-y-auto scrollbar '>
+            <div className='h-[410px] flex flex-col '>
               {/* Display Material Items */}
               <Table
                 data={rawMaterials}

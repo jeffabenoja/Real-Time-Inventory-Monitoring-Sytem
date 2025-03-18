@@ -196,7 +196,7 @@ const ApprovalAssembleTable = ({ close }: ApprovalProps) => {
             <IoIosClose className='cursor-pointer' size={30} onClick={close} />
           </div>
 
-          <div>
+          <div className='border-b border-[#14aff1] py-2'>
             <div className='flex justify-center items-center'>
               <h1 className='font-bold text-center mb-2'>APPROVAL LIST</h1>
             </div>
@@ -235,26 +235,24 @@ const ApprovalAssembleTable = ({ close }: ApprovalProps) => {
             </div>
           </div>
 
-          <div className='flex-1 overflow-hidden overflow-y-auto scrollbar border-t border-b border-[#14aff1] py-2'>
-            <Table
-              data={
-                selectedStatus === "pending"
-                  ? draftItems
-                  : selectedStatus === "approved"
-                  ? approvedItems
-                  : cancelItems
-              }
-              columns={columns}
-              search={true}
-              withImport={false}
-              withExport={true}
-              withSubmit={false}
-              withCancel={false}
-              add={false}
-              view={false}
-              sorting={[{ id: "transactionNo", desc: true }]}
-            />
-          </div>
+          <Table
+            data={
+              selectedStatus === "pending"
+                ? draftItems
+                : selectedStatus === "approved"
+                ? approvedItems
+                : cancelItems
+            }
+            columns={columns}
+            search={true}
+            withImport={false}
+            withExport={true}
+            withSubmit={false}
+            withCancel={false}
+            add={false}
+            view={false}
+            sorting={[{ id: "transactionNo", desc: true }]}
+          />
         </div>
       )}
     </>

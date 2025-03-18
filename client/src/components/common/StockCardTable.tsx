@@ -70,28 +70,26 @@ const StockCardTable = ({ itemId, close }: StockCardTableProps) => {
           <IoIosClose className='cursor-pointer' size={30} onClick={close} />
         </div>
 
-        <div className='flex justify-center items-center mb-2 lg:text-2xl text-base'>
+        <div className='flex justify-center items-center pb-2 lg:text-2xl text-base border-b border-[#14aff1]'>
           <h1 className='font-bold text-center'>RUNNING INVENTORY TABLE</h1>
         </div>
 
-        <div className='flex-1 overflow-hidden overflow-y-auto scrollbar border-t border-b border-[#14aff1] py-2'>
-          {isLoading ? (
-            <Spinner />
-          ) : (
-            <Table
-              data={runningInventory}
-              columns={columns}
-              search={true}
-              withImport={false}
-              withExport={true}
-              withSubmit={false}
-              withCancel={false}
-              add={false}
-              view={false}
-              sorting={[{ id: "transactionNo", desc: true }]}
-            />
-          )}
-        </div>
+        {isLoading ? (
+          <Spinner />
+        ) : (
+          <Table
+            data={runningInventory}
+            columns={columns}
+            search={true}
+            withImport={false}
+            withExport={true}
+            withSubmit={false}
+            withCancel={false}
+            add={false}
+            view={false}
+            sorting={[{ id: "transactionNo", desc: true }]}
+          />
+        )}
       </div>
     </>
   )

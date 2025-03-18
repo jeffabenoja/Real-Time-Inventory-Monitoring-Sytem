@@ -133,20 +133,19 @@ const ViewAssembleTable = ({ itemId, close }: AssembleTableProps) => {
             </h1>
             <IoIosClose className=' cursor-pointer' size={30} onClick={close} />
           </div>
-          <div className='flex-1 overflow-hidden overflow-y-auto scrollbar'>
-            <Table
-              data={assembleData}
-              columns={columns}
-              sorting={[{ id: "transactionNo", desc: true }]}
-              search={true}
-              withImport={false}
-              withExport={false}
-              withSubmit={false}
-              withCancel={false}
-              add={false}
-              view={false}
-            />
-          </div>
+
+          <Table
+            data={assembleData}
+            columns={columns}
+            sorting={[{ id: "transactionNo", desc: true }]}
+            search={true}
+            withImport={false}
+            withExport={false}
+            withSubmit={false}
+            withCancel={false}
+            add={false}
+            view={false}
+          />
         </div>
       )}
       {openModal && (

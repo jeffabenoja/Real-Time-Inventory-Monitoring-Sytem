@@ -122,19 +122,17 @@ const InventoryTable = ({ category, close }: InventoryTableProps) => {
             </div>
           )}
 
-          <div className='flex-1 overflow-hidden overflow-y-auto scrollbar'>
-            <Table
-              data={adjustedInventoryData}
-              columns={columns}
-              search={true}
-              withImport={false}
-              withExport={true}
-              withSubmit={false}
-              withCancel={false}
-              add={false}
-              view={false}
-            />
-          </div>
+          <Table
+            data={adjustedInventoryData}
+            columns={columns}
+            search={true}
+            withImport={false}
+            withExport={true}
+            withSubmit={false}
+            withCancel={false}
+            add={false}
+            view={false}
+          />
         </div>
       )}
     </>

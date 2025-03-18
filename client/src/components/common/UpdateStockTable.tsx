@@ -132,20 +132,19 @@ const UpdateStockTable = ({ itemId, close }: UpdateStockTableProps) => {
             </h1>
             <IoIosClose className=' cursor-pointer' size={30} onClick={close} />
           </div>
-          <div className='flex-1 overflow-hidden overflow-y-auto scrollbar'>
-            <Table
-              data={stockData}
-              columns={columns}
-              sorting={[{ id: "transactionNo", desc: true }]}
-              search={true}
-              withImport={false}
-              withExport={false}
-              withSubmit={false}
-              withCancel={false}
-              add={false}
-              view={false}
-            />
-          </div>
+
+          <Table
+            data={stockData}
+            columns={columns}
+            sorting={[{ id: "transactionNo", desc: true }]}
+            search={true}
+            withImport={false}
+            withExport={false}
+            withSubmit={false}
+            withCancel={false}
+            add={false}
+            view={false}
+          />
         </div>
       )}
 
