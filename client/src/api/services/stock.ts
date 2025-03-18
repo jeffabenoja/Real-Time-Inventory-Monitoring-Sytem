@@ -36,7 +36,7 @@ interface AddAssembleStockType {
 }
 
 interface StockOutTypeProps {
-  stock: StockOutType
+  stockToRemove: StockOutType
   usercode: string
   token: string
 }
@@ -53,11 +53,11 @@ export const addStock = async ({ stock, usercode, token }: AddStockType) => {
   return response.data
 }
 export const stockOuts = async ({
-  stock,
+  stockToRemove,
   usercode,
   token,
 }: StockOutTypeProps) => {
-  const response = await apiClient.post(STOCKOUT, stock, {
+  const response = await apiClient.post(STOCKOUT, stockToRemove, {
     headers: {
       usercode: usercode,
       token: token,

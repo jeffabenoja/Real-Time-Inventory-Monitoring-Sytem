@@ -1,6 +1,5 @@
 import React, { useState } from "react"
 import { showToast } from "../../utils/Toast"
-import { StockInType } from "../../type/stockType"
 import ConfirmationModal from "./ConfirmationModal"
 import EscapeKeyListener from "../../utils/EscapeKeyListener"
 import { useAddStock } from "../../hooks/stock/useAddStock"
@@ -8,6 +7,7 @@ import { useSelector } from "react-redux"
 import { User } from "../../type/userType"
 
 interface AddStockProps {
+  stockInTransactionNo: string
   productCode?: string
   productName?: string
   toggleModal: () => void
@@ -18,20 +18,35 @@ interface UserAuthenticationType {
   }
 }
 
+interface StockOutType {
+  transactionDate: string
+  remarks: string
+  item: {
+    code: string
+  }
+  stockIn: {
+    transactionNo: string
+  }
+  quantity: number
+}
+
 const StockOutRawMats: React.FC<AddStockProps> = ({
+  stockInTransactionNo,
   productName,
   productCode,
   toggleModal,
 }) => {
   const { user } = useSelector((state: UserAuthenticationType) => state.auth)
-  const [stock, setStock] = useState<StockInType>({
+  const [stock, setStock] = useState<StockOutType>({
     transactionDate: `${new Date().toISOString().split("T")[0]}`,
     remarks: "",
     item: {
       code: productCode || "",
     },
+    stockIn: {
+      transactionNo: stockInTransactionNo || "",
+    },
     quantity: 0,
-    batchNo: "",
   })
 
   const [confirmSubmit, setConfirmSubmit] = useState<boolean>(false)
@@ -56,15 +71,10 @@ const StockOutRawMats: React.FC<AddStockProps> = ({
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    const requiredFields: string[] = [
-      "transactionDate",
-      "remarks",
-      "quantity",
-      "batchNo",
-    ]
+    const requiredFields: string[] = ["transactionDate", "remarks", "quantity"]
 
     const emptyFields = requiredFields.filter(
-      (field) => !stock[field as keyof StockInType]
+      (field) => !stock[field as keyof StockOutType]
     )
 
     if (emptyFields.length > 0) {
@@ -84,7 +94,16 @@ const StockOutRawMats: React.FC<AddStockProps> = ({
     const usercode = user.usercode
     const token = user.password!
 
-    stockOut({ stock, usercode, token })
+    const stockToRemove = {
+      transactionDate: stock.transactionDate,
+      remarks: stock.remarks,
+      stockIn: {
+        transactionNo: stock.stockIn.transactionNo,
+      },
+      quantity: stock.quantity,
+    }
+
+    stockOut({ stockToRemove, usercode, token })
     toggleModal()
   }
 
@@ -107,26 +126,25 @@ const StockOutRawMats: React.FC<AddStockProps> = ({
         className='flex flex-col gap-4 text-secondary-200'
         onSubmit={handleSubmit}
       >
-        <div className='flex flex-col gap-2'>
-          <label htmlFor='transactionDate' className='text-sm font-bold'>
-            Transaction Date
-          </label>
-          <input
-            id='transactionDate'
-            type='date'
-            name='transactionDate'
-            onChange={handleChange}
-            value={stock.transactionDate}
-            autoComplete='off'
-            max={new Date().toISOString().split("T")[0]}
-            className={`${
-              invalidFields.includes("transactionDate") && "border-primary"
-            } cursor-pointer py-2 px-4 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent placeholder:text-sm
-              focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
-          />
-        </div>
-
         <div className='flex justify-between items-center gap-2'>
+          <div className='flex flex-col gap-2'>
+            <label htmlFor='transactionDate' className='text-sm font-bold'>
+              Transaction Date
+            </label>
+            <input
+              id='transactionDate'
+              type='date'
+              name='transactionDate'
+              onChange={handleChange}
+              value={stock.transactionDate}
+              autoComplete='off'
+              max={new Date().toISOString().split("T")[0]}
+              className={`${
+                invalidFields.includes("transactionDate") && "border-primary"
+              } w-[120px] md:w-[180px] cursor-pointer py-2 px-4 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent placeholder:text-sm
+              focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
+            />
+          </div>
           <div className='flex flex-col gap-2'>
             <label htmlFor='quantity' className='text-sm'>
               Quantity
@@ -142,23 +160,6 @@ const StockOutRawMats: React.FC<AddStockProps> = ({
               className={`${
                 invalidFields.includes("quantity") && "border-primary"
               } w-[120px] md:w-[150px] py-1 pl-4 pr-1 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent
-              focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
-            />
-          </div>
-          <div className='flex flex-col gap-2'>
-            <label htmlFor='batchNumber' className='text-sm font-bold'>
-              Batch Number
-            </label>
-            <input
-              id='batchNumber'
-              type='text'
-              name='batchNo'
-              value={stock.batchNo}
-              onChange={handleChange}
-              autoComplete='off'
-              className={`${
-                invalidFields.includes("batchNo") && "border-primary"
-              } w-[120px] md:w-[150px] py-2 px-4 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent placeholder:text-sm
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
             />
           </div>

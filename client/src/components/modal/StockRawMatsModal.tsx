@@ -2,8 +2,9 @@ import { useState } from "react"
 import { IoIosClose } from "react-icons/io"
 import CustomModal from "../common/utils/CustomModal"
 import AddStocksRawMats from "./AddStockRawMats"
-import StockOutRawMats from "./StockOutRawMats"
+// import StockOutRawMats from "./StockOutRawMats"
 import StockOutTable from "../common/StockOutTable"
+import StockInHistory from "../common/StockInHistory"
 
 interface StockRawMatsProps {
   productId: string
@@ -76,12 +77,8 @@ const StockRawMatsModal: React.FC<StockRawMatsProps> = ({
         </CustomModal>
       )}
       {removedStockState && (
-        <CustomModal>
-          <StockOutRawMats
-            productCode={productCode || ""}
-            productName={productName || ""}
-            toggleModal={close}
-          />
+        <CustomModal classes='md:h-[480px] md:p-8 w-full h-full md:w-[970px]'>
+          <StockInHistory itemId={productId || ""} close={close} />
         </CustomModal>
       )}
 

@@ -22,11 +22,14 @@ export interface StockInType {
 export interface StockOutType {
   transactionDate: string
   remarks: string
-  item: {
+  item?: {
     code: string
   }
+  stockIn?: {
+    transactionNo: string
+  }
   quantity: number
-  batchNo: string
+  batchNo?: string
 }
 
 export interface UpdateStockType {
