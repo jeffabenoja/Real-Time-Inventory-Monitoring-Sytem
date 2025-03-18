@@ -377,7 +377,7 @@ const ApprovalTable = ({ close }: ApprovalProps) => {
           </div>
         </div>
 
-        <div className='overflow-hidden overflow-y-auto scrollbar border-t border-b border-[#14aff1] py-2'>
+        <div className='flex-1 overflow-hidden overflow-y-auto scrollbar border-t border-b border-[#14aff1] py-2'>
           {isLoading ? (
             <Spinner />
           ) : tab === "stockIn" ? (

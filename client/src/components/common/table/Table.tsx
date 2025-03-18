@@ -393,6 +393,7 @@ const Table: React.FC<TableProps> = ({
           </div>
         </div>
       </div>
+      
       {withSubmit && (
         <div className='flex items-center justify-end'>
           <div className='flex gap-2.5 lg:gap-5 items-center justify-between'>

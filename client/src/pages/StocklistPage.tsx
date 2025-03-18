@@ -11,10 +11,10 @@ import { useItemMaterials } from "../hooks/items/useItemMaterials"
 import { FaExclamationTriangle } from "react-icons/fa"
 import CSVUploader from "../components/modal/CsvUploader"
 import UpdateStockTable from "../components/common/UpdateStockTable"
-import ViewItemStock from "../components/modal/ViewItemStock"
 import InventoryTable from "../components/common/InventoryTable"
 import usePageTitle from "../hooks/usePageTitle"
 import ApprovalTalbe from "../components/common/ApprovalTable"
+import StockCardTable from "../components/common/StockCardTable"
 
 const fields = [
   { key: "code", label: "Product Code", classes: "uppercase" },
@@ -196,8 +196,11 @@ const StocklistPage = () => {
       )}
 
       {isViewItemInventory && (
-        <CustomModal toggleModal={handleViewStockToggle}>
-          <ViewItemStock product={productData} />
+        <CustomModal classes='md:h-[480px] md:p-8 w-full h-full md:w-[970px]'>
+          <StockCardTable
+            itemId={productData?.id || ""}
+            close={handleViewStockToggle}
+          />
         </CustomModal>
       )}
 

@@ -111,3 +111,11 @@ export interface InventoryPerCategory {
   inQuantity: number
   outQuantity: number
 }
+export interface StockCardType {
+  itemId: string
+  date: string
+  transactionNo: string
+  stockIn: number
+  stockOut: number
+  runningBalance: number
+}
