@@ -12,7 +12,7 @@ const fields = [
   { key: "transactionNo", label: "Transaction Number", classes: "uppercase" },
   { key: "stockIn", label: "Stock In" },
   { key: "stockOut", label: "Stock Out" },
-  { key: "runningBalance", label: "Available Stock" },
+  { key: "runningBalance", label: "Running Balance" },
 ]
 
 const Columns = ({
@@ -59,6 +59,11 @@ const StockCardTable = ({ itemId, close }: StockCardTableProps) => {
     )
   }
 
+  // Create a shallow copy and reverse the array
+  const reversedInventory = Array.isArray(runningInventory)
+    ? [...runningInventory].reverse()
+    : []
+
   const columns = Columns({
     fields,
   })
@@ -78,7 +83,7 @@ const StockCardTable = ({ itemId, close }: StockCardTableProps) => {
           <Spinner />
         ) : (
           <Table
-            data={runningInventory}
+            data={reversedInventory}
             columns={columns}
             search={true}
             withImport={false}
@@ -87,7 +92,6 @@ const StockCardTable = ({ itemId, close }: StockCardTableProps) => {
             withCancel={false}
             add={false}
             view={false}
-            sorting={[{ id: "transactionNo", desc: true }]}
           />
         )}
       </div>
