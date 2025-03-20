@@ -47,7 +47,7 @@ const Columns = ({
       id: "currentStock",
       cell: ({ row }) => {
         const { inQuantity, outQuantity } = row.original
-        const currentStock = (inQuantity || 0) - (outQuantity || 0)
+        const currentStock = Math.round((inQuantity || 0) - (outQuantity || 0))
         return <span>{currentStock}</span>
       },
       header: () => <span className='truncate'>Current Stock</span>,

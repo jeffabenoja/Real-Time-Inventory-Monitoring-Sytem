@@ -52,10 +52,10 @@ const ProductColumns = ({
           ? Number(inventoryItem.outQuantity) || 0
           : 0
 
-        const currentStock = inQuantity - outQuantity
+        const currentStock = Math.round(inQuantity - outQuantity)
 
         // Format the currentStock to 2 decimal places
-        const formattedCurrentStock = currentStock.toFixed(2)
+        const formattedCurrentStock = currentStock
 
         return <span>{formattedCurrentStock}</span>
       },

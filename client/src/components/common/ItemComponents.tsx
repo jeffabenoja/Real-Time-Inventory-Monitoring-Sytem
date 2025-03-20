@@ -63,9 +63,9 @@ const Columns = ({
       cell: ({ row }) => {
         const { inQuantity, outQuantity } = row.original
 
-        const currentStock = inQuantity - outQuantity || 0
+        const currentStock = Math.round(inQuantity - outQuantity) || 0
 
-        const formattedCurrentStock = currentStock.toFixed(2)
+        const formattedCurrentStock = currentStock
 
         return <span>{formattedCurrentStock}</span>
       },
@@ -118,7 +118,7 @@ const ItemColumns = ({
       })
     ),
     columnHelper.accessor(`currentStock`, {
-      cell: (info) => <span>{info.getValue().toFixed(2)}</span>,
+      cell: (info) => <span>{info.getValue()}</span>,
       header: () => <span className='truncate'>Current Stock</span>,
     }),
     columnHelper.accessor("quantity", {
@@ -353,21 +353,39 @@ const ItemComponents = () => {
 
     const { cost, price, ...rest } = productData
 
-    const updateProductComponent = {
-      finishProduct: {
-        ...rest,
-        price: parseFloat(totalPrice),
-        cost: parseFloat(totalCost),
-      },
-      components: rawMaterials.map((material) => ({
-        rawMaterial: {
-          ...material.rawMaterial.item,
+    let isValid = true
+
+    rawMaterials.forEach((material) => {
+      console.log(material)
+      const currentStock = material.currentStock
+
+      if (material.quantity > currentStock) {
+        isValid = false
+      }
+    })
+
+    if (isValid) {
+      const updateProductComponent = {
+        finishProduct: {
+          ...rest,
+          price: parseFloat(totalPrice),
+          cost: parseFloat(totalCost),
         },
-        quantity: material.quantity,
-      })),
+        components: rawMaterials.map((material) => ({
+          rawMaterial: {
+            ...material.rawMaterial.item,
+          },
+          quantity: material.quantity,
+        })),
+      }
+      createItem(updateProductComponent)
+      navigate("/dashboard/products")
+    } else {
+      showToast.error(
+        `The quantity of the selected item exceeds the current stock.`
+      )
+      setConfirmSubmit(false)
     }
-    createItem(updateProductComponent)
-    navigate("/dashboard/products")
   }
 
   const data = inventoryData.filter((item) =>

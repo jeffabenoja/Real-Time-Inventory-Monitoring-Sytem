@@ -52,7 +52,7 @@ const StockListColumns = ({
           ? Number(inventoryItem.outQuantity) || 0
           : 0
 
-        const currentStock = inQuantity - outQuantity
+        const currentStock = Math.round(inQuantity - outQuantity)
 
         const formattedCurrentStock = currentStock.toFixed(2)
 

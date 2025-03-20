@@ -67,7 +67,7 @@ const Columns = ({
       cell: ({ row }) => {
         const { inQuantity, outQuantity } = row.original
 
-        const currentStock = inQuantity - outQuantity || 0
+        const currentStock = Math.round(inQuantity - outQuantity || 0)
 
         const formattedCurrentStock = currentStock.toFixed(2)
 
