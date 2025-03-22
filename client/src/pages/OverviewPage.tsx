@@ -131,23 +131,26 @@ const OverviewPage = () => {
   const last6MonthsDate = getLast6Months()
   const lastYearMonths = getLastYearMonths()
 
-  const filteredTransactions = transactions.filter((transaction) => {
-    const transactionDate = new Date(transaction.orderDate)
-      .toISOString()
-      .split("T")[0]
-    return last12MonthsDate.some((monthStart) => {
-      const startOfMonth = new Date(monthStart).toISOString().split("T")[0]
-      const endOfMonth = new Date(
-        monthStart.getFullYear(),
-        monthStart.getMonth() + 1,
-        0
-      )
-        .toISOString()
-        .split("T")[0]
-
-      return transactionDate >= startOfMonth && transactionDate <= endOfMonth
-    })
-  })
+  const getStartOfMonth = (date: Date) => {
+    const d = new Date(date);
+    d.setHours(0, 0, 0, 0);
+    return d;
+  };
+  
+  const getEndOfMonth = (date: Date) => {
+    const d = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    d.setHours(23, 59, 59, 999);
+    return d;
+  };
+  
+  const filteredTransactions = transactions.filter(transaction => {
+    const tDate = getStartOfMonth(new Date(transaction.orderDate));
+  
+    // Check if tDate falls within any month range defined in last12MonthsDate.
+    return last12MonthsDate.some(monthStart => {
+      return tDate >= getStartOfMonth(monthStart) && tDate <= getEndOfMonth(monthStart);
+    });
+  });
 
   const lastYearTransactions = transactions.filter((transaction) => {
     const transactionDate = new Date(transaction.orderDate)
@@ -158,41 +161,30 @@ const OverviewPage = () => {
   })
 
   const filteredTransactions6Months = transactions.filter((transaction) => {
-    const transactionDate = new Date(transaction.orderDate)
-      .toISOString()
-      .split("T")[0]
+    // Normalize the transaction date to midnight local time.
+    const transactionDate = getStartOfMonth(new Date(transaction.orderDate));
+  
     return last6MonthsDate.some((monthStart) => {
-      const startOfMonth = new Date(monthStart).toISOString().split("T")[0]
-      const endOfMonth = new Date(
-        monthStart.getFullYear(),
-        monthStart.getMonth() + 1,
-        0
-      )
-        .toISOString()
-        .split("T")[0]
-
-      return transactionDate >= startOfMonth && transactionDate <= endOfMonth
-    })
-  })
-
+      // Ensure monthStart is treated as a Date and normalized.
+      const startOfMonth = getStartOfMonth(monthStart);
+      const endOfMonth = getEndOfMonth(monthStart);
+  
+      return transactionDate >= startOfMonth && transactionDate <= endOfMonth;
+    });
+  });
+  
+  // Group the filtered transactions by month and sum their total amounts.
   const groupedByMonthSales6Months = filteredTransactions6Months.reduce(
-    (acc: any, curr: any) => {
-      const monthName = getMonthName(curr.orderDate)
-
+    (acc: Record<string, number>, curr) => {
+      const monthName = getMonthName(curr.orderDate);
       const totalAmount = Array.isArray(curr.details)
-        ? curr.details.reduce((sum: number, item: any) => {
-            return sum + item.amount
-          }, 0)
-        : 0
-
-      if (!acc[monthName]) {
-        acc[monthName] = 0
-      }
-      acc[monthName] += totalAmount
-      return acc
+        ? curr.details.reduce((sum: number, item) => sum + item.amount, 0)
+        : 0;
+      acc[monthName] = (acc[monthName] || 0) + totalAmount;
+      return acc;
     },
-    {}
-  )
+    {} as Record<string, number>
+  );
 
   const salesData6Months = last6MonthsDate.map((monthStart) => {
     const monthName = getMonthName(monthStart.toISOString())
