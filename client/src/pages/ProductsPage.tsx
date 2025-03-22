@@ -168,6 +168,7 @@ const ProductsPage = () => {
           {/* <ViewItemStock product={productData} /> */}
           <ViewItemWithComponents
             id={productData?.id || ""}
+            isOnSubmit={updateItem}
             close={handleViewStockToggle}
           />
         </CustomModal>

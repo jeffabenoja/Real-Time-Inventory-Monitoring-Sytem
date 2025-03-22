@@ -10,6 +10,7 @@ import { RootState } from "../../store"
 import { useSelector } from "react-redux"
 import { FaExclamationTriangle } from "react-icons/fa"
 import Spinner from "../common/utils/Spinner"
+import { ItemType } from "../../type/itemType"
 
 const fields = [
   { key: "item.code", label: "Product Code", classes: "uppercase" },
@@ -179,11 +180,13 @@ const ItemColumns = ({
 
 interface ViewItemWithComponentsProps {
   id: string
+  isOnSubmit: (item: ItemType) => void
   close: () => void
 }
 
 const ViewItemWithComponents: React.FC<ViewItemWithComponentsProps> = ({
   id,
+  isOnSubmit,
   close,
 }) => {
   const inventoryData = useSelector(
@@ -194,7 +197,6 @@ const ViewItemWithComponents: React.FC<ViewItemWithComponentsProps> = ({
   const [confirmSubmit, setConfirmSubmit] = useState<boolean>(false)
   const [confirmCancel, setConfirmCancel] = useState<boolean>(false)
   const [rawMaterials, setRawMaterials] = useState<any[]>([])
-
   const {
     data: productData,
     isLoading,
@@ -208,13 +210,13 @@ const ViewItemWithComponents: React.FC<ViewItemWithComponentsProps> = ({
   const validcomponents =
     productData && "components" in productData ? productData.components : null
 
+  const finishProduct = validProductData?.finishProduct
+
   useEffect(() => {
     if (validcomponents) {
       setRawMaterials(validcomponents)
     }
   }, [validcomponents])
-
-  const finishProduct = validProductData?.finishProduct
 
   const columns = Columns({
     fields,
@@ -320,6 +322,20 @@ const ViewItemWithComponents: React.FC<ViewItemWithComponentsProps> = ({
         quantity: material.quantity,
       })),
     }
+
+    const updateFinishedProduct: ItemType = {
+      code: finishProduct?.code || "",
+      description: finishProduct?.description || "",
+      category: "Finished Goods",
+      brand: finishProduct?.brand || "",
+      unit: finishProduct?.unit || "",
+      reorderPoint: finishProduct?.reorderPoint || 0,
+      price: totalPrice || 0,
+      cost: totalCost || 0,
+      status: "ACTIVE",
+    }
+
+    isOnSubmit(updateFinishedProduct)
 
     updateItem({ id, updateProductComponent })
     close()
