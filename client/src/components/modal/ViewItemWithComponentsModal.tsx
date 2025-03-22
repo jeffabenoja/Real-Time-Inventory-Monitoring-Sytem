@@ -353,7 +353,8 @@ const ViewItemWithComponents: React.FC<ViewItemWithComponentsProps> = ({
 
   return (
     <div className='flex flex-col h-full'>
-      <div className='flex items-center justify-end cursor-pointer'>
+      <div className='flex items-center justify-between cursor-pointer'>
+        <h1 className='font-bold uppercase'>Product Details</h1>
         <IoIosClose size={30} onClick={close} />
       </div>
       <form className='flex flex-col' onSubmit={handleOnSubmit}>
