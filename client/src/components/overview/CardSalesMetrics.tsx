@@ -17,7 +17,7 @@ interface CardSalesMetricsProps {
 
 const getCurrentMonthRange = () => {
   const today = new Date()
-  const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1)
+  const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 0)
   const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0)
 
   return { startOfMonth, endOfMonth }
@@ -117,6 +117,7 @@ const CardSalesMetrics: React.FC<CardSalesMetricsProps> = ({ sales }) => {
   const filteredSales = useMemo(() => {
     return filterSalesByTimeframe(sales, timeframe)
   }, [sales, timeframe])
+
 
   const filteredSalesPreviousMonth = useMemo(() => {
     return filterSalesByTimeframePreviousMonth(sales, timeframe)

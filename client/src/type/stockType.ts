@@ -58,6 +58,7 @@ export interface AssembleStock {
   transactionDate?: string
   remarks: string
   finishProduct: ItemType
+  expiryDate?: string
   quantity: number
   batchNo: string
   status?: string
@@ -69,6 +70,7 @@ export interface AssembleUpdateStock {
   remarks: string
   finishProduct: ItemType
   assemble_quantity: number
+  expiryDate?: string
   batchNo: string
   status?: string
 }
@@ -79,6 +81,7 @@ export interface AssembleTransaction {
   remarks: string
   finishProduct: ItemType
   assemble_quantity: number
+  expiryDate?: string
   batchNo: string
   status: string
   createdDateTime: string
