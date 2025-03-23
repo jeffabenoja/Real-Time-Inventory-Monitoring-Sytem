@@ -35,3 +35,94 @@ export const getPredictions = async () => {
   }
   return result;
 };
+
+interface AccuracyMetrics {
+  MAE: number;
+  RMSE: number;
+  MAPE: number;
+  SMAPE: number;
+}
+
+interface ProductForecast {
+  forecast: Record<string, number>;
+  accuracy_metrics: AccuracyMetrics;
+}
+
+type ProductData = ProductForecast | string;
+
+interface Prediction {
+  date: string;
+  prediction: number;
+}
+
+// Helper: Formats a Date as "YYYY-MM-DD" using local time.
+const formatLocalDate = (date: Date): string => {
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const day = date.getDate().toString().padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
+// This helper computes the prediction for a given forecast and target date.
+const getPredictionForForecast = (
+  forecast: Record<string, number>,
+  targetDate: string
+): Prediction | null => {
+  if (forecast[targetDate] !== undefined) {
+    return { date: targetDate, prediction: forecast[targetDate] };
+  }
+  const forecastDates = Object.keys(forecast).sort();
+  if (forecastDates.length === 0) return null;
+  let closestDate = forecastDates[0];
+  let minDiff = Math.abs(new Date(closestDate).getTime() - new Date(targetDate).getTime());
+  for (const dateStr of forecastDates) {
+    const diff = Math.abs(new Date(dateStr).getTime() - new Date(targetDate).getTime());
+    if (diff < minDiff) {
+      minDiff = diff;
+      closestDate = dateStr;
+    }
+  }
+  return { date: closestDate, prediction: forecast[closestDate] };
+};
+
+export const getThisWeeksPrediction = async (): Promise<
+  Record<string, Prediction | string>
+> => {
+  try {
+    const response = await apiClient.get(PREDICT);
+    const data: Record<string, ProductData> = response.data;
+    const predictions: Record<string, Prediction | string> = {};
+
+    // Calculate next Sunday's date.
+    const today = new Date();
+    const nextSunday = new Date(today);
+    nextSunday.setDate(today.getDate() + (7 - today.getDay()));
+    const targetDate = formatLocalDate(nextSunday);
+
+    // Iterate over each product, skipping "256" and "257".
+    for (const [productId, productData] of Object.entries(data)) {
+      if (productData === "No saved model found for this item.") continue;
+      if (
+        typeof productData === "object" &&
+        productData !== null &&
+        "forecast" in productData
+      ) {
+        const forecast = (productData as ProductForecast).forecast;
+        const prediction = getPredictionForForecast(forecast, targetDate);
+        if (prediction) {
+          // Round the prediction to two decimal places.
+          const roundedPrediction = Math.round(prediction.prediction);
+          predictions[productId] = { date: prediction.date, prediction: roundedPrediction };
+        } else {
+          predictions[productId] = "Prediction not found";
+        }
+      } else {
+        predictions[productId] = productData;
+      }
+    }
+    return predictions;
+  } catch (error) {
+    console.error("Error in getThisWeeksPrediction:", error);
+    return {};
+  }
+};

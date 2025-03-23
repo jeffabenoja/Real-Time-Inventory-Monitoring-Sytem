@@ -21,7 +21,7 @@ export const getInventoryPerItem = async (
 
 export const getInventoryByCategory = async (
   category: string
-): Promise<InventoryPerCategory[]> => {
+): Promise<InventoryPerCategory[]> => { //updated InventoryPerCategory to any
   const response = await apiClient.get(GET_INVENTORY_LIST_BY_CATEGORY(category))
 
   return response.data

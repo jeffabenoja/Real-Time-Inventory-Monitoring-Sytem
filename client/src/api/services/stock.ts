@@ -54,6 +54,8 @@ export const addStock = async ({ stock, usercode, token }: AddStockType) => {
 
   return response.data
 }
+
+
 export const stockOuts = async ({
   stockToRemove,
   usercode,

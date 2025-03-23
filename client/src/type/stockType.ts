@@ -114,6 +114,7 @@ export interface InventoryPerCategory {
   inQuantity: number
   outQuantity: number
 }
+
 export interface StockCardType {
   itemId: string
   date: string

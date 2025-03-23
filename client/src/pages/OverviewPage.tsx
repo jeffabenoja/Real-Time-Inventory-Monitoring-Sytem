@@ -14,6 +14,10 @@ import { fetchMultipleItemWithComponents } from "../api/services/item"
 import SalesForecastChart from "../components/overview/SalesForecast"
 import RawMatsForecast from "../components/overview/RawMatsForecast"
 import ProductsForecastChart from "../components/overview/ProductForecast"
+import todaysDate from "../utils/todaysDate"
+
+
+const dateToday = todaysDate()
 
 const getMonthName = (dateString: string) => {
   const date = new Date(dateString)
@@ -107,7 +111,7 @@ const OverviewPage = () => {
     queryFn: () =>
       getSalesOrderListByDateRange({
         from: `${currentYear}-01-01`,
-        to: `${currentYear}-12-31`,
+        to: dateToday,
       }),
     refetchOnWindowFocus: false,
   })
@@ -119,7 +123,7 @@ const OverviewPage = () => {
     queryFn: () =>
       getSalesOrderListByDateRange({
         from: `${previousYear}-01-01`,
-        to: `${currentYear}-12-31`,
+        to: dateToday,
       }),
   })
 

@@ -71,8 +71,8 @@ const App = () => {
             <Route path='/user'>
               <Route index element={<Navigate to='profile' replace />} />
               <Route path='profile' element={<ProfilePage />} />
-              <Route path='predictions' element={<PredictionPage />} />
             </Route>
+            <Route path='prediction' element={<PredictionPage />} />
           </Route>
         </Route>
       </>
