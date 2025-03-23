@@ -30,6 +30,7 @@ const SalesForecastChart: React.FC<Props> = React.memo(
   ({ notLoading, forecastData, itemComponents, sales }) => {
     if (!notLoading) return <p>STILL LOADING...</p>;
 
+    console.log(sales)
     // Memoize aggregated forecast and sales data.
     const aggregatedForecast = useMemo(
       () => aggregateForecastRevenue(forecastData, itemComponents),

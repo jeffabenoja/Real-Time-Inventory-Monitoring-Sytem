@@ -14,6 +14,10 @@ import { fetchMultipleItemWithComponents } from "../api/services/item"
 import SalesForecastChart from "../components/overview/SalesForecast"
 import RawMatsForecast from "../components/overview/RawMatsForecast"
 import ProductsForecastChart from "../components/overview/ProductForecast"
+import todaysDate from "../utils/todaysDate"
+
+
+const dateToday = todaysDate()
 
 const getMonthName = (dateString: string) => {
   const date = new Date(dateString)
@@ -88,7 +92,6 @@ const OverviewPage = () => {
     refetchOnWindowFocus: false,
   })
 
-
   const { data: itemWithComponents, isFetching: fetchingItemWithComponents } =
     useQuery({
       queryKey: ["Item", "Components", predictions],
@@ -108,7 +111,7 @@ const OverviewPage = () => {
     queryFn: () =>
       getSalesOrderListByDateRange({
         from: `${currentYear}-01-01`,
-        to: `${currentYear}-12-31`,
+        to: dateToday,
       }),
     refetchOnWindowFocus: false,
   })
@@ -120,7 +123,7 @@ const OverviewPage = () => {
     queryFn: () =>
       getSalesOrderListByDateRange({
         from: `${previousYear}-01-01`,
-        to: `${currentYear}-12-31`,
+        to: dateToday,
       }),
   })
 
@@ -136,7 +139,7 @@ const OverviewPage = () => {
     return tDate >= startDate && tDate <= endDate
   })
 
-  console.log(testingFilter)
+  // console.log(testingFilter)
 
   const last12MonthsDate = getLast12Months()
   const last6MonthsDate = getLast6Months()
