@@ -34,6 +34,13 @@ const getMonthName = (dateString: string) => {
   return months[date.getMonth()]
 }
 
+const formatDate = (date: Date) => {
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, "0")
+  const day = String(date.getDate()).padStart(2, "0")
+  return `${year}-${month}-${day}`
+}
+
 const getLast12Months = () => {
   const months = []
   const today = new Date()
@@ -127,16 +134,6 @@ const OverviewPage = () => {
     (order) => order.status === "COMPLETED"
   )
 
-  const testingFilter = transactions.filter((transaction) => {
-    const tDate = new Date(transaction.orderDate)
-    const startDate = new Date("2025-03-01")
-    const endDate = new Date("2025-03-31")
-
-    return tDate >= startDate && tDate <= endDate
-  })
-
-  console.log(testingFilter)
-
   const last12MonthsDate = getLast12Months()
   const last6MonthsDate = getLast6Months()
   const lastYearMonths = getLastYearMonths()
@@ -155,7 +152,7 @@ const OverviewPage = () => {
 
   const filteredTransactions = transactions.filter((transaction) => {
     const tDate = getStartOfMonth(new Date(transaction.orderDate))
-
+   
     // Check if tDate falls within any month range defined in last12MonthsDate.
     return last12MonthsDate.some((monthStart) => {
       return (

@@ -118,7 +118,6 @@ const CardSalesMetrics: React.FC<CardSalesMetricsProps> = ({ sales }) => {
     return filterSalesByTimeframe(sales, timeframe)
   }, [sales, timeframe])
 
-
   const filteredSalesPreviousMonth = useMemo(() => {
     return filterSalesByTimeframePreviousMonth(sales, timeframe)
   }, [sales, timeframe])
