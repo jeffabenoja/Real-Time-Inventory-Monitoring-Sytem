@@ -10,9 +10,6 @@ import { createColumnHelper } from "@tanstack/react-table"
 const fields = [
   { key: "date", label: "Transaction Date" },
   { key: "transactionNo", label: "Transaction Number", classes: "uppercase" },
-  { key: "stockIn", label: "Stock In" },
-  { key: "stockOut", label: "Stock Out" },
-  { key: "runningBalance", label: "Running Balance" },
 ]
 
 const Columns = ({
@@ -30,6 +27,18 @@ const Columns = ({
         header: () => <span className='truncate'>{field.label}</span>,
       })
     ),
+    columnHelper.accessor("stockIn", {
+      cell: (info) => <span>{Math.round(info.getValue())}</span>,
+      header: () => <span className='truncate'>Stock In</span>,
+    }),
+    columnHelper.accessor("stockOut", {
+      cell: (info) => <span>{Math.round(info.getValue())}</span>,
+      header: () => <span className='truncate'>Stock Out</span>,
+    }),
+    columnHelper.accessor("runningBalance", {
+      cell: (info) => <span>{Math.round(info.getValue())}</span>,
+      header: () => <span className='truncate'>Running Balance</span>,
+    }),
   ]
 }
 
