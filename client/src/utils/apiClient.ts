@@ -13,7 +13,6 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response) {
-      console.log(error.response.data)
       return Promise.reject(
         new Error(`${error.response.data || error.response.statusText}`)
       )

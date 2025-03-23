@@ -64,11 +64,12 @@ const RawMatForecast: React.FC<Props> = React.memo(
       () => groupPredictedUsageByComponent(predictedData, itemComponents),
       [predictedData, itemComponents]
     )
-
+    
     const rawMaterialActual = useMemo(
       () => aggregateSalesToRawMaterialUsage(sales, itemComponents),
       [sales, itemComponents]
     )
+
 
     const [selectedMaterial, setSelectedMaterial] = useState<string>("sugar")
 

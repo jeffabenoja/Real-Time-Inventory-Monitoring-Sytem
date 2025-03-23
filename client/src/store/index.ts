@@ -2,7 +2,6 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit"
 import authReducer, { logout } from "./slices/auth"
 import adminReducer from "./slices/admin"
-import notificationReducer from "./slices/notifications"
 import inventoryReducer from "./slices/inventory"
 
 import {
@@ -21,7 +20,6 @@ const appReducer = combineReducers({
   auth: authReducer,
   admin: adminReducer,
   inventory: inventoryReducer,
-  notifcation: notificationReducer,
 })
 
 const rootReducer = (

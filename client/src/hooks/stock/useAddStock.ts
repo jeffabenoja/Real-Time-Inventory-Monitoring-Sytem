@@ -8,6 +8,16 @@ import { showToast } from "../../utils/Toast"
 
 // Type Guard to check if error is an AxiosError
 
+export interface StockType {
+  transactionDate: string;
+  remarks: string;
+  item: { code: string };
+  quantity: string;
+  batchNo: string;
+  expiryDate: string;
+}
+
+
 export const useAddStock = () => {
   const queryClient = useQueryClient()
 
@@ -62,3 +72,18 @@ export const useAddStock = () => {
     stockOutPending: stockOutMutation.isPending,
   }
 }
+
+export const useAddStocksMutation = (usercode: string, token: string) => {
+  return useMutation<PromiseSettledResult<any>[], Error, StockType[]>({
+    mutationFn: (stocks: StockType[]) => {
+      const promises = stocks.map((stock) => {
+        const convertedStock = { 
+          ...stock, 
+          quantity: Number(stock.quantity) // convert quantity from string to number
+        };
+        return addStock({ stock: convertedStock, usercode, token });
+      });
+      return Promise.allSettled(promises);
+    },
+  });
+};

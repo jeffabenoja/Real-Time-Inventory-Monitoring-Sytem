@@ -88,6 +88,7 @@ const OverviewPage = () => {
     refetchOnWindowFocus: false,
   })
 
+
   const { data: itemWithComponents, isFetching: fetchingItemWithComponents } =
     useQuery({
       queryKey: ["Item", "Components", predictions],
