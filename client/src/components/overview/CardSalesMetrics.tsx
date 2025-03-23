@@ -17,7 +17,7 @@ interface CardSalesMetricsProps {
 
 const getCurrentMonthRange = () => {
   const today = new Date()
-  const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 0)
+  const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1)
   const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0)
 
   return { startOfMonth, endOfMonth }
@@ -78,8 +78,7 @@ const CardSalesMetrics: React.FC<CardSalesMetricsProps> = ({ sales }) => {
           )
         case "monthly":
           return (
-            orderDate >= previousStart.toISOString().split("T")[0] &&
-            orderDate <= previousEnd.toISOString().split("T")[0]
+            orderDate >= formatDate(previousStart) && orderDate <= formatDate(previousEnd)
           )
       }
     })
@@ -107,8 +106,8 @@ const CardSalesMetrics: React.FC<CardSalesMetricsProps> = ({ sales }) => {
           )
         case "monthly":
           return (
-            orderDate >= startOfMonth.toISOString().split("T")[0] &&
-            orderDate <= endOfMonth.toISOString().split("T")[0]
+            orderDate >= formatDate(startOfMonth) &&
+            orderDate <= formatDate(endOfMonth)
           )
       }
     })

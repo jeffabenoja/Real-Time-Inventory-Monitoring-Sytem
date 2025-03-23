@@ -131,16 +131,6 @@ const OverviewPage = () => {
     (order) => order.status === "COMPLETED"
   )
 
-  const testingFilter = transactions.filter((transaction) => {
-    const tDate = new Date(transaction.orderDate)
-    const startDate = new Date("2025-03-01")
-    const endDate = new Date("2025-03-31")
-
-    return tDate >= startDate && tDate <= endDate
-  })
-
-  // console.log(testingFilter)
-
   const last12MonthsDate = getLast12Months()
   const last6MonthsDate = getLast6Months()
   const lastYearMonths = getLastYearMonths()
