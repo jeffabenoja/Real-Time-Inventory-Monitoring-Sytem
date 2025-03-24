@@ -16,17 +16,17 @@ const inventorySlice = createSlice({
     initialInventory(state, action) {
       state.inventory = action.payload
     },
-    updateInventory(state, action) {
+    rawMatsStockOut(state, action) {
       const { itemId, quantity } = action.payload
-
+      console.log("Dispatched")
       state.inventory = state.inventory.map((item) =>
         item.item.id === itemId
-          ? { ...item, outQuantity: item.outQuantity + quantity }
+          ? { ...item, outQuantity: (item.outQuantity || 0) + quantity }
           : item
       )
     },
   },
 })
 
-export const { initialInventory, updateInventory } = inventorySlice.actions
+export const { initialInventory, rawMatsStockOut } = inventorySlice.actions
 export default inventorySlice.reducer

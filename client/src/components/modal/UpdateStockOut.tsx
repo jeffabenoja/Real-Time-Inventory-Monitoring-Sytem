@@ -4,7 +4,7 @@ import { StockInType, UpdateStockType } from "../../type/stockType"
 import ConfirmationModal from "./ConfirmationModal"
 import { useDispatch } from "react-redux"
 import { AppDispatch } from "../../store"
-import { updateInventory } from "../../store/slices/inventory"
+import { rawMatsStockOut } from "../../store/slices/inventory"
 
 interface UpdateStockProps {
   product: StockInType | null
@@ -71,7 +71,7 @@ const UpdateStockOut: React.FC<UpdateStockProps> = ({
         onSubmit(stockToUpdate)
 
         dispatch(
-          updateInventory({
+          rawMatsStockOut({
             itemId: product.item.id,
             quantity: stockToUpdate.quantity,
           })

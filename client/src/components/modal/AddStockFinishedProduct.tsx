@@ -38,6 +38,11 @@ const AddStocksFinishedProduct: React.FC<AddStockProps> = ({
     transactionDate: `${new Date().toISOString().split("T")[0]}`,
     remarks: "",
     finishProduct: product || defaultItem,
+    expiryDate: (() => {
+      const date = new Date()
+      date.setDate(date.getDate() + 7)
+      return date.toISOString().split("T")[0]
+    })(),
     quantity: 0,
     batchNo: "",
   })
@@ -68,6 +73,7 @@ const AddStocksFinishedProduct: React.FC<AddStockProps> = ({
       "transactionDate",
       "remarks",
       "quantity",
+      "expiryDate",
       "batchNo",
     ]
 
@@ -151,6 +157,24 @@ const AddStocksFinishedProduct: React.FC<AddStockProps> = ({
             max={new Date().toISOString().split("T")[0]}
             className={`${
               invalidFields.includes("transactionDate") && "border-primary"
+            } cursor-pointer py-2 px-4 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent placeholder:text-sm
+              focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
+          />
+        </div>
+
+        <div className='flex flex-col gap-2'>
+          <label htmlFor='expiryDate' className='text-sm font-bold'>
+            Expiration Date
+          </label>
+          <input
+            id='expiryDate'
+            type='date'
+            name='expiryDate'
+            onChange={handleChange}
+            value={stock.expiryDate}
+            autoComplete='off'
+            className={`${
+              invalidFields.includes("expiryDate") && "border-primary"
             } cursor-pointer py-2 px-4 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent placeholder:text-sm
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
           />

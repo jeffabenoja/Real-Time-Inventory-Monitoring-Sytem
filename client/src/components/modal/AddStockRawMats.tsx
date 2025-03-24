@@ -31,7 +31,11 @@ const AddStocksRawMats: React.FC<AddStockProps> = ({
       code: productCode || "",
     },
     quantity: 0,
-    expiryDate: `${new Date().toISOString().split("T")[0]}`,
+    expiryDate: (() => {
+      const date = new Date()
+      date.setDate(date.getDate() + 7)
+      return date.toISOString().split("T")[0]
+    })(),
     batchNo: "",
   })
 
