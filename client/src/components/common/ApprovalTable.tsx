@@ -178,10 +178,14 @@ const ApprovalTable = ({ close }: ApprovalProps) => {
     queryFn: getStockList,
   })
 
-  const { data: stockOutData = [] } = useQuery<StockOutListType[]>({
+  const { data: stockOutDataFetch = [] } = useQuery<StockOutListType[]>({
     queryKey: ["StockOut", "Raw Mats"],
     queryFn: getAllStockOutList,
   })
+
+  const stockOutData = stockOutDataFetch.filter((item) =>
+    item.transactionNo.includes("RM")
+  )
 
   const [approvalDataState, setApprovalDataState] = useState<StockListType[]>(
     []
@@ -191,14 +195,22 @@ const ApprovalTable = ({ close }: ApprovalProps) => {
   >([])
 
   useEffect(() => {
-    if (stockInData.length > 0) {
+   
+    if (stockInData.length > 0 && !areArraysEqual(stockInData, approvalDataState)) {
       setApprovalDataState(stockInData)
     }
-
-    if (stockOutData.length > 0) {
+  
+  
+    if (stockOutData.length > 0 && !areArraysEqual(stockOutData, stockOutDataState)) {
       setStockOutDataState(stockOutData)
     }
   }, [stockInData, stockOutData])
+  
+  
+  const areArraysEqual = (arr1: any[], arr2: any[]) => {
+    return arr1.length === arr2.length && arr1.every((value, index) => value === arr2[index])
+  }
+  
 
   const draftItems = approvalDataState.filter(
     (pending) => pending.status === "DRAFT"
@@ -239,7 +251,7 @@ const ApprovalTable = ({ close }: ApprovalProps) => {
       setApprovalDataState(updatedApprovalData)
       showToast.success("Successfully updated stock transaction ")
     } catch (error) {
-      showToast.success("Eroor updating stock transaction ")
+      showToast.error("Error updating stock transaction ")
     }
   }
 

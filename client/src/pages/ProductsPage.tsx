@@ -10,11 +10,11 @@ import { useItemComponents } from "../hooks/items/useItemComponents"
 import { FaExclamationTriangle } from "react-icons/fa"
 import { ItemType } from "../type/itemType"
 import { Navigate } from "react-router-dom"
-import AddStocksFinishedProduct from "../components/modal/AddStockFinishedProduct"
 import InventoryTable from "../components/common/InventoryTable"
 import ViewAssembleTable from "../components/common/ViewAssembleTable"
 import ApprovalAssembleTable from "../components/common/ApprovalAssembleTable"
 import ViewItemWithComponents from "../components/modal/ViewItemWithComponentsModal"
+import AssembleStockModal from "../components/modal/AssembleStockModal"
 
 const fields = [
   { key: "code", label: "Product Code", classes: "uppercase" },
@@ -145,9 +145,9 @@ const ProductsPage = () => {
       {/* Stocking functionality  */}
       {isAddStock && (
         <CustomModal>
-          <AddStocksFinishedProduct
+          <AssembleStockModal
             product={productData}
-            toggleModal={handleAddStockToggle}
+            close={handleAddStockToggle}
           />
         </CustomModal>
       )}

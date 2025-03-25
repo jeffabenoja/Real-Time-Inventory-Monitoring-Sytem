@@ -1,5 +1,5 @@
 export const ADD_STOCK = `/v1/stockIn`
-export const STOCKOUT = `/v1/stockOut`
+export const STOCKOUT = `/v1/stockout-rawmats`
 export const STOCKOUT_FINISHED_PRODUCT = `/v1/stockout-product`
 export const GET_STOCK_LIST = (id: String) => `/v1//stockInList/${id}`
 export const GET_ASSEMBLE_LIST_PER_ITEM = (id: String) =>

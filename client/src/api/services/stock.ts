@@ -12,6 +12,7 @@ import {
   UPDATE_ASSEMBLE_STOCK,
   GET_STOCKIN_BY_DATE_RANGE,
   STOCKOUT,
+  STOCKOUT_FINISHED_PRODUCT,
   GET_STOCKOUT_PER_ITEM,
   GET_STOCKIOUT_BY_DATE_RANGE,
 } from "../urls/stockUrls"
@@ -55,7 +56,6 @@ export const addStock = async ({ stock, usercode, token }: AddStockType) => {
   return response.data
 }
 
-
 export const stockOuts = async ({
   stockToRemove,
   usercode,
@@ -68,6 +68,26 @@ export const stockOuts = async ({
       "Content-Type": "application/json",
     },
   })
+
+  return response.data
+}
+
+export const stockOutsAssemble = async ({
+  stockToRemove,
+  usercode,
+  token,
+}: StockOutTypeProps) => {
+  const response = await apiClient.post(
+    STOCKOUT_FINISHED_PRODUCT,
+    stockToRemove,
+    {
+      headers: {
+        usercode: usercode,
+        token: token,
+        "Content-Type": "application/json",
+      },
+    }
+  )
 
   return response.data
 }

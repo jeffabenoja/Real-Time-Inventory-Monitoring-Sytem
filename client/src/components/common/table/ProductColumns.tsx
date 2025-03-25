@@ -1,6 +1,6 @@
 import { createColumnHelper } from "@tanstack/react-table"
 import { CiEdit } from "react-icons/ci"
-import { IoIosAdd } from "react-icons/io"
+import { TiClipboard } from "react-icons/ti"
 import { IoEyeOutline } from "react-icons/io5"
 import { ItemType } from "../../../type/itemType"
 import { MdOutlineInventory } from "react-icons/md"
@@ -102,7 +102,7 @@ const ProductColumns = ({
               </button>
             </Tooltip>
             {/* Add Button */}
-            <Tooltip text='Add'>
+            <Tooltip text='Stock'>
               <button
                 onClick={(e) => {
                   e.stopPropagation()
@@ -110,7 +110,7 @@ const ProductColumns = ({
                 }}
                 className='lg:py-2 lg:px-4 p-2 bg-gray-200 hover:bg-gray-300 hover:text-primary rounded-md shadow-md'
               >
-                <IoIosAdd size={20} />
+                <TiClipboard size={20} />
               </button>
             </Tooltip>
 

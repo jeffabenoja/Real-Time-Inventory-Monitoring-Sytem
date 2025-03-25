@@ -56,6 +56,8 @@ export interface AssembleTransaction {
   remarks: string
   finishProduct: ItemType
   assembleQuantity: number
+  issuedQuantity?: number
+  returnQuantity?: number
   expiryDate?: string
   batchNo: string
   status: string

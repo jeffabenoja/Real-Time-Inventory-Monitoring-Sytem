@@ -7,7 +7,7 @@ import { AppDispatch } from "../../store"
 import { rawMatsStockOut } from "../../store/slices/inventory"
 
 interface UpdateStockProps {
-  product: StockInType | null
+  product: StockInType | any | null
   toggleModal: () => void
   isLoading: boolean
   onSubmit: (item: UpdateStockType) => void
