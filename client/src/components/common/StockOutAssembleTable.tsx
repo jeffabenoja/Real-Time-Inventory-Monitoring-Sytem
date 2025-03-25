@@ -147,8 +147,6 @@ const StockOutAssembleTable = ({ productId, close }: StockOutTableProps) => {
     onUpdate: handleUpdate,
   })
 
-  console.log(productData)
-
   return (
     <>
       {isLoading ? (

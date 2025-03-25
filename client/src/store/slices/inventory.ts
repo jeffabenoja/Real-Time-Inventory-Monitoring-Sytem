@@ -18,7 +18,7 @@ const inventorySlice = createSlice({
     },
     rawMatsStockOut(state, action) {
       const { itemId, quantity } = action.payload
-      console.log("Dispatched")
+      console.log("triggered")
       state.inventory = state.inventory.map((item) =>
         item.item.id === itemId
           ? { ...item, outQuantity: (item.outQuantity || 0) + quantity }

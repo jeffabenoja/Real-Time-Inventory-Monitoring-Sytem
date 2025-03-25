@@ -8,6 +8,9 @@ import Table from "./table/Table"
 import { StockListType, StockOutListType } from "../../type/stockType"
 import { useState, useEffect } from "react"
 import { showToast } from "../../utils/Toast"
+import { rawMatsStockOut } from "../../store/slices/inventory"
+import { useDispatch } from "react-redux"
+import { AppDispatch } from "../../store"
 import { updateStock, updateStockOut } from "../../api/services/stock"
 
 const fields = [
@@ -168,6 +171,7 @@ type ApprovalProps = {
   close: () => void
 }
 const ApprovalTable = ({ close }: ApprovalProps) => {
+  const dispatch = useDispatch<AppDispatch>()
   const [tab, setTab] = useState<string>("stockIn")
   const {
     data: stockInData = [],
@@ -195,22 +199,27 @@ const ApprovalTable = ({ close }: ApprovalProps) => {
   >([])
 
   useEffect(() => {
-   
-    if (stockInData.length > 0 && !areArraysEqual(stockInData, approvalDataState)) {
+    if (
+      stockInData.length > 0 &&
+      !areArraysEqual(stockInData, approvalDataState)
+    ) {
       setApprovalDataState(stockInData)
     }
-  
-  
-    if (stockOutData.length > 0 && !areArraysEqual(stockOutData, stockOutDataState)) {
+
+    if (
+      stockOutData.length > 0 &&
+      !areArraysEqual(stockOutData, stockOutDataState)
+    ) {
       setStockOutDataState(stockOutData)
     }
   }, [stockInData, stockOutData])
-  
-  
+
   const areArraysEqual = (arr1: any[], arr2: any[]) => {
-    return arr1.length === arr2.length && arr1.every((value, index) => value === arr2[index])
+    return (
+      arr1.length === arr2.length &&
+      arr1.every((value, index) => value === arr2[index])
+    )
   }
-  
 
   const draftItems = approvalDataState.filter(
     (pending) => pending.status === "DRAFT"
@@ -265,6 +274,12 @@ const ApprovalTable = ({ close }: ApprovalProps) => {
 
     try {
       await updateStockOut(stockToUpdate)
+      dispatch(
+        rawMatsStockOut({
+          itemId: updatedRow.stockIn.item.id,
+          quantity: stockToUpdate.quantity,
+        })
+      )
       const updatedApprovalData = stockOutDataState.map((item) =>
         item.transactionNo === updatedRow.transactionNo ? updatedRow : item
       )
