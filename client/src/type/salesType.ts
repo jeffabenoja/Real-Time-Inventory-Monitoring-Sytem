@@ -9,7 +9,7 @@ export interface itemDetailType {
 }
 
 export interface DetailsType {
-  id: number
+  id: string
   item: ItemType
   orderQuantity: number
   stockQuantity?: number

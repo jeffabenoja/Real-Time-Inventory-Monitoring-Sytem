@@ -148,7 +148,23 @@ const SalesPage = () => {
     to: dateRange.to,
   })
 
-  const salesData = data?.filter((pending) => pending.status === "COMPLETED")
+  const salesData = data?.filter((pending) => {
+    const formatDate = (date: Date) => {
+      const year = date.getFullYear()
+      const month = String(date.getMonth() + 1).padStart(2, "0")
+      const day = String(date.getDate()).padStart(2, "0")
+      return `${year}-${month}-${day}`
+    }
+
+    const orderDate = new Date(pending.orderDate)
+    const currentDate = new Date()
+
+    return (
+      pending.status !== "CANCEL" &&
+      pending.status !== "cancel" &&
+      formatDate(orderDate) <= formatDate(currentDate)
+    )
+  })
   const [openModal, setOpenModal] = useState<boolean>()
   const [isRangeChecked, setIsRangeChecked] = useState<boolean>(false)
   const [openSalesOrderModal, setOpenSalesOrderModal] = useState<boolean>()
@@ -165,7 +181,6 @@ const SalesPage = () => {
 
   const handleCloseDateRangeModal = () => {
     handlefilterModalToggle()
-    handleRangeToggle()
   }
 
   const handleEndDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {

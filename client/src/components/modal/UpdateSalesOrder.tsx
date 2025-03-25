@@ -10,6 +10,8 @@ import SalesOrderCustomer from "./SalesOrderCustomer"
 import { showToast } from "../../utils/Toast"
 import ConfirmationModal from "./ConfirmationModal"
 import useUpdateSalesOrder from "../../hooks/sales/useUpdateSalesOrder"
+import ItemSalesOrder from "../common/ItemSalesOrder"
+import { InventoryPerCategory } from "../../type/stockType"
 
 const itemFields = [
   { key: "item.code", label: "Product Code", classes: "uppercase" },
@@ -144,6 +146,7 @@ const UpdateSalesOrder: React.FC<UpdateSalesOrderProps> = ({ row, close }) => {
   const { updateSalesOrder, isUpdatePending } = useUpdateSalesOrder()
   const [confirmSubmit, setConfirmSubmit] = useState<boolean>(false)
   const [confirmCancel, setConfirmCancel] = useState<boolean>(false)
+  const [openMaterials, setOpenMaterials] = useState<boolean>(false)
 
   const [orderDate, setOrderDate] = useState(row?.orderDate)
   const [remarks, setRemarks] = useState(row?.remarks || "")
@@ -207,6 +210,40 @@ const UpdateSalesOrder: React.FC<UpdateSalesOrderProps> = ({ row, close }) => {
   const handleCustomerToggle = () => {
     setOpenCustomerModal((prev) => !prev)
   }
+
+  const handleMaterialsToggle = () => {
+    setOpenMaterials((prev) => !prev)
+  }
+
+  const handleSubmit = (invetoryProductPerItem: InventoryPerCategory[]) => {
+    console.log(invetoryProductPerItem)
+
+    setProductItems((prevProduct) => {
+      const updatedProductItems = [
+        ...prevProduct,
+        ...invetoryProductPerItem
+          .filter((product) => {
+            const isExisting = prevProduct.some(
+              (existingProduct) =>
+                existingProduct.item.code === product.item.code
+            )
+            return !isExisting
+          })
+          .map((product) => ({
+            id: product.id,
+            item: { ...product.item },
+            orderQuantity: 1,
+            itemPrice: product.item.price ?? 0,
+            amount: (product.item.price ?? 0) * 1,
+          })),
+      ]
+      return updatedProductItems
+    })
+
+    handleMaterialsToggle()
+  }
+
+  console.log(productItems)
 
   const handleSubmitCustomer = (customerDetails: CustomerType[]) => {
     if (customerDetails.length === 1) {
@@ -289,7 +326,7 @@ const UpdateSalesOrder: React.FC<UpdateSalesOrderProps> = ({ row, close }) => {
         </p>
       </div>
       <form onSubmit={handleOnSubmit}>
-        <div className='pt-4 px-2 border-t border-[#14aff1] flex flex-col gap-5'>
+        <div className='pt-4 border-t border-[#14aff1] flex flex-col gap-5'>
           <div className='flex flex-col md:flex-row gap-5 md:items-center md:justify-between'>
             <div className='flex items-center gap-2 md:w-[300px] relative'>
               <label htmlFor='customer' className='text-sm'>
@@ -448,9 +485,20 @@ const UpdateSalesOrder: React.FC<UpdateSalesOrderProps> = ({ row, close }) => {
           withExport={false}
           withSubmit={false}
           withCancel={false}
+          materials={true}
           add={false}
           view={false}
+          toggleModal={handleMaterialsToggle}
         />
+
+        {openMaterials && (
+          <CustomModal classes='h-[420px] md:p-8 w-[343px] md:w-[860px]'>
+            <ItemSalesOrder
+              onSubmit={handleSubmit}
+              toggleModal={handleMaterialsToggle}
+            />
+          </CustomModal>
+        )}
 
         {openCustomerModal && (
           <CustomModal
