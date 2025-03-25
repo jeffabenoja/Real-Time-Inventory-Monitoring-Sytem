@@ -102,28 +102,26 @@ const ItemSalesOrder: React.FC<ItemSalesOrderProps> = ({
   }
 
   return (
-    <>
-      <h1 className='text-md mb-1'>Products</h1>
-      <div className='border-t border-[#14aff1] pt-2'>
-        {isLoading ? (
-          <Spinner />
-        ) : (
-          <Table
-            data={inventoryData}
-            columns={columns}
-            search={true}
-            withImport={false}
-            withExport={false}
-            withSubmit={true}
-            withCancel={true}
-            add={false}
-            view={false}
-            handleSubmit={onSubmit}
-            toggleModal={toggleModal}
-          />
-        )}
-      </div>
-    </>
+    <div className='flex flex-col h-full'>
+      <h1 className='text-md border-b border-[#14aff1] pt-2'>Products</h1>
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <Table
+          data={inventoryData}
+          columns={columns}
+          search={true}
+          withImport={false}
+          withExport={false}
+          withSubmit={true}
+          withCancel={true}
+          add={false}
+          view={false}
+          handleSubmit={onSubmit}
+          toggleModal={toggleModal}
+        />
+      )}
+    </div>
   )
 }
 

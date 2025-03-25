@@ -589,7 +589,7 @@ const ItemComponents = () => {
                 toggleModal={handleModalToggle}
               >
                 {/* Material Items Table */}
-                <>
+                <div className='flex flex-col h-full'>
                   <PageTitle>Material List</PageTitle>
                   <hr style={{ borderColor: "#14aff1" }} />
                   <Table
@@ -605,7 +605,7 @@ const ItemComponents = () => {
                     handleSubmit={handleSubmit}
                     toggleModal={handleModalToggle}
                   />
-                </>
+                </div>
               </CustomModal>
             )}
           </div>

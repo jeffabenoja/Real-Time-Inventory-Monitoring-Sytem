@@ -477,19 +477,21 @@ const UpdateSalesOrder: React.FC<UpdateSalesOrderProps> = ({ row, close }) => {
           </div>
         </div>
 
-        <Table
-          data={productItems}
-          columns={columns}
-          search={true}
-          withImport={false}
-          withExport={false}
-          withSubmit={false}
-          withCancel={false}
-          materials={true}
-          add={false}
-          view={false}
-          toggleModal={handleMaterialsToggle}
-        />
+        <div className='md:h-[300px] flex flex-col'>
+          <Table
+            data={productItems}
+            columns={columns}
+            search={true}
+            withImport={false}
+            withExport={false}
+            withSubmit={false}
+            withCancel={false}
+            materials={true}
+            add={false}
+            view={false}
+            toggleModal={handleMaterialsToggle}
+          />
+        </div>
 
         {openMaterials && (
           <CustomModal classes='h-[420px] md:p-8 w-[343px] md:w-[860px]'>

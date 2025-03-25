@@ -286,7 +286,7 @@ const SalesPage = () => {
       )}
 
       {openModal && salesOrderDetails && (
-        <CustomModal classes='md:h-[480px] md:p-8 w-full h-full md:w-[1020px]'>
+        <CustomModal classes='md:h-[600px] md:p-8 w-full h-full md:w-[1020px]'>
           <UpdateSalesOrder
             row={salesOrderDetails}
             close={handleOpenModalToggle}
