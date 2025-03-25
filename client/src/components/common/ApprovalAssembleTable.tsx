@@ -8,7 +8,7 @@ import Table from "./table/Table"
 import { useState, useEffect } from "react"
 import { showToast } from "../../utils/Toast"
 import { getAssembleList } from "../../api/services/stock"
-import { rawMatsStockOut } from "../../store/slices/inventory"
+import { rawMatsStockIn, rawMatsStockOut } from "../../store/slices/inventory"
 import { useDispatch } from "react-redux"
 import { AppDispatch } from "../../store"
 import {
@@ -268,6 +268,12 @@ const ApprovalAssembleTable = ({ close }: ApprovalProps) => {
     }
     try {
       await updateStockAssemble(stockToUpdate)
+      dispatch(
+        rawMatsStockIn({
+          itemId: updatedRow.finishProduct.id,
+          quantity: stockToUpdate.assembleQuantity,
+        })
+      )
       const updatedApprovalData = approvalDataState.map((item) =>
         item.transactionNo === updatedRow.transactionNo ? updatedRow : item
       )
@@ -280,7 +286,6 @@ const ApprovalAssembleTable = ({ close }: ApprovalProps) => {
   }
 
   const handleUpdateStockOut = async (updatedRow: any) => {
-    console.log(updatedRow)
     const stockToUpdate = {
       remarks: updatedRow.remarks,
       quantity: updatedRow.quantity,

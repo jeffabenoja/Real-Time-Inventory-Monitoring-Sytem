@@ -4,12 +4,16 @@ import { useState } from "react"
 import { showToast } from "../../utils/Toast"
 import { useUpdateAssemble } from "../../hooks/stock/useUpdateAssemble"
 import ConfirmationModal from "./ConfirmationModal"
+import { useDispatch } from "react-redux"
+import { AppDispatch } from "../../store"
+import { rawMatsStockIn } from "../../store/slices/inventory"
 
 interface UpdateAssembleProps {
   row: AssembleTransaction | null
   close: () => void
 }
 const UpdateAssemble: React.FC<UpdateAssembleProps> = ({ row, close }) => {
+  const dispatch = useDispatch<AppDispatch>()
   const defaultItem: ItemType = {
     id: "",
     code: "",
@@ -51,7 +55,18 @@ const UpdateAssemble: React.FC<UpdateAssembleProps> = ({ row, close }) => {
       return
     }
 
-    updateAssembleStock(assembleUpdate)
+    try {
+      updateAssembleStock(assembleUpdate)
+
+      dispatch(
+        rawMatsStockIn({
+          itemId: assembleUpdate.finishProduct.id,
+          quantity: assembleUpdate.assembleQuantity,
+        })
+      )
+    } catch (error) {
+      console.log("error updating stock", error)
+    }
 
     close()
   }
