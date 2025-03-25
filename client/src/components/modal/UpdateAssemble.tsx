@@ -26,7 +26,7 @@ const UpdateAssemble: React.FC<UpdateAssembleProps> = ({ row, close }) => {
     transactionNo: row?.transactionNo || "",
     remarks: row?.remarks || "",
     finishProduct: row?.finishProduct || defaultItem,
-    assemble_quantity: row?.assemble_quantity || 0,
+    assembleQuantity: row?.assembleQuantity || 0,
     batchNo: row?.batchNo || "",
     status: row?.status || "",
   })
@@ -38,7 +38,7 @@ const UpdateAssemble: React.FC<UpdateAssembleProps> = ({ row, close }) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    const requiredFields: string[] = ["remarks", "assemble_quantity", "batchNo"]
+    const requiredFields: string[] = ["remarks", "assembleQuantity", "batchNo"]
 
     const emptyFields = requiredFields.filter(
       (field) => !assembleUpdate[field as keyof AssembleUpdateStock]
@@ -272,18 +272,17 @@ const UpdateAssemble: React.FC<UpdateAssembleProps> = ({ row, close }) => {
 
           <div className='flex flex-col md:flex-row gap-5 items-center justify-between'>
             <div className='flex items-center gap-2 '>
-              <label htmlFor='assemble_quantity' className='text-sm w-[120px] '>
+              <label htmlFor='assembleQuantity' className='text-sm w-[120px] '>
                 Quantity:
               </label>
               <input
-                id='assemble_quantity'
+                id='assembleQuantity'
                 type='number'
-                name='assemble_quantity'
+                name='assembleQuantity'
                 onChange={handleChange}
-                value={assembleUpdate?.assemble_quantity}
+                value={assembleUpdate?.assembleQuantity}
                 className={`${
-                  invalidFields.includes("assemble_quantity") &&
-                  "border-red-900"
+                  invalidFields.includes("assembleQuantity") && "border-red-900"
                 } w-full p-2 rounded-md border outline-transparent bg-transparent text-xs
                         focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
               />

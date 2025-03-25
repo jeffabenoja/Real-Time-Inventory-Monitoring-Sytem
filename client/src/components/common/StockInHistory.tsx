@@ -11,14 +11,11 @@ import Tooltip from "./Tooltip"
 import { IoIosClose } from "react-icons/io"
 
 const fields = [
-  { key: "transactionNo", label: "Transaction Number", classes: "uppercase" },
-  { key: "batchNo", label: "Batch Number", classes: "uppercase" },
-  { key: "expiryDate", label: "Expiry Date" },
+  { key: "quantity", label: "Quantity" },
   { key: "issuedQuantity", label: "Issued Quantity" },
   { key: "returnQuantity", label: "Return Quantity" },
   { key: "item.code", label: "Product Code", classes: "uppercase" },
   { key: "item.description", label: "Product Name", classes: "uppercase" },
-  { key: "quantity", label: "Quantity" },
   { key: "status", label: "Status", classes: "uppercase" },
 ]
 type UpdateStockTableProps = {
@@ -56,6 +53,34 @@ const Columns = ({
         </div>
       ),
       header: () => <span className='text-center truncate'>Actions</span>,
+    }),
+    columnHelper.accessor("transactionNo", {
+      cell: (info) => <span className={`uppercase`}>{info.getValue()}</span>,
+      header: () => <span className='truncate'>Transaction Number</span>,
+    }),
+    columnHelper.accessor("batchNo", {
+      cell: (info) => <span className={`uppercase`}>{info.getValue()}</span>,
+      header: () => <span className='truncate'>Batch Number</span>,
+    }),
+    columnHelper.accessor("expiryDate", {
+      cell: (info) => <span className={`uppercase`}>{info.getValue()}</span>,
+      header: () => <span className='truncate'>Expiry Date</span>,
+    }),
+    columnHelper.accessor("stock", {
+      id: "currentStock",
+      cell: ({ row }) => {
+        // Get the row data
+        const { quantity, issuedQuantity, returnQuantity } = row.original
+
+        // Calculate the current stock
+        const currentStock = Math.round(
+          quantity - issuedQuantity - returnQuantity
+        )
+
+        // Return the current stock as formatted text
+        return <span>{currentStock}</span>
+      },
+      header: () => <span className='truncate'>Current Stock</span>,
     }),
     ...fields.map((field) =>
       columnHelper.accessor(field.key, {

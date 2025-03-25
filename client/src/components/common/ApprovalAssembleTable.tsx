@@ -52,7 +52,7 @@ const Columns = ({
           if (
             row.original.status !== "DRAFT" &&
             row.original.expiryDate !== null &&
-            row.original.assemble_quantity > 0 &&
+            row.original.assembleQuantity > 0 &&
             row.original.batchNo !== ""
           ) {
             const stockToUpdate = {
@@ -131,7 +131,7 @@ const ApprovalAssembleTable = ({ close }: ApprovalProps) => {
       transactionNo: updatedRow?.transactionNo,
       remarks: updatedRow?.remarks,
       finishProduct: updatedRow?.finishProduct,
-      assemble_quantity: updatedRow?.assemble_quantity,
+      assembleQuantity: updatedRow?.assembleQuantity,
       batchNo: updatedRow?.batchNo,
       status: updatedRow?.status,
     }

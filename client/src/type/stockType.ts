@@ -19,31 +19,6 @@ export interface StockInType {
   createdBy?: string
 }
 
-export interface StockOutListType {
-  transactionNo: string
-  transactionDate: string
-  remarks: string
-  stockIn: StockInType
-  quantity: number
-  batchNo: string
-  status?: string
-  createdDateTime?: string
-  createdBy?: string
-}
-
-export interface StockOutType {
-  transactionDate: string
-  remarks: string
-  item?: {
-    code: string
-  }
-  stockIn?: {
-    transactionNo: string
-  }
-  quantity: number
-  batchNo?: string
-}
-
 export interface UpdateStockType {
   transactionNo?: string
   remarks: string
@@ -69,7 +44,7 @@ export interface AssembleUpdateStock {
   transactionDate?: string
   remarks: string
   finishProduct: ItemType
-  assemble_quantity: number
+  assembleQuantity: number
   expiryDate?: string
   batchNo: string
   status?: string
@@ -80,7 +55,7 @@ export interface AssembleTransaction {
   transactionDate: string
   remarks: string
   finishProduct: ItemType
-  assemble_quantity: number
+  assembleQuantity: number
   expiryDate?: string
   batchNo: string
   status: string
@@ -122,4 +97,32 @@ export interface StockCardType {
   stockIn: number
   stockOut: number
   runningBalance: number
+}
+
+export interface StockOutListType {
+  transactionNo: string
+  transactionDate: string
+  remarks: string
+  stockIn: StockInType
+  quantity: number
+  batchNo: string
+  status?: string
+  createdDateTime?: string
+  createdBy?: string
+}
+
+export interface StockOutType {
+  transactionDate: string
+  remarks: string
+  item?: {
+    code: string
+  } | null
+  stockIn?: {
+    transactionNo: string
+  } | null
+  assemble?: {
+    transactionNo: string
+  } | null
+  quantity: number
+  batchNo?: string
 }

@@ -110,7 +110,7 @@ const AddStocksFinishedProduct: React.FC<AddStockProps> = ({
 
     const assembleStock = {
       ...stockWithoutItem,
-      assemble_quantity: stock.quantity,
+      assembleQuantity: stock.quantity,
       finishProduct: {
         ...finalProduct,
       },

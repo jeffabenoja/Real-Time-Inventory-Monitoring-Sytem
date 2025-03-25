@@ -100,6 +100,7 @@ const StockOutRawMats: React.FC<AddStockProps> = ({
       stockIn: {
         transactionNo: stock.stockIn.transactionNo,
       },
+      assemble: null,
       quantity: stock.quantity,
     }
 
