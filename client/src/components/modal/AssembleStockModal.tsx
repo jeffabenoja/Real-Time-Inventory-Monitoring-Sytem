@@ -5,6 +5,7 @@ import AddStocksFinishedProduct from "./AddStockFinishedProduct"
 import AssembleHistory from "../common/AssembleHistory"
 import { ItemType } from "../../type/itemType"
 import StockOutAssembleTable from "../common/StockOutAssembleTable"
+import StockCardTable from "../common/StockCardTable"
 
 interface AssembleStockModalProps {
   product: ItemType | null
@@ -17,6 +18,7 @@ const AssembleStockModal: React.FC<AssembleStockModalProps> = ({
 }) => {
   const [addStockState, setAddStockState] = useState<boolean>(false)
   const [removedStockState, setRemovedStockState] = useState<boolean>(false)
+  const [viewStockCard, setViewStockCard] = useState<boolean>(false)
   const [viewApproval, setViewApproval] = useState<boolean>(false)
 
   const handleAddToggle = () => {
@@ -28,11 +30,14 @@ const AssembleStockModal: React.FC<AssembleStockModalProps> = ({
   const handleApprovalToggle = () => {
     setViewApproval((prev) => !prev)
   }
+  const handleStockCardToggle = () => {
+    setViewStockCard((prev) => !prev)
+  }
 
   return (
     <>
       <div className='flex flex-col gap-6'>
-        <div className='flex items-center justify-between border-b border-[#14aff1] pb-1'>
+        <div className='flex items-center justify-between border-b border-[#14aff1] pb-1 font-bold'>
           <h3>
             Stock for {product?.code} - {product?.description}
           </h3>
@@ -56,6 +61,14 @@ const AssembleStockModal: React.FC<AssembleStockModalProps> = ({
 
           <button
             type='button'
+            onClick={handleStockCardToggle}
+            className='bg-gray-200 rounded-md py-2.5 w-[100px] text-xs text-center'
+          >
+            Stock Card
+          </button>
+
+          <button
+            type='button'
             onClick={handleApprovalToggle}
             className='bg-gray-200 rounded-md py-2.5 w-[100px] text-xs text-center'
           >
@@ -71,6 +84,12 @@ const AssembleStockModal: React.FC<AssembleStockModalProps> = ({
       {removedStockState && (
         <CustomModal classes='md:h-[480px] md:p-8 w-full h-full md:w-[970px]'>
           <AssembleHistory itemId={product?.id || ""} close={close} />
+        </CustomModal>
+      )}
+
+      {viewStockCard && (
+        <CustomModal classes='md:h-[480px] md:p-8 w-full h-full md:w-[970px]'>
+          <StockCardTable itemId={product?.id || ""} close={close} />
         </CustomModal>
       )}
 

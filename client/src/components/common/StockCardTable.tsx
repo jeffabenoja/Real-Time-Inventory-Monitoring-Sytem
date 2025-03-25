@@ -46,6 +46,7 @@ type StockCardTableProps = {
   itemId: string
   close: () => void
 }
+
 const StockCardTable = ({ itemId, close }: StockCardTableProps) => {
   const {
     data: runningInventory = [],

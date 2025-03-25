@@ -153,7 +153,7 @@ const AddItems: React.FC<AddItemsProps> = ({
   return (
     <div className='flex flex-col gap-6'>
       <EscapeKeyListener onEscape={toggleModal} />
-      <h3 className=' border-b border-[#14aff1] pb-1'>
+      <h3 className=' border-b border-[#14aff1] pb-1 font-bold'>
         {!productData
           ? title
           : `Update ${productData.code} - ${productData.description}`}

@@ -36,7 +36,7 @@ const StockRawMatsModal: React.FC<StockRawMatsProps> = ({
   return (
     <>
       <div className='flex flex-col gap-6'>
-        <div className='flex items-center justify-between border-b border-[#14aff1] pb-1'>
+        <div className='flex items-center justify-between border-b border-[#14aff1] pb-1 font-bold'>
           <h3>
             Stock for {productCode} - {productName}
           </h3>
