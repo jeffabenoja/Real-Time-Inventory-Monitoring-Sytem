@@ -12,14 +12,17 @@ import { updateStockAssemble } from "../../api/services/stock"
 
 const fields = [
   { key: "transactionNo", label: "Transaction Number", classes: "uppercase" },
+  { key: "expiryDate", label: "Expiry Date" },
   { key: "batchNo", label: "Batch Number", classes: "uppercase" },
-  { key: "assemble_quantity", label: "Quantity" },
+  { key: "assembleQuantity", label: "Quantity" },
   { key: "finishProduct.code", label: "Product Code", classes: "uppercase" },
   {
     key: "finishProduct.description",
     label: "Product Name",
     classes: "uppercase",
   },
+  { key: "issuedQuantity", label: "Issued Quantity" },
+  { key: "returnQuantity", label: "Return Quantity" },
 ]
 
 const Columns = ({

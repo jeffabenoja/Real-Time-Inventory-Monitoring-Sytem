@@ -14,13 +14,16 @@ import { IoIosClose } from "react-icons/io"
 const fields = [
   { key: "transactionNo", label: "Transaction Number", classes: "uppercase" },
   { key: "batchNo", label: "Batch Number", classes: "uppercase" },
+  { key: "expiryDate", label: "Expiry Date", classes: "uppercase" },
+  { key: "assembleQuantity", label: "Quantity" },
+  { key: "issuedQuantity", label: "Issued Quantity" },
+  { key: "returnQuantity", label: "Return Quantity" },
   { key: "finishProduct.code", label: "Product Code", classes: "uppercase" },
   {
     key: "finishProduct.description",
     label: "Product Name",
     classes: "uppercase",
   },
-  { key: "assemble_quantity", label: "Quantity" },
   { key: "status", label: "Status", classes: "uppercase" },
 ]
 type AssembleTableProps = {
