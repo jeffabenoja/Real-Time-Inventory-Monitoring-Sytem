@@ -2,6 +2,9 @@ import React, { useState } from "react"
 import { showToast } from "../../utils/Toast"
 import { StockInType, UpdateStockType } from "../../type/stockType"
 import ConfirmationModal from "./ConfirmationModal"
+import { useDispatch } from "react-redux"
+import { AppDispatch } from "../../store"
+import { rawMatsStockIn } from "../../store/slices/inventory"
 
 interface UpdateStockProps {
   product: StockInType | null
@@ -16,6 +19,7 @@ const UpdateStockRawMats: React.FC<UpdateStockProps> = ({
   onSubmit,
   isLoading,
 }) => {
+  const dispatch = useDispatch<AppDispatch>()
   const [updateStock, setUpdateStock] = useState<UpdateStockType>({
     remarks: product?.remarks || "",
     quantity: product?.quantity || 0,
@@ -68,7 +72,18 @@ const UpdateStockRawMats: React.FC<UpdateStockProps> = ({
         transactionNo: product.transactionNo,
       }
 
-      onSubmit(stockToUpdate)
+      try {
+        onSubmit(stockToUpdate)
+
+        dispatch(
+          rawMatsStockIn({
+            itemId: product.item.id,
+            quantity: stockToUpdate.quantity,
+          })
+        )
+      } catch (error) {
+        console.log("error updating stock", error)
+      }
     }
 
     toggleModal()

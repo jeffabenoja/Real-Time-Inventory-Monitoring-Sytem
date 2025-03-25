@@ -8,7 +8,7 @@ import Table from "./table/Table"
 import { StockListType, StockOutListType } from "../../type/stockType"
 import { useState, useEffect } from "react"
 import { showToast } from "../../utils/Toast"
-import { rawMatsStockOut } from "../../store/slices/inventory"
+import { rawMatsStockOut, rawMatsStockIn } from "../../store/slices/inventory"
 import { useDispatch } from "react-redux"
 import { AppDispatch } from "../../store"
 import { updateStock, updateStockOut } from "../../api/services/stock"
@@ -253,10 +253,16 @@ const ApprovalTable = ({ close }: ApprovalProps) => {
 
     try {
       await updateStock(stockToUpdate)
+
+      dispatch(
+        rawMatsStockIn({
+          itemId: updatedRow.item.id,
+          quantity: stockToUpdate.quantity,
+        })
+      )
       const updatedApprovalData = approvalDataState.map((item) =>
         item.transactionNo === updatedRow.transactionNo ? updatedRow : item
       )
-
       setApprovalDataState(updatedApprovalData)
       showToast.success("Successfully updated stock transaction ")
     } catch (error) {
