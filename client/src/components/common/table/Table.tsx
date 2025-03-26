@@ -364,8 +364,8 @@ const Table: React.FC<TableProps> = ({
           <div className="mt-4 text-center">
             <button
               onClick={handleApply}
-              className="px-4 py-2 bg-primary text-white rounded"
-              disabled={applying}
+              className="px-4 py-2 bg-primary text-white rounded disabled:bg-gray-500 disabled:cursor-not-allowed"
+              disabled={applying || table.getSelectedRowModel().rows.length === 0}
             >
               {applying ? "Applying stock" : "Apply Stock"}
             </button>
