@@ -58,7 +58,7 @@ function getCurrentMonthIndex(): number {
 
 const ProductsForecastChart: React.FC<Props> = React.memo(
   ({ notLoading, predictedData, itemComponents, sales }) => {
-    if (!notLoading) return <p className="text-gray-500">Still loading...</p>;
+    if (!notLoading) return <Spinner />
 
     // Group predicted and actual product usage data.
     const productForecast = useMemo(

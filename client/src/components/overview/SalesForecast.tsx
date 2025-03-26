@@ -16,6 +16,7 @@ import { aggregateForecastRevenue } from "../../utils/aggregateForecastRevenue"
 import { aggregateSalesByMonth } from "../../utils/aggregateSalesByMonth"
 import { mergeSalesData } from "../../utils/mergeSalesData"
 import getCurrentMonth from "../../utils/getCurrentMonth"
+import Spinner from "../common/utils/Spinner"
 
 let currentMonth = getCurrentMonth()
 
@@ -28,7 +29,7 @@ interface Props {
 
 const SalesForecastChart: React.FC<Props> = React.memo(
   ({ notLoading, forecastData, itemComponents, sales }) => {
-    if (!notLoading) return <p>STILL LOADING...</p>
+    if (!notLoading) return <Spinner />
 
     // Memoize aggregated forecast and sales data.
     const aggregatedForecast = useMemo(

@@ -58,7 +58,7 @@ function getCurrentMonthIndex(): number {
 
 const RawMatForecast: React.FC<Props> = React.memo(
   ({ notLoading, predictedData, itemComponents, sales }) => {
-    if (!notLoading) return <p className='text-gray-500'>Still loading...</p>
+    if (!notLoading) return <Spinner />
 
     const rawMaterialForecast = useMemo(
       () => groupPredictedUsageByComponent(predictedData, itemComponents),
