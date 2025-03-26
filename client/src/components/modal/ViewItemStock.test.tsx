@@ -46,7 +46,7 @@ describe("ViewItemStock Component", () => {
 
     render(
       <QueryClientProvider client={queryClient}>
-        <ViewItemStock product={mockProduct} />
+        <ViewItemStock product={mockProduct as any} />
       </QueryClientProvider>
     )
 

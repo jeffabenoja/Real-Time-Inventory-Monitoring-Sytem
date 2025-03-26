@@ -1,6 +1,6 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import Sidebar from "./Sidebar";
-import { describe, expect, it, vi } from "vitest";
+import { describe, it, vi } from "vitest";
 
 // Mock Container to isolate Sidebar
 vi.mock("./Container", () => ({

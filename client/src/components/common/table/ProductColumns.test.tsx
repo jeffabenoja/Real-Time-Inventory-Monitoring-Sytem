@@ -1,5 +1,4 @@
 // src/__tests__/ProductColumns.test.tsx
-import React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { useReactTable, getCoreRowModel, flexRender } from "@tanstack/react-table";

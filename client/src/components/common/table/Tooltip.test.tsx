@@ -1,7 +1,6 @@
 // src/__tests__/Tooltip.test.tsx
-import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { describe, it, expect, beforeAll, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeAll, beforeEach } from "vitest";
 import Tooltip from "../Tooltip"
 
 // Ensure that the tooltip portal container exists in the document
