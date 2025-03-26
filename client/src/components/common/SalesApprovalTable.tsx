@@ -7,6 +7,9 @@ import { showToast } from "../../utils/Toast"
 import { DetailsType } from "../../type/salesType"
 import { SalesOrderType } from "../../type/salesType"
 import { updateSalesOrder } from "../../api/services/sales"
+import { rawMatsStockOut } from "../../store/slices/inventory"
+import { useDispatch } from "react-redux"
+import { AppDispatch } from "../../store"
 
 const fields = [
   { key: "salesorderNo", label: "Order Number", classes: "uppercase" },
@@ -29,15 +32,23 @@ const Columns = ({
         const [selectedStatus, setSelectedStatus] = useState(
           row.original.status
         )
+        const [isConfirming, setIsConfirming] = useState(false) // Track if we need confirmation
+        const [tempStatus, setTempStatus] = useState<string | null>(null) // Store the temporary status
 
         const handleStatusChange = (
           e: React.ChangeEvent<HTMLSelectElement>
         ) => {
           const newStatus = e.target.value
+          if (newStatus === "COMPLETED" || newStatus === "CANCEL") {
+            // If status change requires confirmation, store the status and show confirmation
+            setTempStatus(newStatus)
+            setIsConfirming(true)
+          }
+        }
+
+        const applyStatusChange = (newStatus: string) => {
           setSelectedStatus(newStatus)
-
           row.original.status = newStatus
-
           if (
             row.original.status !== "DRAFT" &&
             row.original.remakrs !== "" &&
@@ -54,19 +65,48 @@ const Columns = ({
           }
         }
 
-        return row.original.status === "DRAFT" ? (
-          <select
-            value={selectedStatus}
-            onChange={handleStatusChange}
-            className='py-2 rounded-md border outline-transparent bg-transparent text-xs
-      focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary'
-          >
-            <option value='DRAFT'>DRAFT</option>
-            <option value='COMPLETED'>COMPLETED</option>
-            <option value='CANCEL'>CANCEL</option>
-          </select>
-        ) : (
-          <span className='truncate'>{selectedStatus}</span>
+        const confirmChange = () => {
+          if (tempStatus) {
+            applyStatusChange(tempStatus)
+          }
+          setIsConfirming(false) // Hide the confirmation prompt after applying the change
+        }
+
+        const cancelChange = () => {
+          setIsConfirming(false) // Close the confirmation prompt without applying the change
+        }
+
+        return (
+          <div>
+            {isConfirming ? (
+              // Show confirmation modal/dialog
+              <div className='confirmation-modal'>
+                <p className='mb-2'>Are you sure?</p>
+                <button
+                  onClick={cancelChange}
+                  className='bg-red-700 text-white px-4 py-2 rounded mr-2'
+                >
+                  No
+                </button>
+                <button
+                  onClick={confirmChange}
+                  className='bg-blue-700 text-white px-4 py-2 rounded'
+                >
+                  Yes
+                </button>
+              </div>
+            ) : (
+              <select
+                value={selectedStatus}
+                onChange={handleStatusChange}
+                className='py-2 rounded-md border outline-transparent bg-transparent text-xs focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary'
+              >
+                <option value='DRAFT'>DRAFT</option>
+                <option value='COMPLETED'>COMPLETED</option>
+                <option value='CANCEL'>CANCEL</option>
+              </select>
+            )}
+          </div>
         )
       },
       header: () => <span className='truncate'>Status</span>,
@@ -113,6 +153,7 @@ type ApprovalProps = {
   close: () => void
 }
 const SalesApprovalTable = ({ data, close }: ApprovalProps) => {
+  const dispatch = useDispatch<AppDispatch>()
   const [approvalDataState, setApprovalDataState] =
     useState<SalesOrderType[]>(data)
 
@@ -144,10 +185,19 @@ const SalesApprovalTable = ({ data, close }: ApprovalProps) => {
 
     try {
       await updateSalesOrder(updatedOrder)
+      if (updatedRow.status === "COMPLETED") {
+        updatedRow.details.forEach((item: any) => {
+          dispatch(
+            rawMatsStockOut({
+              itemId: item.item.id,
+              quantity: item.orderQuantity,
+            })
+          )
+        })
+      }
       const updatedApprovalData = approvalDataState.map((item) =>
         item.salesorderNo === updatedRow.salesorderNo ? updatedRow : item
       )
-
       setApprovalDataState(updatedApprovalData)
       showToast.success("Successfully updated stock transaction")
     } catch (error) {

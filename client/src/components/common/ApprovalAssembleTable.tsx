@@ -64,44 +64,76 @@ const Columns = ({
         const [selectedStatus, setSelectedStatus] = useState(
           row.original.status
         )
+        const [isConfirming, setIsConfirming] = useState(false) // Track if we need confirmation
+        const [tempStatus, setTempStatus] = useState<string | null>(null) // Store the temporary status
 
         const handleStatusChange = (
           e: React.ChangeEvent<HTMLSelectElement>
         ) => {
           const newStatus = e.target.value
+          if (newStatus === "COMPLETED" || newStatus === "CANCEL") {
+            // If status change requires confirmation, store the status and show confirmation
+            setTempStatus(newStatus)
+            setIsConfirming(true)
+          }
+        }
+
+        const applyStatusChange = (newStatus: string) => {
           setSelectedStatus(newStatus)
-
           row.original.status = newStatus
-
-          if (
-            row.original.status !== "DRAFT" &&
-            row.original.expiryDate !== null &&
-            row.original.assembleQuantity > 0 &&
-            row.original.batchNo !== ""
-          ) {
+          if (newStatus !== "DRAFT" && row.original.quantity > 0) {
             const stockToUpdate = {
               ...row.original,
               status: newStatus,
             }
-            onUpdate(stockToUpdate)
+            onUpdate(stockToUpdate) // Call the onUpdate function to handle stock update
           } else {
             showToast.error("Cannot approve invalid entry!")
           }
         }
 
-        return row.original.status === "DRAFT" ? (
-          <select
-            value={selectedStatus}
-            onChange={handleStatusChange}
-            className='py-2 rounded-md border outline-transparent bg-transparent text-xs
-      focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary'
-          >
-            <option value='DRAFT'>DRAFT</option>
-            <option value='COMPLETED'>COMPLETED</option>
-            <option value='CANCEL'>CANCEL</option>
-          </select>
-        ) : (
-          <span className='truncate'>{selectedStatus}</span>
+        const confirmChange = () => {
+          if (tempStatus) {
+            applyStatusChange(tempStatus)
+          }
+          setIsConfirming(false) // Hide the confirmation prompt after applying the change
+        }
+
+        const cancelChange = () => {
+          setIsConfirming(false) // Close the confirmation prompt without applying the change
+        }
+
+        return (
+          <div>
+            {isConfirming ? (
+              // Show confirmation modal/dialog
+              <div className='confirmation-modal'>
+                <p className='mb-2'>Are you sure?</p>
+                <button
+                  onClick={cancelChange}
+                  className='bg-red-700 text-white px-4 py-2 rounded mr-2'
+                >
+                  No
+                </button>
+                <button
+                  onClick={confirmChange}
+                  className='bg-blue-700 text-white px-4 py-2 rounded'
+                >
+                  Yes
+                </button>
+              </div>
+            ) : (
+              <select
+                value={selectedStatus}
+                onChange={handleStatusChange}
+                className='py-2 rounded-md border outline-transparent bg-transparent text-xs focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary'
+              >
+                <option value='DRAFT'>DRAFT</option>
+                <option value='COMPLETED'>COMPLETED</option>
+                <option value='CANCEL'>CANCEL</option>
+              </select>
+            )}
+          </div>
         )
       },
       header: () => <span className='truncate'>Status</span>,
@@ -132,39 +164,76 @@ const stockOutColumn = ({
         const [selectedStatus, setSelectedStatus] = useState(
           row.original.status
         )
+        const [isConfirming, setIsConfirming] = useState(false) // Track if we need confirmation
+        const [tempStatus, setTempStatus] = useState<string | null>(null) // Store the temporary status
 
         const handleStatusChange = (
           e: React.ChangeEvent<HTMLSelectElement>
         ) => {
           const newStatus = e.target.value
+          if (newStatus === "COMPLETED" || newStatus === "CANCEL") {
+            // If status change requires confirmation, store the status and show confirmation
+            setTempStatus(newStatus)
+            setIsConfirming(true)
+          }
+        }
+
+        const applyStatusChange = (newStatus: string) => {
           setSelectedStatus(newStatus)
-
           row.original.status = newStatus
-
-          if (row.original.status !== "DRAFT" && row.original.quantity > 0) {
+          if (newStatus !== "DRAFT" && row.original.quantity > 0) {
             const stockToUpdate = {
               ...row.original,
               status: newStatus,
             }
-            onUpdate(stockToUpdate)
+            onUpdate(stockToUpdate) // Call the onUpdate function to handle stock update
           } else {
             showToast.error("Cannot approve invalid entry!")
           }
         }
 
-        return row.original.status === "DRAFT" ? (
-          <select
-            value={selectedStatus}
-            onChange={handleStatusChange}
-            className='py-2 rounded-md border outline-transparent bg-transparent text-xs
-      focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary'
-          >
-            <option value='DRAFT'>DRAFT</option>
-            <option value='COMPLETED'>COMPLETED</option>
-            <option value='CANCEL'>CANCEL</option>
-          </select>
-        ) : (
-          <span className='truncate'>{selectedStatus}</span>
+        const confirmChange = () => {
+          if (tempStatus) {
+            applyStatusChange(tempStatus)
+          }
+          setIsConfirming(false) // Hide the confirmation prompt after applying the change
+        }
+
+        const cancelChange = () => {
+          setIsConfirming(false) // Close the confirmation prompt without applying the change
+        }
+
+        return (
+          <div>
+            {isConfirming ? (
+              // Show confirmation modal/dialog
+              <div className='confirmation-modal'>
+                <p className='mb-2'>Are you sure?</p>
+                <button
+                  onClick={cancelChange}
+                  className='bg-red-700 text-white px-4 py-2 rounded mr-2'
+                >
+                  No
+                </button>
+                <button
+                  onClick={confirmChange}
+                  className='bg-blue-700 text-white px-4 py-2 rounded'
+                >
+                  Yes
+                </button>
+              </div>
+            ) : (
+              <select
+                value={selectedStatus}
+                onChange={handleStatusChange}
+                className='py-2 rounded-md border outline-transparent bg-transparent text-xs focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary'
+              >
+                <option value='DRAFT'>DRAFT</option>
+                <option value='COMPLETED'>COMPLETED</option>
+                <option value='CANCEL'>CANCEL</option>
+              </select>
+            )}
+          </div>
         )
       },
       header: () => <span className='truncate'>Status</span>,
@@ -268,12 +337,14 @@ const ApprovalAssembleTable = ({ close }: ApprovalProps) => {
     }
     try {
       await updateStockAssemble(stockToUpdate)
-      dispatch(
-        rawMatsStockIn({
-          itemId: updatedRow.finishProduct.id,
-          quantity: stockToUpdate.assembleQuantity,
-        })
-      )
+      if (stockToUpdate.status === "COMPLETED") {
+        dispatch(
+          rawMatsStockIn({
+            itemId: updatedRow.finishProduct.id,
+            quantity: stockToUpdate.assembleQuantity,
+          })
+        )
+      }
       const updatedApprovalData = approvalDataState.map((item) =>
         item.transactionNo === updatedRow.transactionNo ? updatedRow : item
       )
@@ -295,12 +366,14 @@ const ApprovalAssembleTable = ({ close }: ApprovalProps) => {
 
     try {
       await updateStockOut(stockToUpdate)
-      dispatch(
-        rawMatsStockOut({
-          itemId: updatedRow.assemble.finishProduct.id,
-          quantity: stockToUpdate.quantity,
-        })
-      )
+      if (stockToUpdate.status === "COMPLETED") {
+        dispatch(
+          rawMatsStockOut({
+            itemId: updatedRow.assemble.finishProduct.id,
+            quantity: stockToUpdate.quantity,
+          })
+        )
+      }
       const updatedApprovalData = stockOutDataState.map((item) =>
         item.transactionNo === updatedRow.transactionNo ? updatedRow : item
       )
