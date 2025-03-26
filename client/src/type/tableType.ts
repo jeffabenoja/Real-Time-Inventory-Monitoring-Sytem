@@ -26,4 +26,5 @@ export interface TableProps {
   toggleModal?: () => void
   sorting?: { id: string; desc: boolean }[]
   apply?: boolean
+  isAdmin?: boolean
 }

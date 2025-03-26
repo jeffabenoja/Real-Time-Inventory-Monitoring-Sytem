@@ -128,6 +128,7 @@ export default function Users() {
           add={true}
           view={false}
           handleAdd={handleModalToggle}
+          isAdmin={true}
         />
       )}
 

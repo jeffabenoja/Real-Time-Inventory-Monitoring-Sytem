@@ -101,6 +101,7 @@ export default function UserGroups() {
         <Spinner />
       ) : (
         <Table
+          isAdmin={true}
           data={tableData}
           columns={columns}
           search={true}

@@ -55,6 +55,7 @@ const Table: React.FC<TableProps> = ({
   toggleModal,
   sorting,
   apply,
+  isAdmin
 }) => {
   const [isOpenExport, setIsOpenExport] = useState<boolean>(false);
   const [globalFilter, setGlobalFilter] = useState<string>("");
@@ -63,8 +64,14 @@ const Table: React.FC<TableProps> = ({
     sorting ? sorting : []
   );
 
-  const userCode = useSelector((state: RootState) => state.auth.user?.usercode)
-  const token = useSelector((state: RootState) => state.auth.user?.password)
+  const userCode = useSelector((state: RootState) => state.auth.user?.usercode);
+  const token = useSelector((state: RootState) => state.auth.user?.password);
+  const isEditor = useSelector(
+    (state: RootState) => state.auth.user?.userGroup.isEditor
+  );
+  const isCreator = useSelector(
+    (state: RootState) => state.auth.user?.userGroup.isCreator
+  );
 
   const table = useReactTable({
     data: data || [],
@@ -146,59 +153,55 @@ const Table: React.FC<TableProps> = ({
 
   const applying = status === "pending";
 
-  
-
   const handleApply = () => {
     // Get all selected rows and extract the "code" property
     const selectedStocks = table.getSelectedRowModel().flatRows.map((row) => ({
       code: row.original.code,
       name: row.original.name,
-      quantity: row.original.forecast.split(" ")[0]
+      quantity: row.original.forecast.split(" ")[0],
     }));
-    
 
-    const stocks = selectedStocks.map(item => {
+    const stocks = selectedStocks.map((item) => {
       const today = new Date();
       const yyyy = today.getFullYear();
       const mm = String(today.getMonth() + 1).padStart(2, "0");
       const dd = String(today.getDate()).padStart(2, "0");
       const formattedDate = `${yyyy}-${mm}-${dd}`;
-  
+
       const timestamp = Date.now();
-  
+
       const expiry = new Date();
       expiry.setDate(expiry.getDate() + 14);
       const expiryFormatted = expiry.toISOString().split("T")[0];
 
-
-      return  {
+      return {
         transactionDate: formattedDate,
         remarks: `AI Prediction ${formattedDate}`,
         item: {
-          code: item.code
+          code: item.code,
         },
         quantity: item.quantity,
         batchNo: `FCST${item.name.replace(/\s+/g, "")}${item.code}${timestamp}`,
-        expiryDate: expiryFormatted
+        expiryDate: expiryFormatted,
       };
-    })
+    });
 
     mutate(stocks, {
       onSuccess: (results: any) => {
         // Check if all API calls were successful
         table.resetRowSelection();
         const failed = results.filter(
-          (result: { status: string; }) => result.status === "rejected"
+          (result: { status: string }) => result.status === "rejected"
         );
         if (failed.length > 0) {
           throw new Error(JSON.stringify(failed));
         } else {
-          showToast.success("Stocks Applied")
+          showToast.success("Stocks Applied");
         }
       },
       onError: () => {
         table.resetRowSelection();
-        showToast.error("Applying stocks on some items failed")
+        showToast.error("Applying stocks on some items failed");
       },
     });
   };
@@ -217,7 +220,7 @@ const Table: React.FC<TableProps> = ({
             </div>
           )}
 
-          {withImport && (
+          {(isCreator || isEditor) && withImport && (
             <div className="ml-2">
               <Buttons
                 label={"Import"}
@@ -249,7 +252,8 @@ const Table: React.FC<TableProps> = ({
             </div>
           )}
 
-          {add && (
+          
+          {(isEditor || isCreator || isAdmin) && add && (
             <div className="ml-2">
               <Buttons label={"Add"} Icon={IoIosAdd} onClick={handleAdd} />
             </div>
@@ -279,7 +283,7 @@ const Table: React.FC<TableProps> = ({
             </div>
           )}
 
-          {approval && (
+          {approval && isEditor && (
             <div className="ml-2 text-cente">
               <Buttons
                 label={"Approval"}
@@ -365,7 +369,9 @@ const Table: React.FC<TableProps> = ({
             <button
               onClick={handleApply}
               className="px-4 py-2 bg-primary text-white rounded disabled:bg-gray-500 disabled:cursor-not-allowed"
-              disabled={applying || table.getSelectedRowModel().rows.length === 0}
+              disabled={
+                applying || table.getSelectedRowModel().rows.length === 0
+              }
             >
               {applying ? "Applying stock" : "Apply Stock"}
             </button>
@@ -515,4 +521,4 @@ const Table: React.FC<TableProps> = ({
   );
 };
 
-export default Table
+export default Table;

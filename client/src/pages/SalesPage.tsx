@@ -18,6 +18,8 @@ import { IoPrintOutline } from "react-icons/io5"
 import { useNavigate } from "react-router-dom"
 import Tooltip from "../components/common/Tooltip"
 import SalesApprovalTable from "../components/common/SalesApprovalTable"
+import { useSelector } from "react-redux"
+import { RootState } from "../store"
 
 const fields = [
   { key: "salesorderNo", label: "Order Number", classes: "uppercase" },
@@ -37,6 +39,9 @@ const Columns = ({
   onPrint: (item: SalesOrderType) => void
 }) => {
   const columnHelper = createColumnHelper<any>()
+  const isEditor = useSelector(
+    (state: RootState) => state.auth.user?.userGroup.isEditor
+  );
 
   return [
     // Dynamically generate columns based on fields
@@ -99,7 +104,8 @@ const Columns = ({
               <IoEyeOutline size={20} />
             </button>
           </Tooltip>
-          <Tooltip text='Update Order'>
+
+          {isEditor && <Tooltip text='Update Order'>
             <button
               onClick={(e) => {
                 e.stopPropagation()
@@ -109,7 +115,7 @@ const Columns = ({
             >
               <CiEdit size={20} />
             </button>
-          </Tooltip>
+          </Tooltip> }
           <Tooltip text='Print Order'>
             <button
               onClick={(e) => {
