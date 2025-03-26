@@ -76,7 +76,7 @@ export interface ItemType {
         merged.push({
           name: invItem.item.description,
           id: key,
-          forecast: `${forecastEntry.forecast} ${forecastEntry.label}`,
+          forecast: `${Math.ceil(forecastEntry.forecast)} ${forecastEntry.label}`,
           currentStock: `${invItem.inQuantity - invItem.outQuantity} ${forecastEntry.label}`,
           code: invItem.item.code
         });
