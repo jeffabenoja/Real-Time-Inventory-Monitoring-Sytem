@@ -128,3 +128,21 @@ export interface StockOutType {
   quantity: number
   batchNo?: string
 }
+
+export interface AddStockType {
+  stock: StockInType
+  usercode: string
+  token: string
+}
+
+export interface AddAssembleStockType {
+  assembleStock: AssembleStock
+  usercode: string
+  token: string
+}
+
+export interface StockOutTypeProps {
+  stockToRemove: StockOutType
+  usercode: string
+  token: string
+}

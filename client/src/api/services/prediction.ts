@@ -1,5 +1,7 @@
 import apiClient from "../../utils/apiClient";
 import { PREDICT } from "../urls/predictionUrl";
+import { ProductForecast, ProductData, Prediction } from "../../type/productForecastType";
+import formatLocalDate from "../../utils/formatLocalDate";
 
 export const getPredictions = async () => {
   const response = await apiClient.get(PREDICT);
@@ -36,34 +38,6 @@ export const getPredictions = async () => {
   return result;
 };
 
-interface AccuracyMetrics {
-  MAE: number;
-  RMSE: number;
-  MAPE: number;
-  SMAPE: number;
-}
-
-interface ProductForecast {
-  forecast: Record<string, number>;
-  accuracy_metrics: AccuracyMetrics;
-}
-
-type ProductData = ProductForecast | string;
-
-interface Prediction {
-  date: string;
-  prediction: number;
-}
-
-// Helper: Formats a Date as "YYYY-MM-DD" using local time.
-const formatLocalDate = (date: Date): string => {
-  const year = date.getFullYear();
-  const month = (date.getMonth() + 1).toString().padStart(2, "0");
-  const day = date.getDate().toString().padStart(2, "0");
-  return `${year}-${month}-${day}`;
-};
-
-// This helper computes the prediction for a given forecast and target date.
 const getPredictionForForecast = (
   forecast: Record<string, number>,
   targetDate: string

@@ -17,32 +17,15 @@ import {
   GET_STOCKIOUT_BY_DATE_RANGE,
 } from "../urls/stockUrls"
 import {
-  StockInType,
   StockListType,
   AssembleStock,
   StockOutListType,
   UpdateStockType,
   AssembleUpdateStock,
-  StockOutType,
+  AddStockType,
+  AddAssembleStockType,
+  StockOutTypeProps
 } from "../../type/stockType"
-
-interface AddStockType {
-  stock: StockInType
-  usercode: string
-  token: string
-}
-
-interface AddAssembleStockType {
-  assembleStock: AssembleStock
-  usercode: string
-  token: string
-}
-
-interface StockOutTypeProps {
-  stockToRemove: StockOutType
-  usercode: string
-  token: string
-}
 
 export const addStock = async ({ stock, usercode, token }: AddStockType) => {
   const response = await apiClient.post(ADD_STOCK, stock, {

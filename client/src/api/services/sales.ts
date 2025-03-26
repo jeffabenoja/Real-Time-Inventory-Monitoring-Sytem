@@ -6,13 +6,8 @@ import {
   GET_SALESORDER_BY_DATE_RANGE,
   GET_SALES_ORDER_PER_SALESNUMBER,
 } from "../urls/salesOrderUrls"
-import { SalesOrderType, SalesOrderCreateType } from "../../type/salesType"
-
-interface CreateSalesOrderTypeWithAuth {
-  salesOrder: SalesOrderCreateType
-  usercode: string
-  token: string
-}
+import { SalesOrderCreateType ,SalesOrderType } from "../../type/salesType"
+import CreateSalesOrderTypeWithAuth from "../../type/salesOrderWithAuth"
 
 export const getSalesOrderPerNumber = async (
   salesNumber: string
