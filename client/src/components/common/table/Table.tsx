@@ -363,7 +363,7 @@ const Table: React.FC<TableProps> = ({
         </table>
       </div>
 
-      {apply && (
+      {apply && isEditor && (
         <>
           <div className="mt-4 text-center">
             <button

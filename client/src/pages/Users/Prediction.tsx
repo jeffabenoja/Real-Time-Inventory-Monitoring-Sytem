@@ -12,6 +12,8 @@ import { getInventoryByCategory } from "../../api/services/inventory";
 import mergeInventoryForecast from "../../utils/mergeInventoryForecast";
 import Table from "../../components/common/table/Table";
 import PredictionTableColumn from "../../components/common/PredictionTableColumn";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 
 const fields = [
   { key: "name", label: "Item Name", classes: "capitalize" },
@@ -21,6 +23,9 @@ const fields = [
 
 export default function Prediction() {
   usePageTitle("AI Stock Forecast");
+  const isEditor = useSelector(
+    (state: RootState) => state.auth.user?.userGroup.isEditor
+  );
 
   const { data: predictions, isFetching: fetchingPredictions } = useQuery({
     queryKey: ["Prediction"],
@@ -69,6 +74,7 @@ export default function Prediction() {
 
   const columns = PredictionTableColumn({
     fields,
+    isEditor
   });
 
   if (
