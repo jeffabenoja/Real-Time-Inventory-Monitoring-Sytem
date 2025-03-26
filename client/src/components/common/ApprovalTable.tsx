@@ -53,6 +53,7 @@ const Columns = ({
         )
         const [isConfirming, setIsConfirming] = useState(false) // Track if we need confirmation
         const [tempStatus, setTempStatus] = useState<string | null>(null) // Store the temporary status
+        const originalStatus = row.original.status
 
         const handleStatusChange = (
           e: React.ChangeEvent<HTMLSelectElement>
@@ -73,7 +74,7 @@ const Columns = ({
               ...row.original,
               status: newStatus,
             }
-            onUpdate(stockToUpdate) // Call the onUpdate function to handle stock update
+            onUpdate(stockToUpdate)
           } else {
             showToast.error("Cannot approve invalid entry!")
           }
@@ -114,6 +115,9 @@ const Columns = ({
                 value={selectedStatus}
                 onChange={handleStatusChange}
                 className='py-2 rounded-md border outline-transparent bg-transparent text-xs focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary'
+                disabled={
+                  originalStatus === "COMPLETED" || originalStatus === "CANCEL"
+                }
               >
                 <option value='DRAFT'>DRAFT</option>
                 <option value='COMPLETED'>COMPLETED</option>
@@ -153,7 +157,7 @@ const stockOutColumn = ({
         )
         const [isConfirming, setIsConfirming] = useState(false) // Track if we need confirmation
         const [tempStatus, setTempStatus] = useState<string | null>(null) // Store the temporary status
-
+        const originalStatus = row.original.status
         const handleStatusChange = (
           e: React.ChangeEvent<HTMLSelectElement>
         ) => {
@@ -214,6 +218,9 @@ const stockOutColumn = ({
                 value={selectedStatus}
                 onChange={handleStatusChange}
                 className='py-2 rounded-md border outline-transparent bg-transparent text-xs focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary'
+                disabled={
+                  originalStatus === "COMPLETED" || originalStatus === "CANCEL"
+                }
               >
                 <option value='DRAFT'>DRAFT</option>
                 <option value='COMPLETED'>COMPLETED</option>
