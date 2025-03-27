@@ -432,7 +432,9 @@ const AddItems: React.FC<AddItemsProps> = ({
            font-medium cursor-pointer text-white bg-blue-700 w-[100px]`}
             >
               {isLoading ? (
-                <div className='w-5 h-5 border-2 border-t-2 border-[#0A140A] border-t-white rounded-full animate-spin'></div>
+                <div className='flex justify-center items-center w-full h-full'>
+                  <div className='w-5 h-5 border-2 border-t-2 border-[#0A140A] border-t-white rounded-full animate-spin'></div>
+                </div>
               ) : (
                 <p className='text-white font-bold text-xs'>Confirm</p>
               )}

@@ -148,7 +148,9 @@ const CreateNewCustomer: React.FC<NewCustomerProps> = ({ close }) => {
             className='bg-blue-700 rounded-md py-2.5 w-[150px]'
           >
             {isPending ? (
-              <div className='w-5 h-5 border-2 border-t-2 border-[#0A140A] border-t-white rounded-full animate-spin'></div>
+              <div className='flex justify-center items-center w-full h-full'>
+                <div className='w-5 h-5 border-2 border-t-2 border-[#0A140A] border-t-white rounded-full animate-spin'></div>
+              </div>
             ) : (
               <p className='text-white font-bold text-xs'>Submit</p>
             )}

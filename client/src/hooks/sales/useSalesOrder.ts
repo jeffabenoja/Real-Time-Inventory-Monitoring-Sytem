@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query"
 
 const useSalesOrder = ({ from, to }: { from: string; to: string }) => {
   const { data, isLoading, isError } = useQuery<SalesOrderType[]>({
-    queryKey: ["salesOrder", from, to], 
+    queryKey: ["salesOrder"],
     queryFn: () => getSalesOrderListByDateRange({ from, to }),
   })
 

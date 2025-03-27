@@ -12,6 +12,9 @@ import ConfirmationModal from "./ConfirmationModal"
 import useUpdateSalesOrder from "../../hooks/sales/useUpdateSalesOrder"
 import ItemSalesOrder from "../common/ItemSalesOrder"
 import { InventoryPerCategory } from "../../type/stockType"
+import { rawMatsStockOut } from "../../store/slices/inventory"
+import { AppDispatch } from "../../store"
+import { useDispatch } from "react-redux"
 
 const itemFields = [
   { key: "item.code", label: "Product Code", classes: "uppercase" },
@@ -133,6 +136,7 @@ interface UpdateSalesOrderProps {
 }
 
 const UpdateSalesOrder: React.FC<UpdateSalesOrderProps> = ({ row, close }) => {
+  const dispatch = useDispatch<AppDispatch>()
   const [productItems, setProductItems] = useState<DetailsType[]>([])
   const [openCustomerModal, setOpenCustomerModal] = useState<boolean>()
   const [customerDetails, setCustomerDetails] = useState<CustomerType>({
@@ -216,8 +220,6 @@ const UpdateSalesOrder: React.FC<UpdateSalesOrderProps> = ({ row, close }) => {
   }
 
   const handleSubmit = (invetoryProductPerItem: InventoryPerCategory[]) => {
-    console.log(invetoryProductPerItem)
-
     setProductItems((prevProduct) => {
       const updatedProductItems = [
         ...prevProduct,
@@ -230,7 +232,6 @@ const UpdateSalesOrder: React.FC<UpdateSalesOrderProps> = ({ row, close }) => {
             return !isExisting
           })
           .map((product) => ({
-            id: product.id,
             item: { ...product.item },
             orderQuantity: 1,
             itemPrice: product.item.price ?? 0,
@@ -243,8 +244,6 @@ const UpdateSalesOrder: React.FC<UpdateSalesOrderProps> = ({ row, close }) => {
     handleMaterialsToggle()
   }
 
-  console.log(productItems)
-
   const handleSubmitCustomer = (customerDetails: CustomerType[]) => {
     if (customerDetails.length === 1) {
       setCustomerDetails(customerDetails[0])
@@ -256,7 +255,8 @@ const UpdateSalesOrder: React.FC<UpdateSalesOrderProps> = ({ row, close }) => {
   }
 
   const [invalidFields, setInvalidFields] = useState<string[]>([])
-  const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+
+  const handleOnSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     const requiredFields: string[] = ["orderDate", "remarks", "status"]
@@ -297,7 +297,7 @@ const UpdateSalesOrder: React.FC<UpdateSalesOrderProps> = ({ row, close }) => {
       },
       status: status || "",
       details: productItems.map((item) => ({
-        id: item.id.toString(),
+        id: item.id,
         item: {
           code: item.item.code,
         },
@@ -308,10 +308,24 @@ const UpdateSalesOrder: React.FC<UpdateSalesOrderProps> = ({ row, close }) => {
 
     if (row?.status === "COMPLETED" || row?.status === "completed") {
       showToast.error("Sales status is already completed!")
-    } else {
-      updateSalesOrder(updatedOrder)
-      close()
+      return
     }
+
+    updateSalesOrder(updatedOrder, {
+      onSuccess: () => {
+        if (updatedOrder.status === "COMPLETED") {
+          productItems.forEach((item: any) => {
+            dispatch(
+              rawMatsStockOut({
+                itemId: item.item.id,
+                quantity: item.orderQuantity,
+              })
+            )
+          })
+        }
+        close()
+      },
+    })
   }
 
   return (
@@ -571,7 +585,9 @@ const UpdateSalesOrder: React.FC<UpdateSalesOrderProps> = ({ row, close }) => {
            font-medium cursor-pointer text-white bg-blue-700 w-[100px]`}
             >
               {isUpdatePending ? (
-                <div className='w-5 h-5 border-2 border-t-2 border-[#0A140A] border-t-white rounded-full animate-spin'></div>
+                <div className='flex justify-center items-center w-full h-full'>
+                  <div className='w-5 h-5 border-2 border-t-2 border-[#0A140A] border-t-white rounded-full animate-spin'></div>
+                </div>
               ) : (
                 <p className='text-white font-bold text-xs'>Confirm</p>
               )}
