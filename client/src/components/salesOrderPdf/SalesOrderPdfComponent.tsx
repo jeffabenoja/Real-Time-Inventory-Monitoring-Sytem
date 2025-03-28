@@ -262,7 +262,7 @@ const SalesOrderPdfComponent: React.FC<SalesOrderPdfProps> = ({ row }) => {
         <div className='w-full h-full justify-center items-center flex'>
           <PDFDownloadLink
             document={<SalesOrderPdfDocument />}
-            fileName='salesorder_delivery_receipt.pdf'
+            fileName={`Salesorder-${row.salesorderNo}.pdf`}
           >
             {({ loading, error }) => {
               if (loading) {
@@ -279,14 +279,13 @@ const SalesOrderPdfComponent: React.FC<SalesOrderPdfProps> = ({ row }) => {
 
               return (
                 <button className='bg-blue-500 text-white p-3 rounded'>
-                  Download Sales Order DR
+                  Download Sales Order - {row.salesorderNo}
                 </button>
               )
             }}
           </PDFDownloadLink>
         </div>
       ) : (
-        // Show PDF viewer on larger screens
         <PDFViewer height='100%' width='100%'>
           <SalesOrderPdfDocument />
         </PDFViewer>
