@@ -74,7 +74,9 @@ const SalesOrderPdfComponent: React.FC<SalesOrderPdfProps> = ({ row }) => {
       .replace(/[^a-zA-Z ]/g, "")
       .replace(/\s+/g, " ")
 
-    return `${wholePartInWords} and ${decimalPartInWords} cents`
+    return decimalPart === "00" || decimalPart === "0"
+      ? `${wholePartInWords} pesos only`
+      : `${wholePartInWords} pesos and ${decimalPartInWords} centavos only`
   }
 
   const netAmountInWords = convertNetAmountToWords(netAmount)
