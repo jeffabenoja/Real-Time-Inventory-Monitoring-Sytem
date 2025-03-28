@@ -78,7 +78,8 @@ const CardSalesMetrics: React.FC<CardSalesMetricsProps> = ({ sales }) => {
           )
         case "monthly":
           return (
-            orderDate >= formatDate(previousStart) && orderDate <= formatDate(previousEnd)
+            orderDate >= formatDate(previousStart) &&
+            orderDate <= formatDate(previousEnd)
           )
       }
     })
@@ -186,7 +187,7 @@ const CardSalesMetrics: React.FC<CardSalesMetricsProps> = ({ sales }) => {
         </select>
       </div>
       <hr />
-      <div className='flex justify-around items-center'>
+      <div className='flex justify-around items-center gap-1'>
         <CardSalesRevenue
           totalValueSum={totalValueSum}
           averageChangePercentage={revenuePercentageChange}

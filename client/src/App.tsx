@@ -32,7 +32,7 @@ const App = () => {
     createRoutesFromElements(
       <>
         <Route path='/login' element={<Login />}>
-          <Route path='password-reset'/>
+          <Route path='password-reset' />
         </Route>
         <Route
           path='/'

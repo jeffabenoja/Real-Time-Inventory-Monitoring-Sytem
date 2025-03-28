@@ -1,7 +1,16 @@
 import { styles } from "./style"
-import { Page, Text, View, Document, PDFViewer } from "@react-pdf/renderer"
+import {
+  Page,
+  Text,
+  View,
+  Document,
+  PDFViewer,
+  PDFDownloadLink,
+} from "@react-pdf/renderer"
 import { SalesOrderType } from "../../type/salesType"
 import { toWords } from "number-to-words"
+import Spinner from "../common/utils/Spinner"
+import { useState, useEffect } from "react"
 
 const formatCurrency = (value: number) => {
   return value.toLocaleString("en-PH", {
@@ -48,18 +57,13 @@ const SalesOrderPdfComponent: React.FC<SalesOrderPdfProps> = ({ row }) => {
   const formattedVatAmount = formatCurrency(vatAmount)
   const formattedNetAmount = formatCurrency(netAmount)
 
-
   const convertNetAmountToWords = (netAmount: number) => {
-    console.log(netAmount)
-    
     const numericAmount = parseFloat(netAmount.toString())
 
-
     if (isNaN(numericAmount)) {
-      return "Invalid amount" 
+      return "Invalid amount"
     }
 
-    
     const [wholePart, decimalPart] = numericAmount.toFixed(2).split(".")
 
     const wholePartInWords = toWords(wholePart)
@@ -237,11 +241,56 @@ const SalesOrderPdfComponent: React.FC<SalesOrderPdfProps> = ({ row }) => {
     </Document>
   )
 
+  // Media query hook to detect if on mobile
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 1024)
+    }
+
+    window.addEventListener("resize", handleResize)
+    handleResize() // Initial check
+
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
+
   return (
     <div className='w-full h-full'>
-      <PDFViewer width='100%' height='100%'>
-        <SalesOrderPdfDocument />
-      </PDFViewer>
+      {isMobile ? (
+        // Show download link on mobile
+        <div className='w-full h-full justify-center items-center flex'>
+          <PDFDownloadLink
+            document={<SalesOrderPdfDocument />}
+            fileName='salesorder_delivery_receipt.pdf'
+          >
+            {({ loading, error }) => {
+              if (loading) {
+                return <Spinner />
+              }
+
+              if (error) {
+                return (
+                  <div className='bg-red-900 text-white p-3 rounded'>
+                    <strong>Error generating the document!</strong>
+                  </div>
+                )
+              }
+
+              return (
+                <button className='bg-blue-500 text-white p-3 rounded'>
+                  Download Sales Order DR
+                </button>
+              )
+            }}
+          </PDFDownloadLink>
+        </div>
+      ) : (
+        // Show PDF viewer on larger screens
+        <PDFViewer height='100%' width='100%'>
+          <SalesOrderPdfDocument />
+        </PDFViewer>
+      )}
     </div>
   )
 }
