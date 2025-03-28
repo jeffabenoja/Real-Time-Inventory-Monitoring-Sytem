@@ -1,10 +1,27 @@
-import { StyleSheet } from "@react-pdf/renderer"
+import { StyleSheet, Font } from "@react-pdf/renderer"
+
+// Register the fonts
+Font.register({
+  family: "Roboto",
+
+  src: "../../../src/assets/Roboto-Regular.ttf",
+})
+
+Font.register({
+  family: "Roboto-Bold",
+  src: "../../../src/assets/Roboto-Bold.ttf",
+})
+
+Font.register({
+  family: "Roboto-Italic",
+  src: "../../../src/assets/Roboto-Italic.ttf",
+})
 
 export const styles = StyleSheet.create({
   page: {
     color: "#262626",
     backgroundColor: "#fff",
-    fontFamily: "Helvetica",
+    fontFamily: "Roboto",
     fontSize: 8,
     padding: "30px 50px",
     display: "flex",
@@ -27,7 +44,7 @@ export const styles = StyleSheet.create({
   },
 
   textBold: {
-    fontFamily: "Helvetica-Bold",
+    fontFamily: "Roboto-Bold",
   },
 
   companyAddress: {
@@ -51,7 +68,7 @@ export const styles = StyleSheet.create({
   },
   label: {
     width: "20%",
-    fontFamily: "Helvetica-Bold",
+    fontFamily: "Roboto-Bold",
   },
 
   value: {
@@ -77,7 +94,7 @@ export const styles = StyleSheet.create({
   },
   tableHeader: {
     backgroundColor: "#14aff1",
-    fontFamily: "Helvetica-Bold",
+    fontFamily: "Roboto-Bold",
   },
   textCenter: {
     textAlign: "center",
@@ -94,7 +111,7 @@ export const styles = StyleSheet.create({
   numberToWords: {
     width: "60%",
     fontSize: 8,
-    fontFamily: "Helvetica-BoldOblique",
+    fontFamily: "Roboto-Italic",
     textTransform: "uppercase",
     color: "#696969",
   },
@@ -119,7 +136,7 @@ export const styles = StyleSheet.create({
   amountLabel: {
     width: "40%",
     textAlign: "left",
-    fontFamily: "Helvetica-Bold",
+    fontFamily: "Roboto-Bold",
     marginRight: 10,
   },
 
@@ -132,15 +149,15 @@ export const styles = StyleSheet.create({
   amountValue: {
     width: "50%",
     textAlign: "right",
-    fontFamily: "Helvetica",
+    fontFamily: "Roboto",
   },
 
   totalAmountValue: {
-    fontFamily: "Helvetica-Bold",
+    fontFamily: "Roboto-Bold",
   },
 
   remarks: {
-    fontFamily: "Helvetica-Bold",
+    fontFamily: "Roboto-Bold",
     marginTop: 28,
     marginBottom: 8,
   },
@@ -162,7 +179,7 @@ export const styles = StyleSheet.create({
   },
 
   remarkLabel: {
-    fontFamily: "Helvetica-Bold",
+    fontFamily: "Roboto-Bold",
   },
 
   remarkInput: {

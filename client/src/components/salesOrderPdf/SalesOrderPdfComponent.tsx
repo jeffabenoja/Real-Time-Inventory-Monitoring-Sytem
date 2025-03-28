@@ -13,10 +13,10 @@ import Spinner from "../common/utils/Spinner"
 import { useState, useEffect } from "react"
 
 const formatCurrency = (value: number) => {
-  return value.toLocaleString("en-PH", {
+  return `₱${value.toLocaleString("en-PH", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
-  })
+  })}`
 }
 
 interface SalesOrderPdfProps {
