@@ -15,8 +15,8 @@ const MainLayout = () => {
       <Header
         handleSidebar={menuToggle}
       />
-      <div className='hidden lg:block w-60 lg:w-64'>
       {sidebar && <Sidebar close={menuToggle} />}
+      <div className='hidden lg:block w-60 lg:w-64'>
         <Sidebar />
       </div>
       <div className={`lg:ml-64 ${sidebar ? "overflow-hidden" : ""}`}>
