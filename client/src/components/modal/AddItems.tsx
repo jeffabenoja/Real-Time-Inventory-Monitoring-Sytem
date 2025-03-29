@@ -145,6 +145,14 @@ const AddItems: React.FC<AddItemsProps> = ({
       }
     }
 
+    const productPrice = product.price || 0
+    const productCost = product.cost || 0
+
+    if (productPrice <= productCost) {
+      showToast.error("Selling price must be greater than cost.")
+      return
+    }
+
     isOnSubmit(updatedProduct)
 
     toggleModal()
@@ -299,7 +307,7 @@ const AddItems: React.FC<AddItemsProps> = ({
               <input
                 type='number'
                 step='0.01'
-                min='0.01'
+                min={product.cost ? product.cost + 1 : 0}
                 id='price'
                 name='price'
                 autoComplete='off'
@@ -307,6 +315,10 @@ const AddItems: React.FC<AddItemsProps> = ({
                 onChange={handleChange}
                 className={`${
                   invalidFields.includes("price") && "border-primary"
+                } ${
+                  (product?.price ?? 0) <= (product?.cost ?? 0)
+                    ? "border-red-700 focus:border-red-700 focus:outline-none active:border-red-700 active:outline-none hover:border-red-700"
+                    : "border-primary"
                 } w-[120px] md:w-[180px] py-1 pl-4 pr-1 border  border-opacity-25 rounded-md outline-transparent bg-transparent
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
               />
