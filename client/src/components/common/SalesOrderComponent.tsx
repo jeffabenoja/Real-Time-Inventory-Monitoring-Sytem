@@ -174,8 +174,16 @@ const SalesOrderComponent: React.FC<SalesOrderProps> = ({ close }) => {
     const token = user.password!
 
     if (token !== undefined) {
-      createSalesOrder({ salesOrder, usercode, token })
-      close()
+      const isValidOrder = productItems.every(
+        (item) => item.itemPrice > (item?.item?.averageCost ?? 0)
+      )
+
+      if (isValidOrder) {
+        createSalesOrder({ salesOrder, usercode, token })
+        close()
+      } else {
+        showToast.error("Item price must be greater than average cost.")
+      }
     } else {
       showToast.error("Unauthorized user to create orders")
     }

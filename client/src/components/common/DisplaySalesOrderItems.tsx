@@ -39,7 +39,16 @@ const ProductItem = ({
         header: () => <span className='truncate'>{field.label}</span>,
       })
     ),
+    columnHelper.accessor("item.averageCost", {
+      id: "avgCost",
+      cell: (info) => {
+        const cost = info.getValue()
+        const formattedPrice = cost % 1 === 0 ? `${cost}.00` : cost.toFixed(2)
 
+        return <span>{formattedPrice}</span>
+      },
+      header: () => <span className='truncate'>Average Cost</span>,
+    }),
     columnHelper.accessor("quantity", {
       id: "qty",
       header: () => <span className='truncate'>Quantity</span>,
@@ -72,7 +81,7 @@ const ProductItem = ({
         }
 
         const borderClass = isQuantityValid
-          ? "border-gray-900 border-opacity-25 focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary"
+          ? "border-gray-900 focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary"
           : "border-red-900 focus:border-red-900 focus:outline-none active:border-red-900 active:outline-none hover:border-red-900"
 
         return (
@@ -88,7 +97,7 @@ const ProductItem = ({
             className={` ${
               currentValue > currentStock
                 ? "border-red-900 focus:border-red-900 focus:outline-none active:border-red-900 active:outline-none hover:border-red-900"
-                : ""
+                : "border-opacity-25"
             } w-[100px] py-1 pl-4 pr-1 border ${borderClass} rounded-md outline-transparent bg-transparent `}
           />
         )
@@ -100,16 +109,35 @@ const ProductItem = ({
       header: () => <span className='truncate'>Price</span>,
       cell: ({ row }) => {
         const productCode = row.original.item.code
+        const averageCost = row.original.item.averageCost || 1
+
+        const [isPriceValid, setIsPriceValid] = useState(true)
+
+        const [currentPrice, setCurrentPrice] = useState(
+          row.original.itemPrice || 1
+        )
+
         const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
           const value = e.target.value
+          setCurrentPrice(value)
+          if (value > averageCost) {
+            setIsPriceValid(false)
+          } else {
+            setIsPriceValid(true)
+          }
           quantityRefs.current[productCode] = value
         }
 
         const handleBlur = () => {
           const value =
             quantityRefs.current[productCode] || row.original.itemPrice
+
           onPriceChange(productCode, value)
         }
+
+        const borderClass = isPriceValid
+          ? "border-gray-900  focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary"
+          : "border-red-700  focus:border-red-700 focus:outline-none active:border-red-700 active:outline-none hover:border-red-700"
 
         return (
           <input
@@ -121,7 +149,11 @@ const ProductItem = ({
             defaultValue={row.original.itemPrice}
             onChange={handlePriceChange}
             onBlur={handleBlur}
-            className='w-[100px] py-1 pl-4 pr-1 border border-gray-900 border-opacity-25 rounded-md outline-transparent bg-transparent focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary'
+            className={` ${
+              currentPrice <= averageCost
+                ? "border-red-700 border-2 focus:border-red-700 focus:outline-none active:border-red-700 active:outline-none hover:border-red-700"
+                : "border-opacity-25"
+            } w-[100px] py-1 pl-4 pr-1 border ${borderClass} rounded-md outline-transparent bg-transparent `}
           />
         )
       },
