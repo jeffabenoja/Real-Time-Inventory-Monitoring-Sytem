@@ -81,16 +81,18 @@ const Columns = ({
         const applyStatusChange = (newStatus: string) => {
           setSelectedStatus(newStatus)
           row.original.status = newStatus
-          if (newStatus !== "DRAFT" && row.original.quantity > 0) {
+          if (newStatus !== "DRAFT" && row.original.assembleQuantity > 0) {
             const stockToUpdate = {
               ...row.original,
               status: newStatus,
             }
-            onUpdate(stockToUpdate) // Call the onUpdate function to handle stock update
+            onUpdate(stockToUpdate)
           } else {
             showToast.error("Cannot approve invalid entry!")
           }
         }
+
+        console.log(tempStatus)
 
         const confirmChange = () => {
           if (tempStatus) {

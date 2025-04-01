@@ -24,7 +24,7 @@ import {
   AssembleUpdateStock,
   AddStockType,
   AddAssembleStockType,
-  StockOutTypeProps
+  StockOutTypeProps,
 } from "../../type/stockType"
 
 export const addStock = async ({ stock, usercode, token }: AddStockType) => {

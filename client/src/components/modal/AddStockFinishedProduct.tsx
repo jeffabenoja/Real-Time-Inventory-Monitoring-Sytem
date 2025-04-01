@@ -7,6 +7,7 @@ import { useSelector } from "react-redux"
 import { User } from "../../type/userType"
 import ConfirmationModal from "./ConfirmationModal"
 import EscapeKeyListener from "../../utils/EscapeKeyListener"
+import { generateRandomBatchNumber } from "../../utils/generateRandomBatchNumber"
 
 interface AddStockProps {
   product: ItemType | null
@@ -74,7 +75,6 @@ const AddStocksFinishedProduct: React.FC<AddStockProps> = ({
       "remarks",
       "quantity",
       "expiryDate",
-      "batchNo",
     ]
 
     const emptyFields = requiredFields.filter(
@@ -108,8 +108,11 @@ const AddStocksFinishedProduct: React.FC<AddStockProps> = ({
 
     const finalProduct = finishProduct
 
+    const batchNumber = generateRandomBatchNumber(product?.id || "")
+
     const assembleStock = {
       ...stockWithoutItem,
+      batchNo: batchNumber,
       assembleQuantity: stock.quantity,
       finishProduct: {
         ...finalProduct,
@@ -196,23 +199,6 @@ const AddStocksFinishedProduct: React.FC<AddStockProps> = ({
               className={`${
                 invalidFields.includes("quantity") && "border-primary"
               } w-[120px] md:w-[150px] py-1 pl-4 pr-1 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent
-              focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
-            />
-          </div>
-          <div className='flex flex-col gap-2'>
-            <label htmlFor='batchNumber' className='text-sm'>
-              Batch Number
-            </label>
-            <input
-              id='batchNumber'
-              type='text'
-              name='batchNo'
-              value={stock.batchNo}
-              onChange={handleChange}
-              autoComplete='off'
-              className={`${
-                invalidFields.includes("batchNo") && "border-primary"
-              } w-[120px] md:w-[150px] py-2 px-4 border border-secondary-200 border-opacity-25 rounded-md outline-transparent bg-transparent placeholder:text-sm
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
             />
           </div>
