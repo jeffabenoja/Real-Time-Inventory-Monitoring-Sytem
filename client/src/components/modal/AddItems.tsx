@@ -147,10 +147,24 @@ const AddItems: React.FC<AddItemsProps> = ({
 
     const productPrice = product.price || 0
     const productCost = product.cost || 0
+    const reorderPoint = product.reorderPoint || 0
+    const averageCost = productData?.averageCost || 0
 
     if (productPrice <= productCost) {
       showToast.error("Selling price must be greater than cost.")
       return
+    }
+
+    if (isProduct) {
+      if (reorderPoint <= 0) {
+        showToast.error("Reorder point must be greater than 0.")
+        return
+      }
+
+      if (productPrice <= averageCost) {
+        showToast.error("Selling price must be greater than average cost.")
+        return
+      }
     }
 
     isOnSubmit(updatedProduct)
@@ -318,8 +332,8 @@ const AddItems: React.FC<AddItemsProps> = ({
                 } ${
                   (product?.price ?? 0) <= (product?.cost ?? 0)
                     ? "border-red-700 focus:border-red-700 focus:outline-none active:border-red-700 active:outline-none hover:border-red-700"
-                    : "border-primary"
-                } w-[120px] md:w-[180px] py-1 pl-4 pr-1 border  border-opacity-25 rounded-md outline-transparent bg-transparent
+                    : "border-primary border-opacity-25"
+                } w-[120px] md:w-[180px] py-1 pl-4 pr-1 border  rounded-md outline-transparent bg-transparent
               focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
               />
             </div>
@@ -345,24 +359,53 @@ const AddItems: React.FC<AddItemsProps> = ({
             </div>
           </div>
         ) : (
-          <div className='flex flex-col gap-2'>
-            <label htmlFor='price' className='text-sm'>
-              Selling Price
-            </label>
-            <input
-              type='number'
-              step='0.01'
-              min='0.01'
-              id='price'
-              name='price'
-              autoComplete='off'
-              value={product.price}
-              onChange={handleChange}
-              className={`${
-                invalidFields.includes("price") && "border-primary"
-              } w-[120px] md:w-[180px] py-1 pl-4 pr-1 border  border-opacity-25 rounded-md outline-transparent bg-transparent
-          focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
-            />
+          <div className='w-full flex justify-between'>
+            <div className='flex flex-col gap-2'>
+              <label htmlFor='price' className='text-sm'>
+                Selling Price
+              </label>
+              <input
+                type='number'
+                step='0.01'
+                min='0.01'
+                id='price'
+                name='price'
+                autoComplete='off'
+                value={product.price}
+                onChange={handleChange}
+                className={`
+                  ${invalidFields.includes("price") && "border-primary"} 
+                  ${
+                    (productData?.averageCost ?? 0) > (product?.price ?? 0)
+                      ? "border-red-700 focus:border-red-700 focus:outline-none active:border-red-700 active:outline-none hover:border-red-700"
+                      : "border-primary border-opacity-25 focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary"
+                  } 
+                  w-[120px] md:w-[180px] py-1 pl-4 pr-1 border rounded-md outline-transparent bg-transparent
+                `}
+              />
+            </div>
+
+            <div className='flex flex-col gap-2'>
+              <label htmlFor='cost' className='text-sm'>
+                Average Cost
+              </label>
+              <input
+                type='number'
+                step='0.01'
+                min='0.01'
+                id='cost'
+                autoComplete='off'
+                name='cost'
+                value={
+                  productData?.averageCost
+                    ? productData.averageCost.toFixed(2)
+                    : "0.00"
+                }
+                readOnly={true}
+                className={`$ w-[120px] md:w-[150px] py-1 pl-4 pr-1 border border-opacity-25 rounded-md outline-transparent bg-transparent
+              focus:border-primary focus:outline-none active:border-primary active:outline-none hover:border-primary`}
+              />
+            </div>
           </div>
         )}
 
