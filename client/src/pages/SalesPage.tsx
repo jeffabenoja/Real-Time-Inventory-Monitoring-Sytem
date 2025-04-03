@@ -42,6 +42,9 @@ const Columns = ({
   const isEditor = useSelector(
     (state: RootState) => state.auth.user?.userGroup.isEditor
   );
+  const groupCode = useSelector(
+    (state: RootState) => state.auth.user?.userGroup.code
+  );
 
   return [
     // Dynamically generate columns based on fields
@@ -105,7 +108,7 @@ const Columns = ({
             </button>
           </Tooltip>
 
-          {isEditor && <Tooltip text='Update Order'>
+          {(isEditor || groupCode === "SALES")&& <Tooltip text='Update Order'>
             <button
               onClick={(e) => {
                 e.stopPropagation()

@@ -72,6 +72,7 @@ const Table: React.FC<TableProps> = ({
   const isCreator = useSelector(
     (state: RootState) => state.auth.user?.userGroup.isCreator
   );
+  const groupCode = useSelector((state: RootState) => state.auth.user?.userGroup.code);
 
   const table = useReactTable({
     data: data || [],
@@ -282,8 +283,8 @@ const Table: React.FC<TableProps> = ({
             </div>
           )}
 
-          {approval && isEditor && (
-            <div className="ml-2 text-cente">
+          {approval && isEditor && (groupCode === "APPROVER" || groupCode === "ADMIN" || groupCode === "MANAGER") && (
+            <div className="ml-2 text-center">
               <Buttons
                 label={"Approval"}
                 Icon={MdOutlineInventory}

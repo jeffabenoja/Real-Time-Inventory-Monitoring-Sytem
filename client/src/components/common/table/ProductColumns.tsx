@@ -26,6 +26,9 @@ const ProductColumns = ({
   const isEditor = useSelector(
     (state: RootState) => state.auth.user?.userGroup.isEditor
   );
+  const groupCode = useSelector(
+    (state: RootState) => state.auth.user?.userGroup.code
+  );
   return [
     // Dynamically generate columns based on fields
     ...fields.map((field) =>
@@ -88,7 +91,7 @@ const ProductColumns = ({
               </button>
             </Tooltip>
             {/* Add Button */}
-            {isEditor && (
+            {isEditor && groupCode !== "APPROVER" && (
               <Tooltip text="Stock">
                 <button
                   onClick={(e) => {
@@ -103,7 +106,7 @@ const ProductColumns = ({
             )}
 
             {/* Update Button */}
-            {isEditor && (
+            {isEditor && groupCode !== "APPROVER" &&  (
               <Tooltip text="Update">
                 <button
                   onClick={(e) => {
@@ -117,7 +120,7 @@ const ProductColumns = ({
               </Tooltip>
             )}
 
-            {isEditor && (
+            {isEditor && (groupCode === "APPROVER" || groupCode === "ADMIN" || groupCode === "MANAGER") && (
               <Tooltip text="Approval">
                 <button
                   onClick={(e) => {

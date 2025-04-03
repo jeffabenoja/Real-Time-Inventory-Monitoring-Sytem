@@ -5,6 +5,8 @@ import AddStocksRawMats from "./AddStockRawMats"
 // import StockOutRawMats from "./StockOutRawMats"
 import StockOutTable from "../common/StockOutTable"
 import StockInHistory from "../common/StockInHistory"
+import { useSelector } from "react-redux"
+import { RootState } from "../../store"
 
 interface StockRawMatsProps {
   productId: string
@@ -22,6 +24,9 @@ const StockRawMatsModal: React.FC<StockRawMatsProps> = ({
   const [addStockState, setAddStockState] = useState<boolean>(false)
   const [removedStockState, setRemovedStockState] = useState<boolean>(false)
   const [viewApproval, setViewApproval] = useState<boolean>(false)
+  const groupCode = useSelector(
+    (state: RootState) => state.auth.user?.userGroup.code
+  );
 
   const handleAddToggle = () => {
     setAddStockState((prev) => !prev)
@@ -58,13 +63,13 @@ const StockRawMatsModal: React.FC<StockRawMatsProps> = ({
             Remove Stock
           </button>
 
-          <button
+          {(groupCode === "APPROVER" || groupCode === "ADMIN" || groupCode === "MANAGER") && <button
             type='button'
             onClick={handleApprovalToggle}
             className='bg-gray-200 rounded-md py-2.5 w-[100px] text-xs text-center'
           >
             Approval
-          </button>
+          </button>}
         </div>
       </div>
       {addStockState && (

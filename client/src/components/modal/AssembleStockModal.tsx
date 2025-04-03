@@ -6,6 +6,8 @@ import AssembleHistory from "../common/AssembleHistory"
 import { ItemType } from "../../type/itemType"
 import StockOutAssembleTable from "../common/StockOutAssembleTable"
 import StockCardTable from "../common/StockCardTable"
+import { useSelector } from "react-redux"
+import { RootState } from "../../store"
 
 interface AssembleStockModalProps {
   product: ItemType | null
@@ -20,6 +22,9 @@ const AssembleStockModal: React.FC<AssembleStockModalProps> = ({
   const [removedStockState, setRemovedStockState] = useState<boolean>(false)
   const [viewStockCard, setViewStockCard] = useState<boolean>(false)
   const [viewApproval, setViewApproval] = useState<boolean>(false)
+  const groupCode = useSelector(
+    (state: RootState) => state.auth.user?.userGroup.code
+  );
 
   const handleAddToggle = () => {
     setAddStockState((prev) => !prev)
@@ -67,13 +72,13 @@ const AssembleStockModal: React.FC<AssembleStockModalProps> = ({
             Stock Card
           </button>
 
-          <button
+          {(groupCode === "APPROVER" || groupCode === "ADMIN" || groupCode === "MANAGER") && <button
             type='button'
             onClick={handleApprovalToggle}
             className='bg-gray-200 rounded-md py-2.5 w-[100px] text-xs text-center'
           >
             Approval
-          </button>
+          </button>}
         </div>
       </div>
       {addStockState && (

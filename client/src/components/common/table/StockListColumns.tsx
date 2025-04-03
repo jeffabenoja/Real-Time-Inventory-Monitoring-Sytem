@@ -25,6 +25,9 @@ const StockListColumns = ({
   const isEditor = useSelector(
     (state: RootState) => state.auth.user?.userGroup.isEditor
   );
+  const groupCode = useSelector(
+    (state: RootState) => state.auth.user?.userGroup.code
+  );
   return [
     // Dynamically generate columns based on fields
     ...fields.map((field) =>
@@ -91,7 +94,7 @@ const StockListColumns = ({
           </Tooltip>
 
           {/* Add Button */}
-          {isEditor && (
+          {isEditor && groupCode !== "APPROVER" && (
             <Tooltip text="Stock">
               <button
                 onClick={(e) => {
@@ -106,7 +109,7 @@ const StockListColumns = ({
           )}
 
           {/* Update Button */}
-          {isEditor && <Tooltip text="Update">
+          {isEditor && groupCode !== "APPROVER" && <Tooltip text="Update">
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -118,7 +121,7 @@ const StockListColumns = ({
             </button>
           </Tooltip>}
 
-          {isEditor && 
+          {isEditor && (groupCode === "APPROVER" || groupCode === "ADMIN" || groupCode === "MANAGER") && 
           <Tooltip text="Approval">
             <button
               onClick={(e) => {

@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { logout } from "../../store/slices/auth";
 import CustomModal from "../common/utils/CustomModalV2";
 import { useState } from "react";
+import { getNavigationByRole } from "../../utils/getNavigationByRole";
 
 const NAVIGATION_ITEMS = [
   { name: "Overview", to: "/dashboard/overview", icon: HiDocumentSearch },
@@ -40,6 +41,7 @@ export default function Container({
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.auth.user);
+  const filteredNavigation = getNavigationByRole(NAVIGATION_ITEMS, user?.userGroup.code!)
   const [logoutModal, setLogoutModal] = useState(false);
 
   const logoutHandler = () => {
@@ -78,7 +80,7 @@ export default function Container({
         </div>
         <div>
           <p className="text-sm">Dashboard</p>
-          {NAVIGATION_ITEMS.map(({ name, to, icon }) => (
+          {filteredNavigation.map(({ name, to, icon }) => (
             <NavItem
               label={name}
               path={to}
@@ -88,7 +90,7 @@ export default function Container({
             />
           ))}
         </div>
-        {user?.userGroup.isAdmin && (
+        {user?.userGroup.isAdmin && user?.userGroup.code === "ADMIN" && (
           <div>
             <p className="text-sm">Admin</p>
             {ADMIN_ITEMS.map(({ name, to, icon }) => (
