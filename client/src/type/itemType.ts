@@ -10,6 +10,7 @@ export interface ItemType {
   averageCost?: number
   status?: "ACTIVE" | "INACTIVE"
   id?: string
+  currentStock?: number;
 }
 
 export interface ComponentsMaterials {

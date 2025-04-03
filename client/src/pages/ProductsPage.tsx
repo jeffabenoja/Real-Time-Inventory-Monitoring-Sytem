@@ -15,6 +15,9 @@ import ViewAssembleTable from "../components/common/ViewAssembleTable"
 import ApprovalAssembleTable from "../components/common/ApprovalAssembleTable"
 import ViewItemWithComponents from "../components/modal/ViewItemWithComponentsModal"
 import AssembleStockModal from "../components/modal/AssembleStockModal"
+import { useSelector } from "react-redux"
+import { RootState } from "../store"
+import mergeData from "../utils/mergeData"
 
 const fields = [
   { key: "code", label: "Product Code", classes: "uppercase" },
@@ -37,8 +40,17 @@ const ProductsPage = () => {
   const [itemId, setItemId] = useState<string>("")
   const [isViewItemInventory, setIsViewItemInventory] = useState<boolean>(false)
   const [approval, setApproval] = useState<boolean>(false)
+
+  const inventory = useSelector((state: RootState) => state.inventory.inventory)
+
   const { data, isLoading, isError, updateItem, isPendingUpdate } =
     useItemComponents()
+
+  let mergedData;
+  
+  if(data){
+      mergedData = mergeData(data, inventory)
+  }
 
   const handleModalAdd = () => {
     setIsOpenAdd((prev) => !prev)
@@ -109,11 +121,11 @@ const ProductsPage = () => {
   return (
     <>
       <PageTitle>Products Page</PageTitle>
-      {isLoading ? (
+      {isLoading ?? mergedData ? (
         <Spinner />
       ) : (
         <Table
-          data={data || []}
+          data={mergedData || []}
           columns={columns}
           search={true}
           withImport={false}

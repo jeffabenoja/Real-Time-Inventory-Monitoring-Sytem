@@ -15,6 +15,9 @@ import InventoryTable from "../components/common/InventoryTable"
 import usePageTitle from "../hooks/usePageTitle"
 import ApprovalTable from "../components/common/ApprovalTable"
 import StockCardTable from "../components/common/StockCardTable"
+import { useSelector } from "react-redux"
+import { RootState } from "../store"
+import mergeData from "../utils/mergeData"
 
 const fields = [
   { key: "code", label: "Product Code", classes: "uppercase" },
@@ -39,6 +42,8 @@ const StocklistPage = () => {
   const [productData, setProductData] = useState<ItemType | null>(null)
   const [itemId, setItemId] = useState<string>("")
 
+  const inventory = useSelector((state: RootState) => state.inventory.inventory)
+
   const {
     data,
     isLoading,
@@ -48,6 +53,12 @@ const StocklistPage = () => {
     updateItem,
     isPendingUpdate,
   } = useItemMaterials()
+
+  let mergedData;
+
+  if(data){
+    mergedData = mergeData(data, inventory)
+  }
 
   const handleModalAdd = () => {
     setIsOpenAdd((prev) => !prev)
@@ -125,13 +136,13 @@ const StocklistPage = () => {
   return (
     <>
       <PageTitle>Stocklist Page</PageTitle>
-      {isLoading ? (
+      {isLoading ?? mergedData ? (
         <Spinner />
       ) : (
         <Table
-          data={data || []}
+          data={mergedData || []}
           columns={columns}
-          search={true}
+          search={true} 
           withImport={true}
           withExport={true}
           add={true}

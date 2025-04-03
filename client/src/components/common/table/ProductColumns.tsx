@@ -23,9 +23,6 @@ const ProductColumns = ({
   onApproval: (item: ItemType) => void;
 }) => {
   const columnHelper = createColumnHelper<any>();
-  let inventoryData = useSelector(
-    (state: RootState) => state.inventory.inventory
-  );
   const isEditor = useSelector(
     (state: RootState) => state.auth.user?.userGroup.isEditor
   );
@@ -39,26 +36,12 @@ const ProductColumns = ({
         header: () => <span className="truncate">{field.label}</span>,
       })
     ),
-    columnHelper.accessor("id", {
-      id: "productId",
+    columnHelper.accessor("currentStock", {
+      id: "productStock",
       cell: (info) => {
-        const id = info.getValue();
+        const stock = info.getValue();
 
-        const inventoryItem = inventoryData.find(
-          (item: any) => item.item.id === id
-        );
-
-        const inQuantity = inventoryItem
-          ? Number(inventoryItem.inQuantity) || 0
-          : 0;
-        const outQuantity = inventoryItem
-          ? Number(inventoryItem.outQuantity) || 0
-          : 0;
-
-        const currentStock = Math.round(inQuantity - outQuantity);
-
-        // Format the currentStock to 2 decimal places
-        const formattedCurrentStock = currentStock;
+        const formattedCurrentStock = stock.toFixed(2);
 
         return <span>{formattedCurrentStock}</span>;
       },

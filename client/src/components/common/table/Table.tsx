@@ -55,7 +55,7 @@ const Table: React.FC<TableProps> = ({
   toggleModal,
   sorting,
   apply,
-  isAdmin
+  isAdmin,
 }) => {
   const [isOpenExport, setIsOpenExport] = useState<boolean>(false);
   const [globalFilter, setGlobalFilter] = useState<string>("");
@@ -252,7 +252,6 @@ const Table: React.FC<TableProps> = ({
             </div>
           )}
 
-          
           {(isEditor || isCreator || isAdmin) && add && (
             <div className="ml-2">
               <Buttons label={"Add"} Icon={IoIosAdd} onClick={handleAdd} />
@@ -337,28 +336,35 @@ const Table: React.FC<TableProps> = ({
             ))}
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {table.getRowModel().rows.map((row) => (
-              <tr
-                key={row.id}
-                className="hover:bg-gray-50"
-                onClick={(e) => e.stopPropagation()}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <td
-                    key={cell.id}
-                    className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 cursor-pointer text-center"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      if (handleUpdate) {
-                        handleUpdate(row.original);
-                      }
-                    }}
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            ))}
+            {table.getRowModel().rows.map((row) => {
+              const { currentStock, reorderPoint } = row.original;
+              const isBelowReorder = currentStock <= reorderPoint;
+              return (
+                <tr
+                  key={row.id}
+                  className={`hover:bg-gray-50 ${isBelowReorder ? "bg-red-200 hover:bg-red-100" : ""}`}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <td
+                      key={cell.id}
+                      className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 cursor-pointer text-center"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (handleUpdate) {
+                          handleUpdate(row.original);
+                        }
+                      }}
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
