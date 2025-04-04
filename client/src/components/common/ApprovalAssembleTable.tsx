@@ -92,8 +92,6 @@ const Columns = ({
           }
         }
 
-        console.log(tempStatus)
-
         const confirmChange = () => {
           if (tempStatus) {
             applyStatusChange(tempStatus)

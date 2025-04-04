@@ -321,7 +321,7 @@ const AddItems: React.FC<AddItemsProps> = ({
               <input
                 type='number'
                 step='0.01'
-                min={product.cost ? product.cost + 1 : 0}
+                min='0.01'
                 id='price'
                 name='price'
                 autoComplete='off'
