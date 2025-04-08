@@ -1,6 +1,6 @@
 # Real-Time Inventory Monitoring System
 
-![dashboard](/img/dashboard.JPG)
+![dasboard](/img//dasboard.JPG)
 ![product](/img/product.JPG)
 ![sales](/img/sales.JPG)
 ![stocklist](/img/stocklist.JPG)
