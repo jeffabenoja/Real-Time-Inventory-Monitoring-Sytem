@@ -74,9 +74,3 @@ This project is part of our **Capstone Thesis** aimed at improving inventory man
   - Researcher
   - Documentation Controller
   - Tester
-
-## Setup (client folder)
-
-- cd client
-- npm install
-- run "npm run dev"
